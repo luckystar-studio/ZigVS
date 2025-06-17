@@ -1,0 +1,13 @@
+# Ignore Visual Studio generated files
+*.user
+*.suo
+obj/
+[Bb]in/
+TestResults/
+
+# Ignore Roslyn IDE cache
+.vs/
+
+# Ignore NuGet package output
+/Dev10/nuget/release/
+/Dev10/packages/
