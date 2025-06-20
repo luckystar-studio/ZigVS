@@ -1,0 +1,18 @@
+﻿<VSTemplate Version="2.0.0" Type="Project"
+    xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+    <TemplateData>
+        <Name>ZigProject Application</Name>
+        <Description>
+            A project for creating a ZigProject application
+        </Description>
+        <Icon>ZigVSProject.ico</Icon>
+        <ProjectType>ZigVSProject</ProjectType>
+    </TemplateData>
+    <TemplateContent>
+        <Project File="ZigProject.zigproj" ReplaceParameters="true">
+            <ProjectItem ReplaceParameters="true" OpenInEditor="true">
+                main.zig
+            </ProjectItem>
+        </Project>
+    </TemplateContent>
+</VSTemplate>

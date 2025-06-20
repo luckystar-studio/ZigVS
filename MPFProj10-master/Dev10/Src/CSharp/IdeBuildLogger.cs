@@ -369,7 +369,7 @@ namespace Microsoft.VisualStudio.Project
 
         protected virtual void NavigateTo(object sender, EventArgs arguments)
         {
-            Microsoft.VisualStudio.Shell.Task task = sender as Microsoft.VisualStudio.Shell.Task;
+            Microsoft.VisualStudio.Shell.TaskListItem task = sender as Microsoft.VisualStudio.Shell.TaskListItem;
             if (task == null)
                 throw new ArgumentException("The sender should be a Task.", "sender");
 
@@ -695,7 +695,13 @@ namespace Microsoft.VisualStudio.Project
         /// <param name="action">action to invoke</param>
         protected static void BeginInvokeWithErrorMessage(IServiceProvider serviceProvider, Dispatcher dispatcher, Action action)
         {
-            dispatcher.BeginInvoke(new Action(() => CallWithErrorMessage(serviceProvider, action)));
+            /*ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                CallWithErrorMessage(serviceProvider, action);
+            });*/
+
+            _ = dispatcher.BeginInvoke(new Action(() => CallWithErrorMessage(serviceProvider, action)));
         }
 
         /// <summary>

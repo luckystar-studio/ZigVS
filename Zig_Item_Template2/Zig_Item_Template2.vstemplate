@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>Zig build file</Name>
+		<Description>a build file</Description>
+		<Icon>Zig_Item_Template2.ico</Icon>
+		<TemplateID>5eae2f7e-f7f7-46bd-a68e-877e48756384</TemplateID>
+		<ProjectType>Zig</ProjectType>
+		<LanguageTag>Zig</LanguageTag>
+		<RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+		<DefaultName>Build.zig</DefaultName>
+	</TemplateData>
+	<TemplateContent>
+		<References>
+			<Reference>
+				<Assembly>System</Assembly>
+			</Reference>
+		</References>
+		<ProjectItem>Build.zig</ProjectItem>
+		<ProjectItem>Build.zig.zon</ProjectItem>
+	</TemplateContent>
+</VSTemplate>

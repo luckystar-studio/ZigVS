@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>Zig Library</Name>
+		<Description>A library using the Zig language.</Description>
+		<Icon>Zig_LibProject_Template1.ico</Icon>
+		<ProjectType>Zig</ProjectType>
+		<LanguageTag>Zig</LanguageTag>
+		<SortOrder>1000</SortOrder>
+		<TemplateID>2eb7e88e-aa0e-46dc-9185-99da390078d3</TemplateID>
+		<CreateNewFolder>true</CreateNewFolder>
+		<DefaultName>ZigLib</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<PlatformTag>Windows</PlatformTag>
+		<PlatformTag>Linux</PlatformTag>
+		<PlatformTag>Android</PlatformTag>
+		<PlatformTag>macOS</PlatformTag>
+		<PlatformTag>iOS</PlatformTag>
+		<PlatformTag>WASI</PlatformTag>
+		<ProjectTypeTag>console</ProjectTypeTag>
+	</TemplateData>
+	<TemplateContent>
+		<Project File="ProjectTemplate.zigproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" TargetFileName="src\main.zig" OpenInEditor="true" >main.zig</ProjectItem>
+		</Project>
+	</TemplateContent>
+</VSTemplate>

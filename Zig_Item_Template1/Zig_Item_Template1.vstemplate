@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>Zig source file</Name>
+    <Description>A source file using zig language</Description>
+    <Icon>Zig_Item_Template1.ico</Icon>
+    <TemplateID>fa7541e8-21b3-4084-a259-170ad12dfd9a</TemplateID>
+    <ProjectType>Zig</ProjectType>
+    <LanguageTag>Zig</LanguageTag>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <DefaultName>struct.zig</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <AppliesTo>Zig</AppliesTo>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true">struct.zig</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

@@ -73,9 +73,9 @@ namespace Microsoft.VisualStudio.Project
 
 			if(str != null)
 			{
-				if(str == SR.GetString(SR.Exe, culture)) return OutputType.Exe;
-				if(str == SR.GetString(SR.Library, culture)) return OutputType.Library;
-				if(str == SR.GetString(SR.WinExe, culture)) return OutputType.WinExe;
+				if(str == SR.GetString(SR.Exe, culture)) return OutputType.Application;
+				if(str == SR.GetString(SR.Library, culture)) return OutputType.DynamicLibrary;
+				if(str == SR.GetString(SR.StaticLibrary, culture)) return OutputType.StaticLibrary;
 			}
 
 			return base.ConvertFrom(context, culture, value);
@@ -94,7 +94,7 @@ namespace Microsoft.VisualStudio.Project
 				}
 				else
 				{
-					result = SR.GetString(OutputType.Library.ToString(), culture);
+					result = SR.GetString(OutputType.DynamicLibrary.ToString(), culture);
 				}
 
 				if(result != null) return result;
@@ -110,7 +110,7 @@ namespace Microsoft.VisualStudio.Project
 
 		public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(System.ComponentModel.ITypeDescriptorContext context)
 		{
-			return new StandardValuesCollection(new OutputType[] { OutputType.Exe, OutputType.Library, OutputType.WinExe });
+			return new StandardValuesCollection(new OutputType[] { OutputType.Application, OutputType.DynamicLibrary, OutputType.StaticLibrary });
 		}
 	}
 }

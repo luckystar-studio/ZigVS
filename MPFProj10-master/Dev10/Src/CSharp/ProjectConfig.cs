@@ -464,6 +464,26 @@ namespace Microsoft.VisualStudio.Project
 
         #endregion
 
+        public enum DebugEngine{
+            WindowsNative,
+            MIEngine
+        }
+        static DebugEngine s_DebugEngine = DebugEngine.WindowsNative;
+
+        static public void SetDebugEngine(DebugEngine i_DebugEngine)
+        {
+            s_DebugEngine = i_DebugEngine;
+        }
+        static DebugEngine GetDebugEngine() 
+        {
+            return s_DebugEngine;
+        }
+
+        public static Guid GetMIEngineGuid()
+        {
+            return new Guid("{EA6637C6-17DF-45B5-A183-0951C54243BC}");
+        }
+
         #region IVsDebuggableProjectCfg methods
         /// <summary>
         /// Called by the vs shell to start debugging (managed or unmanaged).
@@ -482,53 +502,89 @@ namespace Microsoft.VisualStudio.Project
                 info.dlo = Microsoft.VisualStudio.Shell.Interop.DEBUG_LAUNCH_OPERATION.DLO_CreateProcess;
 
                 // On first call, reset the cache, following calls will use the cached values
-                string property = GetConfigurationProperty("StartProgram", _PersistStorageType.PST_USER_FILE, true);
+                string property = GetConfigurationProperty("StartProgram", _PersistStorageType.PST_PROJECT_FILE, true);
                 if(string.IsNullOrEmpty(property))
                 {
-                    info.bstrExe = this._project.GetOutputAssembly(this.ConfigName, this.Platform);
+                    string l_OutputNameString = GetConfigurationProperty("OutputName", _PersistStorageType.PST_PROJECT_FILE, true);
+                    string l_OutDirString = GetConfigurationProperty("OutDir", _PersistStorageType.PST_PROJECT_FILE, true);
+
+                    info.bstrExe = Path.Combine(l_OutDirString, l_OutputNameString);
                 }
                 else
                 {
                     info.bstrExe = property;
                 }
-
-                property = GetConfigurationProperty("WorkingDirectory", _PersistStorageType.PST_USER_FILE, false);
-                if(string.IsNullOrEmpty(property))
+                var l_currentDirecotryString = GetConfigurationProperty("WorkingDirectory", _PersistStorageType.PST_PROJECT_FILE, false);
+                 if (string.IsNullOrEmpty(l_currentDirecotryString))
                 {
                     info.bstrCurDir = Path.GetDirectoryName(info.bstrExe);
                 }
                 else
                 {
-                    info.bstrCurDir = property;
+                    info.bstrCurDir = l_currentDirecotryString;
                 }
 
-                property = GetConfigurationProperty("CmdArgs", _PersistStorageType.PST_USER_FILE, false);
+                property = GetConfigurationProperty("CmdArgs", _PersistStorageType.PST_PROJECT_FILE, false);
                 if(!string.IsNullOrEmpty(property))
                 {
                     info.bstrArg = property;
                 }
 
-                property = GetConfigurationProperty("RemoteDebugMachine", _PersistStorageType.PST_USER_FILE, false);
+                property = GetConfigurationProperty("RemoteDebugMachine", _PersistStorageType.PST_PROJECT_FILE, false);
                 if(property != null && property.Length > 0)
                 {
                     info.bstrRemoteMachine = property;
                 }
+           /*     info.bstrOptions = @"<PipeLaunchOptions xmlns=""http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014""
+    PipePath=""c:\mytools\plink.exe"" ExePath=""-i c:\Users\myaccount\Documents\ssh-key.ppk myaccount@169.254.2.2 -batch -t gdb""
+    TargetArchitecture=""x64"">
+    <CustomLaunchSetupCommands>
+      <Command IgnoreFailures=""false"" Description=""Attaching to the 'foo' process"">-target-attach 1234</Command>
+    </CustomLaunchSetupCommands>
+    <LaunchCompleteCommand>exec-continue</LaunchCompleteCommand>
+  </PipeLaunchOptions>";*/
+                info.fSendStdoutToOutputWindow = 1;
 
-                info.fSendStdoutToOutputWindow = 0;
-
-                property = GetConfigurationProperty("EnableUnmanagedDebugging", _PersistStorageType.PST_USER_FILE, false);
-                if(property != null && string.Equals(property, "true", StringComparison.OrdinalIgnoreCase))
+                property = GetConfigurationProperty("DebugEngine", _PersistStorageType.PST_PROJECT_FILE, false);
+                if(!string.IsNullOrEmpty(property) && property==DebugEngineType.WindowsNative.ToString())
                 {
-                    //Set the unmanged debugger
                     info.clsidCustom = VSConstants.DebugEnginesGuids.NativeOnly_guid;
                 }
                 else
                 {
-                    //Set the managed debugger
-                    info.clsidCustom = VSConstants.DebugEnginesGuids.ManagedOnly_guid;
+                    var l_IVsOutputWindowPane = Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
+
+                    info.clsidCustom = GetMIEngineGuid();
+
+                    var l_MIEngineLaunchOptionsString = GetConfigurationProperty("MIEngineLaunchOptions", _PersistStorageType.PST_PROJECT_FILE, false);
+                    if(string.IsNullOrWhiteSpace(l_MIEngineLaunchOptionsString))
+                    {
+                        l_IVsOutputWindowPane.OutputStringThreadSafe("Could not read the property:" + l_MIEngineLaunchOptionsString + Environment.NewLine);
+                    }
+                    
+                    var l_filePathString = Path.Combine(this._project.ProjectFolder, l_MIEngineLaunchOptionsString);
+                    try
+                    {
+
+                        info.bstrOptions = File.ReadAllText(l_filePathString);
+                    }
+                    catch
+                    {
+                        l_IVsOutputWindowPane.OutputStringThreadSafe("Could not read the file:" + l_filePathString + Environment.NewLine);
+                    }
+                    //      info.clsidCustom = VSConstants.DebugEnginesGuids.NativeOnly_guid;
+                    //        info.clsidCustom = new Guid("{6418034F-B351-42C4-8942-3630287267BE}");  //  Linux App Service vsdbg host. maybe only for C#
+                    //        info.clsidCustom = new Guid("{EF9CD3BB-2C0E-41AD-B54C-63006BC09D19}");  //  VSCode Debugger Host - vsdbg + ssh maybe only for C#
+                    //        info.clsidCustom = new Guid("{EA6637C6-17DF-45B5-A183-0951C54243BC}");  //  MI Debug Engine
+                    //        info.clsidCustom = new Guid("{5D630903-189D-4837-9785-699B05BEC2A9}");  //  MI Debug Engine - lldb
+                    //        info.clsidCustom = new Guid("{91744D97-430F-42C1-9779-A5813EBD6AB2}");  //  MI Debug Engine - gdb
+                    // C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\MDD
+                    // https://github.com/Microsoft/MIEngine/
                 }
 
-                info.grfLaunch = grfLaunch;
+                ExecutePreDebugCommand(info.bstrCurDir);
+
+                info.grfLaunch = (grfLaunch | (uint)( __VSDBGLAUNCHFLAGS.DBGLAUNCH_Silent | __VSDBGLAUNCHFLAGS.DBGLAUNCH_StopDebuggingOnEnd ));
                 VsShellUtilities.LaunchDebugger(this._project.Site, info);
             }
             catch(Exception e)
@@ -539,6 +595,43 @@ namespace Microsoft.VisualStudio.Project
             }
 
             return VSConstants.S_OK;
+        }
+
+        private void ExecutePreDebugCommand(string i_WorkingDirectoryString)
+        {
+            try
+            {
+                var l_PreDebugCommandString = GetConfigurationProperty("PreDebugCommand", _PersistStorageType.PST_PROJECT_FILE, false);
+                var l_PreDebugCommandArgumentsString = GetConfigurationProperty("PreDebugCommandArguments", _PersistStorageType.PST_PROJECT_FILE, false);
+
+                if (!string.IsNullOrEmpty(l_PreDebugCommandString))
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = l_PreDebugCommandString,
+                        Arguments = l_PreDebugCommandArgumentsString,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true,
+                        WorkingDirectory = i_WorkingDirectoryString
+                    };
+
+                    try
+                    {
+                        using (Process process = new Process { StartInfo = startInfo })
+                        {
+                            process.Start();
+                            process.WaitForExit();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"error: {ex.Message}");
+                    }
+                }
+            }
+            catch { }
         }
 
         /// <summary>

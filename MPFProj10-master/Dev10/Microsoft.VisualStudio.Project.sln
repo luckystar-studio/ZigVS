@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Project.10.0", "Src\CSharp\Microsoft.VisualStudio.Project.10.0.csproj", "{CACB60A9-1E76-4F92-8831-B134A658C695}"
 EndProject
@@ -40,6 +40,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Project.UnitTests", "Tests\UnitTests\Microsoft.VisualStudio.Project.UnitTests.csproj", "{7301F66C-FF21-4DC6-8EEE-2BA88186DC16}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Project.IntegrationTests", "Tests\IntegrationTests\Microsoft.VisualStudio.Project.IntegrationTests.csproj", "{0A29E2CA-F59D-4467-8FBC-6CA686CAAA3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Project.15.0", "Src\CSharp\Microsoft.VisualStudio.Project.15.0.csproj", "{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{0A29E2CA-F59D-4467-8FBC-6CA686CAAA3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A29E2CA-F59D-4467-8FBC-6CA686CAAA3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A29E2CA-F59D-4467-8FBC-6CA686CAAA3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,5 +102,47 @@ Global
 		{07A3CDE4-390B-40B4-A660-8CA586E255CC} = {48341C58-A2FB-46F0-B4FE-239FAC1F848D}
 		{7301F66C-FF21-4DC6-8EEE-2BA88186DC16} = {48341C58-A2FB-46F0-B4FE-239FAC1F848D}
 		{0A29E2CA-F59D-4467-8FBC-6CA686CAAA3B} = {EFCB5A7D-A19D-4998-BD0E-54F1907596E2}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 11
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://luckystar.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Src\\CSharp\\Microsoft.VisualStudio.Project.10.0.csproj
+		SccProjectName1 = Src/CSharp
+		SccLocalPath1 = Src\\CSharp
+		SccProjectUniqueName2 = Src\\CSharp\\Microsoft.VisualStudio.Project.11.0.csproj
+		SccProjectName2 = Src/CSharp
+		SccLocalPath2 = Src\\CSharp
+		SccProjectUniqueName3 = Src\\CSharp\\Microsoft.VisualStudio.Project.12.0.csproj
+		SccProjectName3 = Src/CSharp
+		SccLocalPath3 = Src\\CSharp
+		SccProjectUniqueName4 = Samples\\CSharp\\CustomProject\\Src\\CustomProject.csproj
+		SccProjectTopLevelParentUniqueName4 = Microsoft.VisualStudio.Project.sln
+		SccProjectName4 = Samples/CSharp/CustomProject/Src
+		SccLocalPath4 = Samples\\CSharp\\CustomProject\\Src
+		SccProjectUniqueName5 = Samples\\CSharp\\NestedProject\\Src\\NestedProject.csproj
+		SccProjectTopLevelParentUniqueName5 = Microsoft.VisualStudio.Project.sln
+		SccProjectName5 = Samples/CSharp/NestedProject/Src
+		SccLocalPath5 = Samples\\CSharp\\NestedProject\\Src
+		SccProjectUniqueName6 = Samples\\CSharp\\NestedProject\\UnitTests\\NestedProject.UnitTests.csproj
+		SccProjectTopLevelParentUniqueName6 = Microsoft.VisualStudio.Project.sln
+		SccProjectName6 = Samples/CSharp/NestedProject/UnitTests
+		SccLocalPath6 = Samples\\CSharp\\NestedProject\\UnitTests
+		SccProjectUniqueName7 = Samples\\CSharp\\CustomProject\\UnitTests\\CustomProject.UnitTests.csproj
+		SccProjectTopLevelParentUniqueName7 = Microsoft.VisualStudio.Project.sln
+		SccProjectName7 = Samples/CSharp/CustomProject/UnitTests
+		SccLocalPath7 = Samples\\CSharp\\CustomProject\\UnitTests
+		SccProjectUniqueName8 = Tests\\UnitTests\\Microsoft.VisualStudio.Project.UnitTests.csproj
+		SccProjectTopLevelParentUniqueName8 = Microsoft.VisualStudio.Project.sln
+		SccProjectName8 = Tests/UnitTests
+		SccLocalPath8 = Tests\\UnitTests
+		SccProjectUniqueName9 = Tests\\IntegrationTests\\Microsoft.VisualStudio.Project.IntegrationTests.csproj
+		SccProjectTopLevelParentUniqueName9 = Microsoft.VisualStudio.Project.sln
+		SccProjectName9 = Tests/IntegrationTests
+		SccLocalPath9 = Tests\\IntegrationTests
+		SccProjectUniqueName10 = Src\\CSharp\\Microsoft.VisualStudio.Project.15.0.csproj
+		SccProjectName10 = Src/CSharp
+		SccLocalPath10 = Src\\CSharp
 	EndGlobalSection
 EndGlobal

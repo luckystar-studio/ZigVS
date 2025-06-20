@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="ZigVS.PackageInstallerWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+             Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+             xmlns:local="clr-namespace:ZigVS"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1000" GotFocus="UserControl_GotFocus">
+
+    <DockPanel x:Name="m_DockPanel">
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Top" VerticalAlignment="Top">
+            <DockPanel Margin="5">
+                <TextBlock x:Name="m_One_TextBlock" Width="40" FontSize="30">❶</TextBlock>
+                <TextBlock x:Name="Text" Width="200" Margin="5" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left">Package Repository</TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                    <Button Margin="5" Content="←" Width="30"  Name="Back" FontSize="20" Click="Back_Click"/>
+                    <Button Margin="5" Content="→" Click="Forword_Click" Width="30"  Name="Forword" FontSize="20" HorizontalAlignment="Right"/>
+                    <Button Margin="5" Content="🏠" Width="30"  Name="Home" FontSize="20" Click="Home_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="m_URL_TextBlock"  Margin="5" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+            </DockPanel>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+            <DockPanel  Margin="5">
+                <TextBlock DockPanel.Dock="Left" x:Name="m_Two_TextBlock" Width="40" FontSize="30">❷</TextBlock>
+                <TextBlock DockPanel.Dock="Left" Width="100" Margin="5" FontSize="16" VerticalAlignment="Center">Install Method</TextBlock>
+                <ComboBox DockPanel.Dock="Left" x:Name="m_Method_ComboBox" Width="100" Margin="5"  FontSize="16" SelectionChanged="Method_SelectionChanged"/>
+                <TextBlock  DockPanel.Dock="Left" Width="10" FontSize="30"></TextBlock>
+                <Button DockPanel.Dock="Right" Content="{Binding InstallButtonTextString}" IsEnabled="{Binding InstallButtonEnabled}"  Width="120" Height="30" FontSize="18" Click="Install_button_Click" HorizontalAlignment="Right"/>
+                <TextBlock DockPanel.Dock="Right" x:Name="m_Warning_TextBlock" Width="350" Margin="5" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Right" TextAlignment="Right"/>
+                <!--TextBlock x:Name="m_Command_TextBlock"  Margin="5" FontSize="16" /-->
+                <TextBox x:Name="m_Command_TextBlock"  Margin="5" FontSize="16" BorderThickness="0" Text="{Binding Text, Mode=OneWay}" IsReadOnly="True" Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
+            </DockPanel>
+        </StackPanel>
+        <Wpf:WebView2 Name="m_WebView2" SourceChanged="webView_SourceChanged"/>
+        <!--WebBrowser Source="https://github.com/search?q=language%3Azig+path%3Abuild.zig.zon+content%3AREADME.md&amp;type=repositories&amp;s=stars&amp;o=desc" DockPanel.Dock="Top" /-->
+    </DockPanel>
+</UserControl>

@@ -352,6 +352,10 @@ namespace Microsoft.VisualStudio.Project
 			{
 				return this.parentNode;
 			}
+			set
+			{
+				this.parentNode = value;
+			}
 		}
 
 
@@ -1021,8 +1025,11 @@ namespace Microsoft.VisualStudio.Project
 			// Notify hierarchy event listeners that the file is going to be removed.
 			OnItemDeleted();
 
-			// Remove child if any before removing from the hierarchy
-			for(HierarchyNode child = this.FirstChild; child != null; child = child.NextSibling)
+            // Close the document window if opened.
+            CloseDocumentWindow(this);
+
+            // Remove child if any before removing from the hierarchy
+            for (HierarchyNode child = this.FirstChild; child != null; child = child.NextSibling)
 			{
 				child.Remove(removeFromStorage);
 			}
@@ -1051,9 +1058,6 @@ namespace Microsoft.VisualStudio.Project
 			{
 				this.DeleteFromStorage(pathToDelete);
 			}
-
-			// Close the document window if opened.
-			CloseDocumentWindow(this);
 
 			// Notify document tracker listeners that we have removed the item.
 			VSREMOVEFILEFLAGS[] removeFlags = this.GetRemoveFileFlags(filesToBeDeleted);
@@ -1270,7 +1274,8 @@ namespace Microsoft.VisualStudio.Project
 			else
 				uiFlags = (uint)(__VSADDITEMFLAGS.VSADDITEM_AddExistingItems | __VSADDITEMFLAGS.VSADDITEM_AllowMultiSelect | __VSADDITEMFLAGS.VSADDITEM_AllowStickyFilter | __VSADDITEMFLAGS.VSADDITEM_ProjectHandlesLinks);
 
-			ErrorHandler.ThrowOnFailure(addItemDialog.AddProjectItemDlg(this.Id, ref projectGuid, project, uiFlags, null, null, ref strBrowseLocations, ref strFilter, out iDontShowAgain)); /*&fDontShowAgain*/
+			var l_result = addItemDialog.AddProjectItemDlg(this.Id, ref projectGuid, project, uiFlags, null, null, ref strBrowseLocations, ref strFilter, out iDontShowAgain);
+//         ErrorHandler.ThrowOnFailure(); /*&fDontShowAgain*/
 
 			return VSConstants.S_OK;
 		}
@@ -3419,5 +3424,23 @@ namespace Microsoft.VisualStudio.Project
 		}
 
 		#endregion
-	}
+
+		public string GetRelativePath()
+		{
+			return GetRelativePath(this.Caption);
+        }
+
+        public string GetRelativePath(string i_newNameString)
+        {
+            string r_relativePathString = i_newNameString;
+
+            HierarchyNode parent = this.Parent;
+            while (parent != null && (parent is FolderNode))
+            {
+                r_relativePathString = Path.Combine(parent.Caption, r_relativePathString);
+                parent = parent.Parent;
+            }
+            return r_relativePathString;
+        }
+    }
 }

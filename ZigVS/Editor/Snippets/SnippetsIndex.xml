@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SnippetCollection>
+    <Language Lang="zig" Guid="{024D2A59-EEE2-4F2A-85C0-0560D7996063}">
+        <SnippetDir>
+            <OnOff>On</OnOff>
+            <Installed>true</Installed>
+            <Locale>1033</Locale>
+            <DirPath>$PackageFolder$\Editor\Snippets</DirPath>	
+            <LocalizedName>zig</LocalizedName>
+        </SnippetDir>
+    </Language>
+</SnippetCollection>

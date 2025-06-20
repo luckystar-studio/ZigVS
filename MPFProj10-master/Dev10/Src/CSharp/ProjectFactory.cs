@@ -144,7 +144,7 @@ namespace Microsoft.VisualStudio.Project
 			return true;
 		}
 
-		public void OnBeforeCreateProjectAsync(ref Guid rguidProjectID, string filename, string location, string pszName, uint flags)
+		public void OnBeforeCreateProject(ref Guid rguidProjectID, string filename, string location, string pszName, uint flags)
 		{
 		}
 

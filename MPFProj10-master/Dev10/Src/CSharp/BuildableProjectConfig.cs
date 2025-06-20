@@ -258,7 +258,7 @@ namespace Microsoft.VisualStudio.Project
 
             try
             {
-                config.ProjectManager.BuildAsync(options, this.config.ConfigName, this.config.Platform, output, target, (result, buildTarget) => this.NotifyBuildEnd(result, buildTarget));
+                config.ProjectManager.Build(options, this.config.ConfigName, this.config.Platform, output, target, (result, buildTarget) => this.NotifyBuildEnd(result, buildTarget));
             }
             catch(Exception e)
             {

@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="ZigVS.ToolchainInstallerWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+             Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+             mc:Ignorable="d"
+             d:DesignHeight="1000" d:DesignWidth="800"
+             Name="MyToolWindow">
+    <Grid HorizontalAlignment="Center">
+        <StackPanel Orientation="Vertical">
+            <StackPanel Margin="5">
+                <TextBlock x:Name="Title" Margin="5" FontSize="22" VerticalAlignment="Center" HorizontalAlignment="Center" TextDecorations="Underline"> Zig Tool-chain Installer </TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Name="m_Zig_TextBlock" Width="40" FontSize="30">❶</TextBlock>
+                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Zig Tool-chain Version</TextBlock>
+                <ComboBox x:Name="m_ZigVersion_ComboBox" Width="450" Margin="5"  FontSize="16" SelectionChanged="ZigVersion_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Name="m_LS_TextBlock" Width="40" FontSize="30">❷</TextBlock>
+                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">ZLS Version</TextBlock>
+                <ComboBox x:Name="m_ZLSVersion_ComboBox" Width="450" Margin="5"  FontSize="16" SelectionChanged="ZLSVersion_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Name="m_CPU_TextBlock" Width="40" FontSize="30">❸</TextBlock>
+                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">CPU Architectures</TextBlock>
+                <ComboBox x:Name="m_CPU_ComboBox" Width="450" Margin="5"  FontSize="16" SelectionChanged="CPU_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Name="m_Directory_TextBlock" Width="40" FontSize="30">❹</TextBlock>
+                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Install Directory</TextBlock>
+                <TextBox x:Name="m_DirecotryPath_TextBox"  Height="30" Width="450" Margin="5" FontSize="16" VerticalAlignment="Center" Text="" TextChanged="DirectoryPath_TextChanged"/>
+                <Button Margin="5" Content="..." Click="directory_button_Click" Width="30"  Name="button1" FontSize="20"/>
+             </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Name="m_Env_TextBlock" Width="40" FontSize="30">❺</TextBlock>
+                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Environment Value</TextBlock>
+                <RadioButton x:Name="m_DoNotSet_Radio_Button" Content="Do not set    " FontSize="16" VerticalAlignment="Center" Click="DoNotSet_Click" Foreground="White" />
+                <RadioButton x:Name="m_DoSet_Path_Radio_Button" Content="Set Environment Value 'PATH'" FontSize="16" VerticalAlignment="Center" Click="DoSet_Path_Click" />
+                <!--RadioButton x:Name="m_DoSet_Radio_Button" Content="Set Environment Value 'ZIG__TOOL__PATH'" FontSize="16" VerticalAlignment="Center" Click="DoSet_Click" /-->
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Width="40" FontSize="30">　</TextBlock>
+                <TextBlock Width="650" Margin="5" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                <Button Content="{Binding InstallButtonTextString}" Width="120" Height="30" FontSize="18" IsEnabled="{Binding InstallButtonEnabled}" Click="install_button_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

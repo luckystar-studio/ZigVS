@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <TargetFrameworkProfile />
+    <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NoWarn>NU1603</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{004B0D4C-0930-4F54-8B9E-E3C3A4E403CC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZigVS</RootNamespace>
+    <AssemblyName>ZigVS</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <UseCodebase>true</UseCodebase>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
+    <StartAction>Program</StartAction>
+    <StartProgram Condition="'$(DevEnvDir)' != ''">$(DevEnvDir)devenv.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1603</NoWarn>
+    <CopyVsixExtensionFiles>False</CopyVsixExtensionFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1603</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Command\Command.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Command.vsct</DependentUpon>
+    </Compile>
+    <Compile Include="Command\CommandDefinition.cs" />
+    <Compile Include="Command\DebugEngineSelectorCommand.cs" />
+    <Compile Include="Command\HelpCommand.cs" />
+    <Compile Include="Command\PackageCreaterCommand.cs" />
+    <Compile Include="Command\PackageCreator\PackageCreator.cs" />
+    <Compile Include="Command\PackageCreator\PackageCreatorWindow.cs" />
+    <Compile Include="Command\PackageCreator\PackageCreatorWindowControl.xaml.cs">
+      <DependentUpon>PackageCreatorWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Command\PackageInstallerCommand.cs" />
+    <Compile Include="Command\PackageInstaller\PackageInstallerWindow.cs" />
+    <Compile Include="Command\PackageInstaller\PackageInstaller.cs" />
+    <Compile Include="Command\QAndACommand.cs" />
+    <Compile Include="Command\RatingAndReviewCommand.cs" />
+    <Compile Include="Command\ToolchainInstaller\ToolchainInstaller.cs" />
+    <Compile Include="Command\ToolchainInstaller\ToolchainInstallerWindow.cs" />
+    <Compile Include="Command\ToolchainInstallerCommand.cs" />
+    <Compile Include="Command\ToolchainInstaller\ToolchainInstallerWindowControl.xaml.cs">
+      <DependentUpon>ToolchainInstallerWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\File.cs" />
+    <Compile Include="Common\OutputWindowPane.cs" />
+    <Compile Include="Common\Parameter.cs" />
+    <Compile Include="Common\Statusbar.cs" />
+    <Compile Include="Common\Test.cs" />
+    <Compile Include="Editor\CompletionCommandHandler.cs" />
+    <Compile Include="Editor\LanguageClient.cs" />
+    <Compile Include="Editor\LanguageClientMiddleLayer.cs" />
+    <Compile Include="Editor\TextViewCreationListener.cs" />
+    <Compile Include="Editor\ZLS.cs" />
+    <Compile Include="FolderMode\Build.cs" />
+    <Compile Include="FolderMode\BuildInfo.cs" />
+    <Compile Include="Editor\ContentDefinition.cs" />
+    <Compile Include="FolderMode\FileContextProvider.cs" />
+    <Compile Include="FolderMode\FileScanner.cs" />
+    <Compile Include="FolderMode\FileScannerFactory.cs" />
+    <Compile Include="FolderMode\LaunchDebugTargetProvider.cs" />
+    <Compile Include="FolderMode\FileContextProviderFactory.cs" />
+    <Compile Include="Common\InstallerBase.cs" />
+    <Compile Include="Options\BaseOptionModel.cs" />
+    <Compile Include="Options\BaseOptionPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\DialogPageProvider.cs" />
+    <Compile Include="Options\FolderModeOptions.cs" />
+    <Compile Include="Options\GeneralOptions.cs" />
+    <Compile Include="Options\ProjectModeOptions.cs" />
+    <Compile Include="Command\PackageInstaller\PackageInstallerWindowControl.xaml.cs">
+      <DependentUpon>PackageInstallerWindowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Options\TextEditorAdvancedOption.cs" />
+    <Compile Include="ProjectMode\PropertyPage\LocDisplayNameAttribute.cs" />
+    <Compile Include="ProjectMode\PropertyPage\PropertyPage_General.cs" />
+    <Compile Include="ProjectMode\PropertyPage\PropertyPage_Debug.cs" />
+    <Compile Include="ProjectMode\PropertyPage\PropertyPageUIText.cs" />
+    <Compile Include="ProjectMode\PropertyPage\ResourcesCategoryAttribute.cs" />
+    <Compile Include="ProjectMode\PropertyPage\ResourcesDescriptionAttribute.cs" />
+    <Compile Include="ProjectMode\PropertyPage\PropertyPage_Build.cs" />
+    <Compile Include="ProjectMode\ZigVSProjectFactory.cs" />
+    <Compile Include="ProjectMode\ZigVSProjectFileNode.cs" />
+    <Compile Include="ProjectMode\ZigVSProjectNode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Command\FormattingCommand.cs" />
+    <Compile Include="Test\SolusionItems.cs" />
+    <Compile Include="Test\TestContainer.cs" />
+    <Compile Include="Test\TestContainerDiscoverer.cs" />
+    <Compile Include="Test\TestDiscoverer.cs" />
+    <Compile Include="Test\TestExecutor.cs" />
+    <Compile Include="Common\Utilities.cs" />
+    <Compile Include="ZigVSPackage.cs" />
+    <Compile Include="ProjectMode\ZigVSProjectAutomation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Editor\Snippets\SnippetsIndex.xml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="LICENSE.txt">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="README.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\language-configuration.json">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="Test\HowToIntegrateUnitTestWithTestExplorer.pdf" />
+    <Resource Include="Resources\file_icon.16.16.png" />
+    <Content Include="Resources\ziglang_logo_icon.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ZigVS.pkgdef">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Syntaxes\Zig.tmLanguage">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <VSCTCompile Include="Command\Command.vsct">
+      <Generator>VsctGenerator</Generator>
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <LastGenOutput>Command.cs</LastGenOutput>
+    </VSCTCompile>
+    <Content Include="Editor\Snippets\if.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Intellisense\snippets.json">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="Editor\InitializeMethod.json" />
+    <Content Include="Editor\Snippets\else.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Monikers.imagemanifest">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IO.Redist">
+      <Version>6.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.ServiceHub.Framework">
+      <Version>4.8.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.LanguageServer.Protocol">
+      <Version>17.2.8</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.TestWindow.Interfaces">
+      <Version>11.0.61030</Version>
+    </PackageReference>
+    <PackageReference Include="System.Collections.Immutable">
+      <Version>9.0.5</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces">
+      <Version>9.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel">
+      <Version>17.14.0</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Designer.Interfaces">
+      <Version>17.11.40262</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.LanguageServer.Client">
+      <Version>17.11.32</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.11.40262" ExcludeAssets="runtime">
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Shell.15.0">
+      <Version>17.11.40262</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Workspace">
+      <Version>17.1.11-preview-0002</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Workspace.Extensions">
+      <Version>17.1.11-preview-0002</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Workspace.Extensions.VS">
+      <Version>17.1.11-preview-0002</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Workspace.VSIntegration">
+      <Version>17.1.11-preview-0002</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.11.435">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.3240.44</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="SnippetManager">
+      <Version>1.3.3</Version>
+      <NoWarn>NU1603</NoWarn>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>9.0.5</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MPFProj10-master\Dev10\Src\CSharp\Microsoft.VisualStudio.Project.15.0.csproj">
+      <Project>{e3ecfe20-a03f-46fc-9211-68c1b9661c5e}</Project>
+      <Name>Microsoft.VisualStudio.Project.15.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zig_AppProject_Template1\Zig_AppProject_Template1.csproj">
+      <Project>{C4CDDB19-85C5-4FB2-92BE-3F821FA17850}</Project>
+      <Name>Zig_AppProject_Template1</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Zig_AppProject_Template2\Zig_AppProject_Template2.csproj">
+      <Project>{B303C666-358D-42F8-BB84-23C635FA14CB}</Project>
+      <Name>Zig_AppProject_Template2</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Zig_Item_Template1\Zig_Item_Template1.csproj">
+      <Project>{5330A58C-BB4B-4C6B-80C1-3FF0DEC303A9}</Project>
+      <Name>Zig_Item_Template1</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Zig_Item_Template2\Zig_Item_Template2.csproj">
+      <Project>{4732B278-F458-4EBF-A1C0-137E4BC59F8B}</Project>
+      <Name>Zig_Item_Template2</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Zig_LibProject_Template1\Zig_LibProject_Template1.csproj">
+      <Project>{4E28FD2A-F331-4709-9812-5F78AE2E6374}</Project>
+      <Name>Zig_LibProject_Template1</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Command\PackageCreator\PackageCreatorWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Command\ToolchainInstaller\ToolchainInstallerWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Command\PackageInstaller\PackageInstallerWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -394,17 +394,7 @@ namespace Microsoft.VisualStudio.Project
                 }
             }
 
-
-            // Build the relative path by looking at folder names above us as one scenarios
-            // where we get called is when a folder above us gets renamed (in which case our path is invalid)
-            HierarchyNode parent = this.Parent;
-            while(parent != null && (parent is FolderNode))
-            {
-                strRelPath = Path.Combine(parent.Caption, strRelPath);
-                parent = parent.Parent;
-            }
-
-            return SetEditLabel(label, strRelPath);
+            return SetEditLabel(label, GetRelativePath());
         }
 
         public override string GetMKDocument()
@@ -495,9 +485,12 @@ namespace Microsoft.VisualStudio.Project
             }
             // Return S_FALSE if the hierarchy item id has changed.  This forces VS to flush the stale
             // hierarchy item id.
+
+            // this.Id is already became invaid. do not use this.Id here, when node name is changed
             if(returnValue == (int)VSConstants.S_OK || returnValue == (int)VSConstants.S_FALSE || returnValue == VSConstants.OLE_E_PROMPTSAVECANCELLED)
             {
-                return (oldId == this.Id) ? VSConstants.S_OK : (int)VSConstants.S_FALSE;
+                return (int)VSConstants.S_FALSE;
+              //  return (oldId == this.Id) ? VSConstants.S_OK : (int)VSConstants.S_FALSE;
             }
 
             return returnValue;
@@ -893,57 +886,19 @@ namespace Microsoft.VisualStudio.Project
                 return null;
             }
 
+            // Retrieve child nodes to add later.
+            var l_childHierarchyNodeList = this.GetChildNodes();
+
             this.OnItemDeleted();
             this.Parent.RemoveChild(this);
 
-            // Since this node has been removed all of its state is zombied at this point
-            // Do not call virtual methods after this point since the object is in a deleted state.
-
-            string[] file = new string[1];
-            file[0] = newFileName;
-            VSADDRESULT[] result = new VSADDRESULT[1];
-            Guid emptyGuid = Guid.Empty;
-            VSADDITEMOPERATION op = (String.IsNullOrEmpty(linkPath) ? VSADDITEMOPERATION.VSADDITEMOP_OPENFILE : VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE);
-            ErrorHandler.ThrowOnFailure(this.ProjectManager.AddItemWithSpecific(newParent.Id, op, null, 0, file, IntPtr.Zero, 0, ref emptyGuid, null, ref emptyGuid, result));
-            FileNode childAdded = this.ProjectManager.FindChild(newFileName) as FileNode;
-            Debug.Assert(childAdded != null, "Could not find the renamed item in the hierarchy");
-
-            /* No need to update the ID of this node. If ID is referenced by the caller after the
-             * node is removed from the hierarchy, it will throw an InvalidOperationException.
-             */
-            //this.ID = childAdded.ID;
-
-            // Remove the item created by the add item. We need to do this otherwise we will have two items.
-            // Please be aware that we have not removed the ItemNode associated to the removed file node from the hierrachy.
-            // What we want to achieve here is to reuse the existing build item. 
-            // We want to link to the newly created node to the existing item node and addd the new include.
-
-            bool wasIndependentNode = !this.ItemNode.Item.UnevaluatedInclude.Contains("*");
-            bool isIndependentNode = !childAdded.ItemNode.Item.UnevaluatedInclude.Contains("*");
-
-            if (wasIndependentNode && isIndependentNode)
-            {
-                //temporarily keep properties from new itemnode since we are going to overwrite it
-                string newInclude = childAdded.ItemNode.Item.EvaluatedInclude;
-                string dependentOf = childAdded.ItemNode.GetMetadata(ProjectFileConstants.DependentUpon);
-
-                childAdded.ItemNode.RemoveFromProjectFile();
-
-                // Assign existing msbuild item to the new childnode
-                childAdded.ItemNode = this.ItemNode;
-                childAdded.ItemNode.Item.ItemType = this.ItemNode.ItemName;
-                childAdded.ItemNode.Item.Xml.Include = newInclude;
-                if (!string.IsNullOrEmpty(dependentOf))
-                    childAdded.ItemNode.SetMetadata(ProjectFileConstants.DependentUpon, dependentOf);
-                if (!string.IsNullOrEmpty(linkPath))
-                    childAdded.ItemNode.SetMetadata(ProjectFileConstants.Link, linkPath);
-                childAdded.ItemNode.RefreshProperties();
-            }
-            else if (wasIndependentNode)
-            {
-                this.ItemNode.RemoveFromProjectFile();
-            }
-
+            var l_relativeFilePathString = CommonUtils.GetRelativeFilePath(this.ProjectManager.ProjectFolder, newFileName);
+            this.ItemNode.Rename(l_relativeFilePathString);
+            var childAdded = this.ProjectManager.CreateFileNode(this.ItemNode);
+            childAdded.ItemNode.RefreshProperties();
+            newParent.AddChild(childAdded);
+            childAdded.Parent = newParent;
+            
             //Update the new document in the RDT.
             DocumentManager.RenameDocument(this.ProjectManager.Site, oldFileName, newFileName, childAdded.Id);
 
@@ -955,7 +910,7 @@ namespace Microsoft.VisualStudio.Project
 			// renamed node.
 			if (uiWindow != null)
 			{
-				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager.InteropSafeIVsUIHierarchy, this.Id, EXPANDFLAGS.EXPF_SelectItem));
+				ErrorHandler.ThrowOnFailure(uiWindow.ExpandItem(this.ProjectManager.InteropSafeIVsUIHierarchy, childAdded.Id, EXPANDFLAGS.EXPF_SelectItem));
 			}
 
             //Update FirstChild
@@ -969,6 +924,18 @@ namespace Microsoft.VisualStudio.Project
             RenameChildNodes(childAdded);
 
             return childAdded;
+        }
+
+        private List<HierarchyNode> GetChildNodes()
+        {
+            var childNodes = new List<HierarchyNode>();
+            var childNode = this.FirstChild;
+            while (childNode != null)
+            {
+                childNodes.Add(childNode);
+                childNode = childNode.NextSibling;
+            }
+            return childNodes;
         }
 
         /// <summary>

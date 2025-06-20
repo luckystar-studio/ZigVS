@@ -84,7 +84,9 @@ namespace Microsoft.VisualStudio.Project
 		public const string SubType = "SubType";
 		public const string DependentUpon = "DependentUpon";
 		public const string Compile = "Compile";
-		public const string ReferencePath = "ReferencePath";
+        public const string ClInclude = "ClInclude";
+        public const string ClCompile = "ClCompile";
+        public const string ReferencePath = "ReferencePath";
 		public const string ResolvedProjectReferencePaths = "ResolvedProjectReferencePaths";
 		public const string Configuration = "Configuration";
 		public const string Platform = "Platform";

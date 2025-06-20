@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipeLaunchOptions xmlns="http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014"
+	MIMode="gdb"
+	PipePath="C:\Windows\System32\OpenSSH\ssh.exe"
+	PipeArguments="-p 2022 -i C:\Users\[windows user name]\.ssh\id_rsa [linux user name]@[linux ip address] -t gdb --interpreter=mi"
+	TargetArchitecture="x64"
+	DebuggerPath="/usr/bin/gdb"
+	Environment="VAR1=value1;VAR2=value2"
+	ExePath="/mnt/[path to the target on windos]"
+	ExeArguments=""
+	WorkingDirectory="/home/[linux user name]"
+	LaunchCompleteCommand="exec-run">
+	<AdditionalSOLibSearchPath>/usr/lib;/usr/local/lib</AdditionalSOLibSearchPath>
+</PipeLaunchOptions>

@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="ZigVS.PackageCreatorWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+             Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+             xmlns:local="clr-namespace:ZigVS"
+             mc:Ignorable="d">
+    <Grid>
+            
+        <StackPanel Orientation="Vertical">
+
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Name="m_One_TextBlock" Width="40" FontSize="30">❶</TextBlock>
+                <TextBlock x:Name="m_Directory_TextBlock" Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Directory</TextBlock>
+                <TextBox x:Name="m_DirecotryPath_TextBox"  Height="30" Width="450" Margin="5" FontSize="16" VerticalAlignment="Center" Text="" TextChanged="m_DirecotryPath_TextBox_TextChanged"/>
+                <Button Margin="5" Content="..." Width="30"  Name="m_Directory_Button" FontSize="20" Click="m_Directory_Button_Click"/>
+             </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Name="m_Two_TextBlock" Width="40" FontSize="30">❷</TextBlock>
+                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Package Name</TextBlock>
+                <TextBox x:Name="m_PackageName_TextBox" Height="30" Width="450" Margin="5" FontSize="16" VerticalAlignment="Center" Text="" TextChanged="m_PackageName_TextBox_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Name="m_Three_TextBlock" Width="40" FontSize="30">❸</TextBlock>
+                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Open Folder Mode</TextBlock>
+                <RadioButton x:Name="m_DoNotOpen_Radio_Button" Content="Do not open    " FontSize="16" VerticalAlignment="Center" Checked="m_DoNotOpen_Radio_Button_Checked"/>
+                <RadioButton x:Name="m_Open_Radio_Button" Content="Open" FontSize="16" VerticalAlignment="Center" Checked="m_Open_Radio_Button_Checked" />
+                <!--RadioButton x:Name="m_DoSet_Radio_Button" Content="Set Environment Value 'ZIG__TOOL__PATH'" FontSize="16" VerticalAlignment="Center" Click="DoSet_Click" /-->
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Width="40" FontSize="30">　</TextBlock>
+                <TextBlock Width="580" Margin="5" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                <Button Content="Create" Width="120" Height="30" x:Name="m_Create_Button" FontSize="18" IsEnabled="False" Click="m_Create_Button_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

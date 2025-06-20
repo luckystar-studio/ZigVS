@@ -1625,6 +1625,14 @@ namespace Microsoft.VisualStudio.Project
             {
                 isFileItem = true;
             }
+            else if (String.Equals(buildItem.ItemType, ProjectFileConstants.ClCompile, StringComparison.OrdinalIgnoreCase))
+            {
+                isFileItem = true;
+            }
+            else if (String.Equals(buildItem.ItemType, ProjectFileConstants.ClInclude, StringComparison.OrdinalIgnoreCase))
+            {
+                isFileItem = true;
+            }
             else if (String.Equals(buildItem.ItemType, ProjectFileConstants.EmbeddedResource, StringComparison.OrdinalIgnoreCase))
             {
                 isFileItem = true;
@@ -2346,7 +2354,7 @@ namespace Microsoft.VisualStudio.Project
             {
                 Array contextParamsAsArray = contextParams;
 
-                int result = ivsExtensibility.RunWizardFile(wizardToRun, (int)dlgOwner, ref contextParamsAsArray, out wizResultAsInt);
+                int result = ivsExtensibility.RunWizardFile(wizardToRun, dlgOwner, ref contextParamsAsArray, out wizResultAsInt);
 
                 if (!ErrorHandler.Succeeded(result) && result != VSConstants.OLE_E_PROMPTSAVECANCELLED)
                 {
@@ -2400,7 +2408,7 @@ namespace Microsoft.VisualStudio.Project
                     // call the container to open the add reference dialog.
                     string browseFilters = GetComponentSelectorBrowseFilters();
                     ErrorHandler.ThrowOnFailure(componentDialog.ComponentSelectorDlg5(
-                        (System.UInt32)(__VSCOMPSELFLAGS.VSCOMSEL_MultiSelectMode | __VSCOMPSELFLAGS.VSCOMSEL_IgnoreMachineName),
+                        (System.UInt32)(__VSCOMPSELFLAGS.VSCOMSEL_MultiSelectMode | __VSCOMPSELFLAGS.VSCOMSEL_HideCOMPlusTab | __VSCOMPSELFLAGS.VSCOMSEL_HideCOMClassicTab | __VSCOMPSELFLAGS.VSCOMSEL_IgnoreMachineName),
                         this.InteropSafeIVsComponentUser,
                         0,
 						null,
@@ -2431,7 +2439,7 @@ namespace Microsoft.VisualStudio.Project
 
         protected virtual string GetComponentSelectorBrowseFilters()
         {
-            return "Component Files (*.exe;*.dll)\0*.exe;*.dll\0";
+            return "Component Files (*.lib;*.exe;*.dll)\0*.lib;*.exe;*.dll\0";
         }
 
         protected virtual ReadOnlyCollection<VSCOMPONENTSELECTORTABINIT> GetComponentSelectorTabList()
@@ -2793,7 +2801,7 @@ namespace Microsoft.VisualStudio.Project
         /// Do the build by invoking msbuild
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "vsopts")]
-        public virtual void BuildAsync(uint vsopts, string config, string platform, IVsOutputWindowPane output, string target, Action<MSBuildResult, string> uiThreadCallback)
+        public virtual void Build(uint vsopts, string config, string platform, IVsOutputWindowPane output, string target, Action<MSBuildResult, string> uiThreadCallback)
         {
             this.BuildPrelude(output);
             this.SetBuildConfigurationProperties(config, platform);
@@ -3225,7 +3233,18 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>false by default for any fileName</returns>
         public virtual bool IsCodeFile(string fileName)
         {
-            return false;
+            return String.Equals(Path.GetExtension(fileName), ".zig", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public virtual bool IsCppFile(string fileName)
+        {
+            return String.Equals(Path.GetExtension(fileName), ".cpp", StringComparison.OrdinalIgnoreCase) ||
+                    String.Equals(Path.GetExtension(fileName), ".c", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public virtual bool IsIncludeFile(string fileName)
+        {
+            return String.Equals(Path.GetExtension(fileName), ".h", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -3235,9 +3254,7 @@ namespace Microsoft.VisualStudio.Project
         /// <returns>true if the file is a resx file, otherwise false.</returns>
         public virtual bool IsEmbeddedResource(string fileName)
         {
-            if (String.Equals(Path.GetExtension(fileName), ".ResX", StringComparison.OrdinalIgnoreCase))
-                return true;
-            return false;
+            return String.Equals(Path.GetExtension(fileName), ".ResX", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -4204,6 +4221,14 @@ namespace Microsoft.VisualStudio.Project
             if (this.IsCodeFile(itemPath))
             {
                 newItem = AddFileToMSBuild(file, ProjectFileConstants.Compile, ProjectFileAttributeValue.Code);
+            }
+            else if (this.IsCppFile(itemPath))
+            {
+                newItem = AddFileToMSBuild(file, ProjectFileConstants.ClCompile, ProjectFileAttributeValue.Code);
+            }
+            else if (this.IsIncludeFile(itemPath))
+            {
+                newItem = AddFileToMSBuild(file, ProjectFileConstants.ClInclude, ProjectFileAttributeValue.Code);
             }
             else if (this.IsEmbeddedResource(itemPath))
             {
@@ -7121,6 +7146,7 @@ namespace Microsoft.VisualStudio.Project
                 _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>("Compile", prjBuildAction.prjBuildActionCompile));
                 _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>("Content", prjBuildAction.prjBuildActionContent));
                 _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>("EmbeddedResource", prjBuildAction.prjBuildActionEmbeddedResource));
+                _availableFileBuildActions.Add(new KeyValuePair<string, prjBuildAction>("ClInclude", prjBuildAction.prjBuildActionNone));
                 ICollection<MSBuild.ProjectItem> availableItemNames = buildProject.GetItems("AvailableItemName");
                 foreach (var itemName in availableItemNames)
                 {

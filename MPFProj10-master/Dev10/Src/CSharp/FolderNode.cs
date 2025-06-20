@@ -825,22 +825,25 @@ namespace Microsoft.VisualStudio.Project
 		#region helper methods
 		protected virtual void RenameFolder(string newName)
 		{
-			// Do the rename (note that we only do the physical rename if the leaf name changed)
-			string newPath = Path.Combine(this.Parent.VirtualNodeName, newName);
-			if(!String.Equals(Path.GetFileName(VirtualNodeName), newName, StringComparison.Ordinal))
-			{
-				this.RenameDirectory(Path.Combine(this.ProjectManager.ProjectFolder, newPath));
-			}
-			this.VirtualNodeName = newPath;
+            var l_oldFolderPathString = this.Url;
+			bool l_createNewFolderBool = false;
 
-			this.ItemNode.Rename(VirtualNodeName);
+            string newPath = GetRelativePath(newName);
+			if(!String.Equals(Path.GetFileName(VirtualNodeName), newPath, StringComparison.Ordinal))
+			{
+				this.CreateDirectory(Path.Combine(this.ProjectManager.ProjectFolder, newPath));
+                l_createNewFolderBool = true;
+            }
+
+            this.VirtualNodeName = newPath;
+            this.ItemNode.Rename(VirtualNodeName);
 
 			// Let all children know of the new path
-			for(HierarchyNode child = this.FirstChild; child != null; child = child.NextSibling)
+			for (HierarchyNode child = this.FirstChild; child != null; child = child.NextSibling)
 			{
 				FolderNode node = child as FolderNode;
 
-				if(node == null)
+				if (node == null)
 				{
 					child.SetEditLabel(child.Caption);
 				}
@@ -849,6 +852,11 @@ namespace Microsoft.VisualStudio.Project
 					node.RenameFolder(node.Caption);
 				}
 			}
+
+			if(l_createNewFolderBool )
+			{
+                this.DeleteFolder(l_oldFolderPathString);
+            }
 
 			// Some of the previous operation may have changed the selection so set it back to us
 			IVsUIHierarchyWindow uiWindow = UIHierarchyUtilities.GetUIHierarchyWindow(this.ProjectManager.Site, SolutionExplorer);
@@ -864,7 +872,7 @@ namespace Microsoft.VisualStudio.Project
             ProjectManager.ItemIdMap.UpdateCanonicalName(this);
 		}
 
-		/// <summary>
+        /// <summary>
 		/// Show error message if not in automation mode, otherwise throw exception
 		/// </summary>
 		/// <param name="newPath">path of file or folder already existing on disk</param>

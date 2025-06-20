@@ -528,7 +528,7 @@ namespace Microsoft.VisualStudio.Project
 				// Make the call to execute the wizard. This should cause AddNestedProjectFromTemplate to be
 				// called back with the correct set of parameters.
 				EnvDTE.IVsExtensibility extensibilityService = (EnvDTE.IVsExtensibility)GetService(typeof(EnvDTE.IVsExtensibility));
-				EnvDTE.wizardResult result = extensibilityService.RunWizardFile(template, 0, ref wizParams);
+				EnvDTE.wizardResult result = extensibilityService.RunWizardFile(template, new System.IntPtr(0), ref wizParams);
 				if(result == EnvDTE.wizardResult.wizardResultFailure)
 					ErrorHandler.ThrowOnFailure(VSConstants.E_FAIL);
 			}

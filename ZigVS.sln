@@ -1,0 +1,92 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZigVS", "ZigVS\ZigVS.csproj", "{004B0D4C-0930-4F54-8B9E-E3C3A4E403CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4732B278-F458-4EBF-A1C0-137E4BC59F8B} = {4732B278-F458-4EBF-A1C0-137E4BC59F8B}
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E} = {E3ECFE20-A03F-46FC-9211-68C1B9661C5E}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zig_AppProject_Template1", "Zig_AppProject_Template1\Zig_AppProject_Template1.csproj", "{C4CDDB19-85C5-4FB2-92BE-3F821FA17850}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zig_Item_Template1", "Zig_Item_Template1\Zig_Item_Template1.csproj", "{5330A58C-BB4B-4C6B-80C1-3FF0DEC303A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zig_LibProject_Template1", "Zig_LibProject_Template1\Zig_LibProject_Template1.csproj", "{4E28FD2A-F331-4709-9812-5F78AE2E6374}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zig_AppProject_Template2", "Zig_AppProject_Template2\Zig_AppProject_Template2.csproj", "{B303C666-358D-42F8-BB84-23C635FA14CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Project.15.0", "MPFProj10-master\Dev10\Src\CSharp\Microsoft.VisualStudio.Project.15.0.csproj", "{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zig_Item_Template2", "Zig_Item_Template2\Zig_Item_Template2.csproj", "{4732B278-F458-4EBF-A1C0-137E4BC59F8B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{004B0D4C-0930-4F54-8B9E-E3C3A4E403CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{004B0D4C-0930-4F54-8B9E-E3C3A4E403CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{004B0D4C-0930-4F54-8B9E-E3C3A4E403CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{004B0D4C-0930-4F54-8B9E-E3C3A4E403CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4CDDB19-85C5-4FB2-92BE-3F821FA17850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4CDDB19-85C5-4FB2-92BE-3F821FA17850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4CDDB19-85C5-4FB2-92BE-3F821FA17850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4CDDB19-85C5-4FB2-92BE-3F821FA17850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5330A58C-BB4B-4C6B-80C1-3FF0DEC303A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5330A58C-BB4B-4C6B-80C1-3FF0DEC303A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5330A58C-BB4B-4C6B-80C1-3FF0DEC303A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5330A58C-BB4B-4C6B-80C1-3FF0DEC303A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E28FD2A-F331-4709-9812-5F78AE2E6374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E28FD2A-F331-4709-9812-5F78AE2E6374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E28FD2A-F331-4709-9812-5F78AE2E6374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E28FD2A-F331-4709-9812-5F78AE2E6374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B303C666-358D-42F8-BB84-23C635FA14CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B303C666-358D-42F8-BB84-23C635FA14CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B303C666-358D-42F8-BB84-23C635FA14CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B303C666-358D-42F8-BB84-23C635FA14CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3ECFE20-A03F-46FC-9211-68C1B9661C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4732B278-F458-4EBF-A1C0-137E4BC59F8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4732B278-F458-4EBF-A1C0-137E4BC59F8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4732B278-F458-4EBF-A1C0-137E4BC59F8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4732B278-F458-4EBF-A1C0-137E4BC59F8B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B410150-B8A4-4EEC-8EFC-AF9CCDB9F05B}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://luckystar.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ZigVS\\ZigVS.csproj
+		SccProjectName1 = ZigVS
+		SccLocalPath1 = ZigVS
+		SccProjectUniqueName2 = Zig_AppProject_Template1\\Zig_AppProject_Template1.csproj
+		SccProjectName2 = Zig_AppProject_Template1
+		SccLocalPath2 = Zig_AppProject_Template1
+		SccProjectUniqueName3 = Zig_Item_Template1\\Zig_Item_Template1.csproj
+		SccProjectName3 = Zig_Item_Template1
+		SccLocalPath3 = Zig_Item_Template1
+		SccProjectUniqueName4 = Zig_LibProject_Template1\\Zig_LibProject_Template1.csproj
+		SccProjectName4 = Zig_LibProject_Template1
+		SccLocalPath4 = Zig_LibProject_Template1
+		SccProjectUniqueName5 = Zig_AppProject_Template2\\Zig_AppProject_Template2.csproj
+		SccProjectName5 = Zig_AppProject_Template2
+		SccLocalPath5 = Zig_AppProject_Template2
+		SccProjectUniqueName6 = MPFProj10-master\\Dev10\\Src\\CSharp\\Microsoft.VisualStudio.Project.15.0.csproj
+		SccProjectName6 = MPFProj10-master/Dev10/Src/CSharp
+		SccLocalPath6 = MPFProj10-master\\Dev10\\Src\\CSharp
+		SccProjectUniqueName7 = Zig_Item_Template2\\Zig_Item_Template2.csproj
+		SccProjectName7 = Zig_Item_Template2
+		SccLocalPath7 = Zig_Item_Template2
+	EndGlobalSection
+EndGlobal

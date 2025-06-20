@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>Zig Application with C/Cpp and resources</Name>
+		<Description>An application using the Zig language. Inludes .zigprog and build.zig</Description>
+		<Icon>Zig_AppProject_Template2.ico</Icon>
+		<ProjectType>Zig</ProjectType>
+		<LanguageTag>Zig</LanguageTag>
+		<SortOrder>1000</SortOrder>
+		<TemplateID>9d5f187a-c35f-44d0-8bfb-e15822d380ff</TemplateID>
+		<CreateNewFolder>true</CreateNewFolder>
+		<DefaultName>ZigApp</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<PlatformTag>windows</PlatformTag>
+		<ProjectTypeTag>console</ProjectTypeTag>
+	</TemplateData>
+	<TemplateContent>
+		<Project File="ProjectTemplate.zigproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" TargetFileName="readme.txt" OpenInEditor="true" >readme.txt</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="src\main.zig">main.zig</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="src\c_code.c">c_code.c</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="src\cpp_code.cpp">cpp_code.cpp</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="header\c_header.h">c_header.h</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="header\cpp_header.h">cpp_header.h</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="resource\resource.rc">resource.rc</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="build.zig">build.zig</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="build.zig.zon" >build.zig.zon</ProjectItem>
+		</Project>
+	</TemplateContent>
+</VSTemplate>

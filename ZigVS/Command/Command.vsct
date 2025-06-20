@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+	<!--  The VSCT compiler (the tool that translates this file into the binary
+        format that VisualStudio will consume) has the ability to run a preprocessor
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so
+        it is possible to define includes and macros with the same syntax used
+        in C++ files. Using this ability of the compiler here, we include some files
+        defining some of the constants that we will use inside the file. -->
+
+	<!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+	<Extern href="stdidcmd.h" />
+
+	<!--This header contains the command ids for the menus provided by the shell. -->
+	<Extern href="vsshlids.h" />
+
+	<Include href="VSGlobals.vsct" />
+
+	<!--The Commands section is where commands, menus, and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+	<Commands package="guidZigVSPackage">
+		<!-- Inside this section we have different sub-sections: one for the menus, another
+		for the menu groups, one for the buttons (the actual commands), one for the combos
+		and the last one for the bitmaps used. Each element is identified by a command id that
+		is a unique pair of guid and numeric identifier; the guid part of the identifier is usually
+		called "command set" and is used to group different command inside a logically related
+		group; your package should define its own command set in order to avoid collisions
+		with command ids defined by other packages. -->
+		<Menus>
+			<Menu guid="guidZigVSPackageCmdSet" id="TopLevelMenuId" priority="0x9050" type="Menu">
+				<Parent guid="VSMainMenu" id="Extensions.DefaultGroup" />
+				<Strings>
+					<ButtonText>ZigVS</ButtonText>
+				</Strings>
+			</Menu>
+
+			<!--Menu guid="guidZigVSPackageCmdSet" id="ToolbarId" type="Toolbar" >
+				<CommandFlag>DefaultDocked</CommandFlag>
+				<Strings>
+					<ButtonText>ZigVS</ButtonText>
+					<CommandName>ZigVS</CommandName>
+				</Strings>
+			</Menu-->
+		</Menus>
+
+		<!-- In this section you can define new menu groups. A menu group is a container for
+         other menus or buttons (commands); from a visual point of view you can see the
+         group as the part of a menu contained between two lines. The parent of a group
+         must be a menu. -->
+		<Groups>
+			<Group guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" priority="0x0000">
+				<Parent guid="guidZigVSPackageCmdSet" id="TopLevelMenuId" />
+			</Group>
+
+			<!--Group guid="guidZigVSPackageCmdSet" id="ToolbarGroupid" priority="0x900">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_TOOL_STANDARD" />
+			</Group-->
+		</Groups>
+
+		<!--Buttons section. -->
+		<!--This section defines the elements the user can interact with, like a menu command or a button
+        or combo box in a toolbar. -->
+		<Buttons>
+			<!--To define a menu group you have to specify its ID, the parent menu and its display priority.
+          The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+          the CommandFlag node.
+          You can add more than one CommandFlag node e.g.:
+              <CommandFlag>DefaultInvisible</CommandFlag>
+              <CommandFlag>DynamicVisibility</CommandFlag>
+          If you do not want an image next to your command, remove the Icon node /> -->
+
+			<Button guid="guidZigVSPackageCmdSet" id="ToolChainInstallerId" priority="0x0000" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
+				<Strings>
+					<ButtonText>Tool-chain Installer</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidZigVSPackageCmdSet" id="PachageInstallerId" priority="0x9010" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
+				<Strings>
+					<ButtonText>Package Installer</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidZigVSPackageCmdSet" id="ToggleInlyHintsId" priority="0x9020" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
+				<Strings>
+					<ButtonText>Inlay Hints On/Off</ButtonText>
+				</Strings>
+			</Button>
+			
+			<Button guid="guidZigVSPackageCmdSet" id="HelpId" priority="0x9030" type="Button">
+				<!--Parent guid="VSMainMenu" id="Extensions.DefaultGroup"/-->
+				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
+				<Strings>
+					<ButtonText>User Manual Page</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidZigVSPackageCmdSet" id="QAndAId" priority="0x9040" type="Button">
+				<!--Parent guid="VSMainMenu" id="Extensions.DefaultGroup"/-->
+				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
+				<Strings>
+					<ButtonText>Q and A Page</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidZigVSPackageCmdSet" id="RatingAndReviewId" priority="0x9050" type="Button">
+				<!--Parent guid="VSMainMenu" id="Extensions.DefaultGroup"/-->
+				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
+				<Strings>
+					<ButtonText>Rating and Review Page</ButtonText>
+				</Strings>
+			</Button>
+			
+			<Button guid="guidZigVSPackageCmdSet" id="PachageCreatorId" priority="0xFFFF" type="Button">
+				<Parent guid="VSMainMenu" id="File.NewGroup.Submenu.DefaultGroup" />
+				<Strings>
+					<ButtonText>Create Zig Package (zig.exe init)</ButtonText>
+				</Strings>
+			</Button>
+			
+			<Button guid="guidZigVSPackageCmdSet" id="FormattingCommandId" priority="0x0300" type="Button">
+				<Parent guid="guidWorkspaceExplorerToolWindowPackageCmdSet" id="idgWSE_ContextMenu_BuildDebugActions" />
+				<Strings>
+					<ButtonText>Format Document (zig.exe fmt)</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidZigVSPackageCmdSet" id="FormattingCommandId" priority="0x0600" type="Button">
+				<Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_ITEM_INCLUDEEXCLUDE" />
+				<Strings>
+					<ButtonText>Format Document (zig.exe fmt)</ButtonText>
+				</Strings>
+			</Button>
+
+		</Buttons>
+		<!--Combos>
+			<Combo guid="guidZigVSPackageCmdSet" id="DebuggerDropDownComboId" priority="0x0300" type="DropDownCombo" defaultWidth="150" idCommandList="DebuggerDropDownComboListCommandId">
+				<Parent guid="guidZigVSPackageCmdSet" id="ToolbarGroupid"/>
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>DebugEngine</ButtonText>
+					<MenuText>デバッガー</MenuText>
+				</Strings>
+			</Combo>
+		</Combos-->
+		<!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+	</Commands>
+
+	<Symbols>
+		<!-- This is the package guid. -->
+		<GuidSymbol name="guidZigVSPackage" value="{3fd9286d-949f-4d6e-a11a-1493feb6f915}" />
+
+		<!-- This is the guid used to group the menu commands together -->
+		<GuidSymbol name="guidZigVSPackageCmdSet" value="{875694cf-4e47-4e92-a15e-c6f296281c12}">
+			<IDSymbol name="TopLevelMenuId" value="0x0100" />
+			<IDSymbol name="SubMenuGroupId" value="0x0200" />
+			<IDSymbol name="ToolChainInstallerId" value="0x1000" />
+			<IDSymbol name="PachageInstallerId" value="0x2000" />
+			<IDSymbol name="HelpId" value="0x3000" />
+			<IDSymbol name="QAndAId" value="0x6000" />
+			<IDSymbol name="RatingAndReviewId" value="0x7000" />
+			<IDSymbol name="PachageCreatorId" value="0x4000" />
+			<IDSymbol name="FormattingCommandId" value="0x0300" />
+			<IDSymbol name="ToggleInlyHintsId" value="0x5000" />
+			
+			<IDSymbol name="ToolbarId" value="0x0350" />
+			<IDSymbol name="ToolbarGroupid" value="0x0400" />
+			<IDSymbol name="DebuggerDropDownComboId" value="0x0500" />
+			<IDSymbol name="DebuggerDropDownComboListCommandId" value="0x0600" />		
+		</GuidSymbol>
+
+		<GuidSymbol name="guidWorkspaceExplorerBuildActionCmdSet" value="{16537f6e-cb14-44da-b087-d1387ce3bf57}">
+			<IDSymbol name="BuildActionContext" value="0x1000" />
+			<IDSymbol name="RebuildActionContext" value="0x1010" />
+			<IDSymbol name="CleanActionContext" value="0x1020" />
+		</GuidSymbol>
+		
+		<!-- This is the command set from the Open Folder / Workspace context menu. Let's us put our context menu inside theirs -->
+		<GuidSymbol name="guidWorkspaceExplorerToolWindowPackageCmdSet" value="{cfb400f1-5c60-4f3c-856e-180d28def0b7}">
+			<IDSymbol name="idmWSE_ContextMenu" value="0x0002" />
+			<IDSymbol name="idgWSE_ContextMenu_ItemActions" value="0x0010" />
+			<IDSymbol name="idgWSE_ContextMenu_CollectionActions" value="0x011" />
+			<IDSymbol name="idgWSE_ContextMenu_Adding" value="0x012" />
+			<IDSymbol name="idgWSE_ContextMenu_SccCommands" value="0x013" />
+			<IDSymbol name="idgWSE_ContextMenu_BuildDebugActions" value="0x014" />
+			<IDSymbol name="idgWSE_ContextMenu_ShellActions" value="0x015" />
+			<IDSymbol name="idgWSE_ContextMenu_ScopeActions" value="0x016" />
+			<IDSymbol name="idgWSE_ContextMenu_FileContextActions" value="0x017" />
+		</GuidSymbol>
+
+		<GuidSymbol name="StandardCommandSet2k" value="{1496A755-94DE-11D0-8C3F-00C04FC2AAE2}">
+			<IDSymbol name="BuildActionContext" value="0xf000" />
+		</GuidSymbol>
+	</Symbols>
+	<KeyBindings>
+		<KeyBinding guid="guidZigVSPackageCmdSet" id="ToggleInlyHintsId" editor="guidVSStd97" key1="VK_F1" mod1="Alt" />
+	</KeyBindings>
+</CommandTable>

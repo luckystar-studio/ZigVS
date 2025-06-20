@@ -1,0 +1,11 @@
+# Ignore Visual Studio generated files
+*.user
+*.suo
+obj/
+bin/
+
+# Ignore Visual Studio cache
+.vs/
+
+# Ignore NuGet package output
+/packages/

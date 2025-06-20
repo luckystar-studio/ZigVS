@@ -57,16 +57,16 @@ namespace Microsoft.VisualStudio.Project
 		/// <summary>
 		/// The output type is a class library.
 		/// </summary>
-		Library,
+		DynamicLibrary,
 
 		/// <summary>
 		/// The output type is a windows executable.
 		/// </summary>
-		WinExe,
+		StaticLibrary,
 
 		/// <summary>
 		/// The output type is an executable.
 		/// </summary>
-		Exe
+		Application
 	}
 }

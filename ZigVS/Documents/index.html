@@ -1,0 +1,881 @@
+<!doctype html>
+<html >
+<head>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!--[if lt IE 9]>
+                <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+        <![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+
+    <!-- <link rel="stylesheet" type="text/css" href="template.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/template.css" />
+
+    <link href="https://vjs.zencdn.net/5.4.4/video-js.css" rel="stylesheet" />
+
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <!-- <script type='text/javascript' src='menu/js/jquery.cookie.js'></script> -->
+    <!-- <script type='text/javascript' src='menu/js/jquery.hoverIntent.minified.js'></script> -->
+    <!-- <script type='text/javascript' src='menu/js/jquery.dcjqaccordion.2.7.min.js'></script> -->
+
+    <!-- <link href="menu/css/skins/blue.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <link href="menu/css/skins/graphite.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <link href="menu/css/skins/grey.css" rel="stylesheet" type="text/css" /> -->
+  
+    <!-- <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+        
+  
+    <!-- <script src="script.js"></script> -->
+  
+    <!-- <script src="jquery.sticky-kit.js "></script> -->
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/js/jquery.cookie.js'></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/js/jquery.hoverIntent.minified.js'></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/js/jquery.dcjqaccordion.2.7.min.js'></script>
+
+    <link href="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/css/skins/blue.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/css/skins/graphite.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/css/skins/grey.css" rel="stylesheet" type="text/css" />
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+    <script src="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/script.js"></script>
+  
+    <script src="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/jquery.sticky-kit.js"></script>
+    <meta name="generator" content="pandoc" />
+  <meta name="author" content="LuckyStar Studio LLC" />
+  <meta name="date" content="2025-02-22" />
+  <title>ZigVS User’s Manual</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+
+    
+    <div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <span class="doc-title">ZigVS User’s Manual</span>
+        <ul class="nav pull-right doc-info">
+                    <li><p class="navbar-text">LuckyStar Studio
+LLC</p></li>
+                              <li><p class="navbar-text">February 22,
+2025</p></li>
+                  </ul>
+      </div>
+    </div>
+  </div>
+    <div class="container">
+    <div class="row">
+            <div id="TOC" class="span3">
+        <div class="well toc">
+
+        <ul>
+        <li><a href="#list-of-supported-features"
+        id="toc-list-of-supported-features">List of Supported
+        Features</a></li>
+        <li><a href="#how-to-set-up-with-zig-tool-chain-installer"
+        id="toc-how-to-set-up-with-zig-tool-chain-installer">How to Set
+        Up with Zig Tool chain Installer</a></li>
+        <li><a href="#how-to-set-up-manually"
+        id="toc-how-to-set-up-manually">How to Set Up Manually</a></li>
+        <li><a href="#how-to-use" id="toc-how-to-use">How to
+        use</a></li>
+        <li><a href="#open-folder-mode" id="toc-open-folder-mode">Open
+        Folder Mode:</a></li>
+        <li><a href="#project-file-mode"
+        id="toc-project-file-mode">Project File Mode</a></li>
+        <li><a href="#cross-platform-build"
+        id="toc-cross-platform-build">Cross-platform Build</a></li>
+        <li><a href="#cross-platform-debugging"
+        id="toc-cross-platform-debugging">Cross-platform
+        Debugging</a></li>
+        <li><a href="#cross-platform-debugging-linux-ubuntu-on-wsl"
+        id="toc-cross-platform-debugging-linux-ubuntu-on-wsl">Cross-platform
+        Debugging (Linux ubuntu on WSL)</a></li>
+        <li><a href="#cross-platform-debugging-linux-ubuntu-on-none-wsl"
+        id="toc-cross-platform-debugging-linux-ubuntu-on-none-wsl">Cross-platform
+        Debugging (Linux ubuntu on none WSL)</a></li>
+        <li><a href="#cross-platform-debugging-android"
+        id="toc-cross-platform-debugging-android">Cross-platform
+        Debugging (Android)</a></li>
+        <li><a href="#cross-platform-debugging-ios"
+        id="toc-cross-platform-debugging-ios">Cross-platform Debugging
+        (iOS)</a></li>
+        <li><a href="#cross-platform-debugging-serial-port-debugger"
+        id="toc-cross-platform-debugging-serial-port-debugger">Cross-platform
+        Debugging (Serial Port Debugger)</a></li>
+        <li><a href="#testing" id="toc-testing">Testing</a></li>
+        <li><a href="#profiler" id="toc-profiler">Profiler</a></li>
+        <li><a href="#package-installer"
+        id="toc-package-installer">Package Installer</a></li>
+        <li><a href="#formatting"
+        id="toc-formatting">Formatting</a></li>
+        <li><a href="#editor-setting" id="toc-editor-setting">Editor
+        Setting</a></li>
+        <li><a href="#syntax-highlighting"
+        id="toc-syntax-highlighting">Syntax Highlighting</a></li>
+        <li><a href="#snippets" id="toc-snippets">Snippets</a></li>
+        <li><a href="#formatting-1"
+        id="toc-formatting-1">Formatting</a></li>
+        <li><a href="#help" id="toc-help">Help</a></li>
+        <li><a href="#questions-requests-etc."
+        id="toc-questions-requests-etc.">Questions, Requests,
+        etc.</a></li>
+        <li><a href="#license" id="toc-license">License</a></li>
+        <li><a href="#extension-name" id="toc-extension-name">Extension
+        Name</a></li>
+        <li><a href="#publisher" id="toc-publisher">Publisher</a></li>
+        <li><a href="#version-history" id="toc-version-history">Version
+        History</a></li>
+        </ul>
+
+        </div>
+      </div>
+            <div class="span9">
+
+      
+      <h1 id="list-of-supported-features">List of Supported
+Features</h1>
+<pre><code>Editor
+    Settings(General,ScrollBars,Tabs)       [✔]  
+    Syntax highlighting using Syntaxes file [✔]  
+    Auto-completion using Snippets files    [✔]  
+    Support for Language Server Features    [✔]  
+        Completions                         [✔]
+        Hover                               [✔]  
+        Goto definition/declaration         [✔]  
+        Find references                     [✔]  
+        Rename symbol                       [✔]  
+        Selection ranges                    [✔]  
+        Folding regions                     [✔]  
+        Code actions                        [✔]  
+        Inlay hints                         [✔]  
+        Diagnostics                         [  ] 
+        Document symbols                    [  ]  
+        Semantic token highlighting         [  ]  
+    Automatically inserts a closing Bracket [✔]
+    Document Formatting using &#39;zig fmt&#39;     [✔]
+
+Navigation  
+    Object Browser                          [  ]
+
+Build               
+    Build                                   [✔]  
+    OS selection                            [✔]  
+    Architecture selection                  [✔] 
+        WebAssembly                         [✔]
+    Optimization selection                  [✔]  
+    GUI configuration                       [✔]  
+    C/C++ integration                       [✔]  
+    Embedding resources                     [✔]
+    Build.zig generation                    [✔]  (Project file mode) 
+    Build.zig.zon generation                [✔]  (Project file mode) 
+    ZigPackage                              [✔]  (Open folder mode) 
+
+Debug
+    Step execution                          [✔]  
+    Set breakpoints                         [✔]  
+    Variable inspection                     [✔]  
+    Cross-platform Debugging                [✔]     [new!!]
+        WebAssembly                         [  ]
+    Hot Reload                              [  ]
+
+Profiling
+    CPU Usage, Memory Usage, Events, File IO    [✔]  
+
+Testing
+    Run code tests using Test Explorer      [✔]  
+    Unit Test Debugging                     [✔]     [new!!]
+
+Templates
+    Package, Project, file                  [✔]
+ 
+Project file mode                           [✔]  
+Open folder mode                            [✔]  
+
+Zig Tool-chain Installer                    [✔] 
+Zig Package Installer                       [✔]     [new!!]
+Help                                        [✔]  </code></pre>
+<hr />
+<h1 id="how-to-set-up-with-zig-tool-chain-installer">How to Set Up with
+Zig Tool chain Installer</h1>
+<ol type="1">
+<li><p>Install ZigVS from [Extensions] → [Manage Extension] or from <a
+href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS">Visual
+Studio Marketplace</a></p></li>
+<li><p>[Extensions] → [ZigVS] → [Zig Tool chain Installer]</p></li>
+</ol>
+<figure>
+<img src="Images/Extensions_ZigVS_ToolChainInstaller.png"
+alt="Extensions_ZigVS_ToolChainInstaller" />
+<figcaption
+aria-hidden="true">Extensions_ZigVS_ToolChainInstaller</figcaption>
+</figure>
+<p>3.ToolChainInstaller window will be opened</p>
+<ol type="a">
+<li><p>Select Zig Tool chain Version</p></li>
+<li><p>Select ZLS Version</p></li>
+<li><p>Set Install Directory<br />
+If you specify a folder without write permissions, the Install button
+will not be activated. Please restart Visual Studio with Administrator
+privileges</p></li>
+<li><p>Select if you set Environment Value ‘PATH’</p></li>
+</ol>
+<ol start="4" type="1">
+<li>Once everything is set up, the Install button will become active, so
+press the Install button</li>
+</ol>
+<figure>
+<img src="Images/ToolChainInstaller.png"
+alt="Extensions_ZigVS_ToolChainInstaller" />
+<figcaption
+aria-hidden="true">Extensions_ZigVS_ToolChainInstaller</figcaption>
+</figure>
+<ol start="5" type="1">
+<li>The progress and results of the installation will be displayed in
+the output window</li>
+</ol>
+<figure>
+<img src="Images/ToolChainInstaller_output.png"
+alt="Extensions_ZigVS_ToolChainInstaller" />
+<figcaption
+aria-hidden="true">Extensions_ZigVS_ToolChainInstaller</figcaption>
+</figure>
+<ol start="6" type="1">
+<li>You might need restart your Visual Studio</li>
+</ol>
+<p>Note: If you see “Access to the path ‘….’ is denied”, the following
+scenarios might be considered<br />
+* File in use: Please close the application that is opening the
+file<br />
+* Directory without write permission: Please restart Visual Studio as
+Administrator</p>
+<hr />
+<h1 id="how-to-set-up-manually">How to Set Up Manually</h1>
+<ol type="1">
+<li><p>Install ZigVS from [Extensions] → [Manage Extension] or from <a
+href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS">Visual
+Studio Marketplace</a></p></li>
+<li><p>Zig Compiler:<br />
+Download <a href="https://ziglang.org">Zig</a> and extract it to your
+desired location.<br />
+ZigVS has been tested with <a
+href="https://ziglang.org/download/0.13.0/zig-windows-x86_64-0.13.0.zip">Zig
+ver 0.13.0</a>.</p></li>
+<li><p>ZLS Language Server:<br />
+Download <a href="https://github.com/zigtools/zls">Zig Language Server
+(zls)</a> and place it in the same directory as the Zig
+Compiler.</p></li>
+</ol>
+<p>Note: The <a
+href="https://github.com/microsoft/language-server-protocol/issues/1847">compatibility</a>
+issue that previously existed between Visual Studio 2022 and ZLS has
+been resolved as both Visual Studio 2022 and ZLS have been fixed. It can
+now be used in Visual Studio 2022 without any modifications to ZLS.</p>
+<ol start="4" type="1">
+<li>Set the <strong>ZIG_TOOL_PATH</strong> environment variable to a
+directory with Zig compiler and ZLS binaries (The path specified for
+ZIG_TOOL_PATH needs to end with a backslash ’' )</li>
+</ol>
+<hr />
+<h1 id="how-to-use">How to use</h1>
+<p>ZigVS supports <strong>Open folder mode</strong> and <strong>Project
+file mode</strong></p>
+<ul>
+<li>Open folder mode<br />
+Open a folder with an existing zig project.<br />
+Uses the zig build system with a build.zig file.</li>
+</ul>
+<pre><code>    Build Tool：zig.exe  
+    Compiler：zig.exe  
+    Build File：Build.zig   
+    Source Code：.zig .cpp .c 
+    GUI/Editor：Visual Studio 2022  </code></pre>
+<ul>
+<li><p>Project file mode<br />
+Create and manage zig projects (.zigproj) using the VS2022 IDE.<br />
+Use the zig compiler along with MSBuild and VS2022 project
+management.<br />
+Link C/C++ libraries and zig libraries in a VS2022 solution file.</p>
+<p>Installing the Desktop Development with C++ module via Visual Studio
+Installer is necessary.</p></li>
+</ul>
+<pre><code>    Build Tool：MSBuild.exe  
+    Compiler：zig.exe  
+    Build File：Zig Project file (extension .zigproj) or Zig Project file create the build.zig
+    Source Code：.zig .cpp .c 
+    GUI/Editor：Visual Studio 2022  </code></pre>
+<hr />
+<h1 id="open-folder-mode">Open Folder Mode:</h1>
+<p>To start Open Folder Mode, do one of the following in Visual
+Studio:</p>
+<pre><code>A. If creating a new Zig package:
+
+A-1. Select [File] → [New] → [Zig Package (zig.exe init)].</code></pre>
+<p><img src="Images/New_ZigPackage.png" /></p>
+<pre><code>A-2. Select the directory and package name, choose whether to open the folder, and then press the create button.</code></pre>
+<p><img src="Images/PackageCreater.png" /></p>
+<pre><code>B. If selecting a template
+
+B-1. Use the wizard and select [Create a new project].
+     The project template supports both project mode and open folder mode.</code></pre>
+<p><img src="Images/006.png" /></p>
+<pre><code>C. If opening an existing Zig Package:
+
+C-1. Use the wizard and select [Open a local folder], then choose the folder containing Build.zig.</code></pre>
+<p><img src="Images/002.png" /></p>
+<pre><code>D. Select [File] → [Open] → [Folder] and choose the folder containing Build.zig.  
+
+
+
+
+To select the Build.zig to use, right-click on it and choose [Set as Startup Item].</code></pre>
+<p><img src="Images/003.png" /></p>
+<pre><code>[Build], [Debug], [Start] button, and [Configuration] drop down will become active for you to start your work.</code></pre>
+<p><img src="Images/004.png" /></p>
+<pre><code>If you want to change settings, select [Tools] → [Options] and make changes in the Options window under [ZigVS].</code></pre>
+<p><img src="Images/005.png" /></p>
+<hr />
+<h1 id="project-file-mode">Project File Mode</h1>
+<p>To start Project File Mode, do one of the following in Visual
+Studio:</p>
+<p><em>Note Installing the Desktop Development with C++ module via
+Visual Studio Installer is necessary.</em></p>
+<pre><code>A. If creating a new project:
+
+a-1. Use the wizard and select [Create a new project] or [File] → [New].</code></pre>
+<p><img src="Images/006.png" /></p>
+<pre><code>B. If opening an existing project:
+
+b-1. Select [Open a project or solution] or [File] → [Open] → [Project/Solution].
+
+If you want to change settings, right-click on [ZigProject file] in [Solution Explorer], select [Property], and [Project Property Page] will appear.</code></pre>
+<p><img src="Images/008.png" /></p>
+<hr />
+<h1 id="cross-platform-build">Cross-platform Build</h1>
+<ul>
+<li><p>Open Folder Mode<br />
+Select CPU and OS from the Standard Menu bar</p></li>
+<li><p>Project File Mode<br />
+Select CPU from the Stan dared Menu bar<br />
+Select OS from [Project Property Page] → [Build] → [Assembly] →
+[OS]</p></li>
+</ul>
+<hr />
+<h1 id="cross-platform-debugging">Cross-platform Debugging</h1>
+<ul>
+<li>Need to make LaunchOption.xml, see <a
+href="https://github.com/microsoft/MIEngine/blob/main/src/MICore/LaunchOptions.xsd">the
+schema file</a></li>
+</ul>
+<hr />
+<h1 id="cross-platform-debugging-linux-ubuntu-on-wsl">Cross-platform
+Debugging (Linux ubuntu on WSL)</h1>
+<ol type="1">
+<li>Generate the key pair on Windows.<br />
+Run ssh-keygen with out a passphrase.<br />
+id_rsa and is_rsa.pub will be generated.</li>
+</ol>
+<pre><code>ssh-keygen -t rsa -b 4096
+dir %USERPROFILE%\.ssh</code></pre>
+<ol start="2" type="1">
+<li>Install openssh-server and gdb on linux<br />
+</li>
+</ol>
+<pre><code>sudo apt update
+sudo apt install openssh-server gdb</code></pre>
+<ol start="3" type="1">
+<li>Change ssh server port from 22 to 2022 on linux<br />
+</li>
+</ol>
+<pre><code>sudo sed -i -E &#39;s,^#?Port.*$,Port 2022,&#39; /etc/ssh/sshd_config
+sudo service ssh start</code></pre>
+<ol start="4" type="1">
+<li>Copy ‘id_rsa.pub’ from windows to linux<br />
+</li>
+</ol>
+<pre><code>scp -P 2022 %USERPROFILE%\.ssh\id_rsa.pub [linux user name]@[linux ip address]:/home/[linux user name]/.ssh/authorized_keys</code></pre>
+<ol start="5" type="1">
+<li>reboot ssh server.</li>
+</ol>
+<pre><code>sudo service ssh restart</code></pre>
+<ol start="6" type="1">
+<li>Create a text file named ‘LaunchOptions.xml’ in the current project
+directory.</li>
+</ol>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;PipeLaunchOptions xmlns=&quot;http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014&quot;
+    PipePath=&quot;C:\Windows\System32\OpenSSH\ssh.exe&quot;
+    PipeArguments=&quot;-p 2022 -i C:\Users\[windows user name]\.ssh\id_rsa [linux user name]@[linux ip address] -t gdb --interpreter=mi&quot;
+    TargetArchitecture=&quot;x64&quot;
+    MIMode=&quot;gdb&quot;
+    DebuggerPath=&quot;/usr/bin/gdb&quot;
+    Environment=&quot;VAR1=value1;VAR2=value2&quot;
+    ExePath=&quot;/mnt/[path to the target on windos]&quot;
+    ExeArguments=&quot;&quot;
+    WorkingDirectory=&quot;/home/[linux user name]&quot;
+    LaunchCompleteCommand=&quot;exec-run&quot;&gt;
+    &lt;AdditionalSOLibSearchPath&gt;/usr/lib;/usr/local/lib&lt;/AdditionalSOLibSearchPath&gt;
+&lt;/PipeLaunchOptions&gt;</code></pre>
+<ol start="7" type="1">
+<li>Select MIEngie as a Visual Studio Debug Engine</li>
+</ol>
+<ul>
+<li><p>Open Folder Mode<br />
+Select OS from [Tools] → [Options] → [ZigVS] → [Folder Mode] →
+[Debug]</p>
+<p>[Debug Engine] MIEngine<br />
+[MIEngine launch Options file name] LaunchOptions.xml</p></li>
+<li><p>Project File Mode<br />
+Select OS from [Project Property Page] → [Debug]</p>
+<p>[Debug Engine] MIEngine<br />
+[MIEngine launch Options file name] LaunchOptions.xml</p></li>
+</ul>
+<hr />
+<h1
+id="cross-platform-debugging-linux-ubuntu-on-none-wsl">Cross-platform
+Debugging (Linux ubuntu on none WSL)</h1>
+<ol type="1">
+<li>Generate the key pair on Windows.<br />
+Run ssh-keygen with out a passphrase.<br />
+id_rsa and is_rsa.pub will be generated.</li>
+</ol>
+<pre><code>ssh-keygen -t rsa -b 4096
+dir %USERPROFILE%\.ssh</code></pre>
+<ol start="2" type="1">
+<li>Install openssh-server and gdb on linux<br />
+</li>
+</ol>
+<pre><code>sudo apt update
+sudo apt install openssh-server gdb</code></pre>
+<ol start="3" type="1">
+<li>Copy ‘id_rsa.pub’ from windows to linux</li>
+</ol>
+<pre><code>scp %USERPROFILE%\.ssh\id_rsa.pub [linux user name]@[linux ip address]:/home/[linux user name]/.ssh/authorized_keys</code></pre>
+<ol start="4" type="1">
+<li>reboot ssh server.</li>
+</ol>
+<pre><code>sudo service ssh restart</code></pre>
+<ol start="5" type="1">
+<li>Create a text file named ‘LaunchOptions.xml’ in the current project
+directory.</li>
+</ol>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;PipeLaunchOptions xmlns=&quot;http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014&quot;
+    PipePath=&quot;C:\Windows\System32\OpenSSH\ssh.exe&quot;
+    PipeArguments=&quot;-p 22 -i C:\Users\[windows user name]\.ssh\id_rsa [linux user name]@[linux ip address] -t gdb --interpreter=mi&quot;
+    TargetArchitecture=&quot;x64&quot;
+    MIMode=&quot;gdb&quot;
+    DebuggerPath=&quot;/usr/bin/gdb&quot;
+    Environment=&quot;VAR1=value1;VAR2=value2&quot;
+    ExePath=&quot;[path to the target on linux]&quot;
+    ExeArguments=&quot;&quot;
+    WorkingDirectory=&quot;/home/[linux user name]&quot;
+    LaunchCompleteCommand=&quot;exec-run&quot;&gt;
+    &lt;AdditionalSOLibSearchPath&gt;/usr/lib;/usr/local/lib&lt;/AdditionalSOLibSearchPath&gt;
+&lt;/PipeLaunchOptions&gt;</code></pre>
+<ol start="5" type="1">
+<li>Select MIEngie as a Visual Studio Debug Engine</li>
+</ol>
+<ul>
+<li><p>Open Folder Mode<br />
+Select OS from [Tools] → [Options] → [ZigVS] → [Folder Mode] →
+[Debug]</p>
+<p>[Debug Engine] MIEngine<br />
+[MIEngine launch Options file name] LaunchOptions.xml</p></li>
+<li><p>Project File Mode<br />
+Select OS from [Project Property Page] → [Debug]</p>
+<p>[Debug Engine] MIEngine<br />
+[MIEngine launch Options file name] LaunchOptions.xml</p></li>
+</ul>
+<ol start="6" type="1">
+<li>Set the command the output to the target machineL</li>
+</ol>
+<ul>
+<li><p>Open Folder Mode<br />
+[Tools] → [Options] → [ZigVS] → [Folder Mode] → [Pre Debug]</p>
+<p>[Pre Debug Command] scp [Pre Debug Command Arguments] -P 22 [target
+file fullpath] [Linux User Name]@[Linux Machine IP Addredd]:/home/[Linux
+User Name]/[your project directory]</p></li>
+<li><p>Project File Mode<br />
+[Project Property Page] → [Debug] → [PreDebug]</p>
+<p>[Pre Debug Command] scp [Pre Debug Command Arguments] -P 22 [target
+file fullpath] [Linux User Name]@[Linux Machine IP Addredd]:/home/[Linux
+User Name]/[your project directory]</p></li>
+</ul>
+<p>Tips</p>
+<ul>
+<li><p>Please check if the target file on linux has executable
+attribute.</p></li>
+<li><p>The following command can be useful for troubleshooting when
+things don’t work as expected.<br />
+</p></li>
+</ul>
+<pre><code>service ssh status</code></pre>
+<pre><code>grep sshd /var/log/auth.log</code></pre>
+<hr />
+<h1 id="cross-platform-debugging-android">Cross-platform Debugging
+(Android)</h1>
+<ol type="1">
+<li>Create a text file named ‘LaunchOptions.xml’ in the current project
+directory.</li>
+</ol>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!-- Android Launch --&gt;
+&lt;AndroidLaunchOptions xmlns=&quot;http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014&quot;
+    Package=&quot;com.example.hellojni&quot;
+    LaunchActivity=&quot;.HelloJni&quot;
+    SDKRoot=&quot;c:\android-bundle\sdk&quot;
+    NDKRoot=&quot;c:\android-ndk&quot;
+    TargetArchitecture=&quot;arm&quot;
+    IntermediateDirectory=&quot;c:\android-ndk\samples\hello-jni\obj\local\armeabi-v7a&quot;
+    AdditionalSOLibSearchPath=&quot;&quot;
+    DeviceId=&quot;emulator-5554&quot;/&gt;</code></pre>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!-- Android Attach --&gt;
+&lt;AndroidLaunchOptions xmlns=&quot;http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014&quot;
+    Package=&quot;com.example.hellojni&quot;
+    Attach=&quot;true&quot;
+    SDKRoot=&quot;c:\android-bundle\sdk&quot;
+    NDKRoot=&quot;c:\android-ndk&quot;
+    TargetArchitecture=&quot;arm&quot;
+    IntermediateDirectory=&quot;c:\android-ndk\samples\hello-jni\obj\local\armeabi-v7a&quot;
+    AdditionalSOLibSearchPath=&quot;&quot;
+    DeviceId=&quot;emulator-5554&quot;/&gt;</code></pre>
+<hr />
+<h1 id="cross-platform-debugging-ios">Cross-platform Debugging
+(iOS)</h1>
+<ol type="1">
+<li>Create a text file named ‘LaunchOptions.xml’ in the current project
+directory.</li>
+</ol>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;IOSLaunchOptions xmlns=&quot;http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014&quot;
+    RemoteMachineName=&quot;Chucks-mac-mini&quot;
+    PackageId=&quot;riesco.Sample&quot;
+    vcremotePort=&quot;3000&quot;
+    IOSDebugTarget=&quot;device&quot;
+    TargetArchitecture=&quot;x86&quot;
+    AdditionalSOLibSearchPath=&quot;&quot;/&gt;</code></pre>
+<hr />
+<h1 id="cross-platform-debugging-serial-port-debugger">Cross-platform
+Debugging (Serial Port Debugger)</h1>
+<ol type="1">
+<li>Create a text file named ‘LaunchOptions.xml’ in the current project
+directory.</li>
+</ol>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;SerialPortLaunchOptions xmlns=&quot;http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014&quot;
+    Port=&quot;COM1&quot; TargetArchitecture=&quot;arm&quot;/&gt;</code></pre>
+<hr />
+<h1 id="testing">Testing</h1>
+<p>To perform tests, select [Test] → [Test Explorer] to open the Test
+Explorer window. If .zig source code includes unit tests, their
+filenames will be listed.</p>
+<p><img src="Images/TestExplorer.png" />　　</p>
+<hr />
+<h1 id="profiler">Profiler</h1>
+<ol type="1">
+<li>[Debug] &gt; [Start Debugging] (or Start on the toolbar, or
+F5).</li>
+</ol>
+<p>When the app finishes loading, the Summary view of the Diagnostics
+Tools appears. If you need to open the window, click Debug &gt; Windows
+&gt; Show Diagnostic Tools.</p>
+<ol start="2" type="1">
+<li>When you choose Record CPU Profile, Visual Studio will begin
+recording your functions and how much time they take to execute. You can
+only view this collected data when your application is halted at a
+breakpoint.</li>
+</ol>
+<p><img src="Images/Profiler.png" /></p>
+<hr />
+<h1 id="package-installer">Package Installer</h1>
+<p>1, [Extensions] → [ZigVS] → [Zig Package Installer]</p>
+<p><img src="Images/Extensions_ZigVS_PackageInstaller.png" /></p>
+<p>2, Browse to the repository and branch that you want to install in
+the WebView.<br />
+3, Select a Installation Method from the drop-down.<br />
+Currently, git and unzip are working correctly.<br />
+4. Once everything is set up, the Install button will become active, so
+press the Install button</p>
+<p><img src="Images/PackageInstaller.png" /></p>
+<hr />
+<h1 id="formatting">Formatting</h1>
+<ul>
+<li>Right-click in the solution explorer and select ‘zig fmt’</li>
+</ul>
+<p><img src="Images/zig_fmt.png" /></p>
+<hr />
+<h1 id="editor-setting">Editor Setting</h1>
+<ul>
+<li>[Tools]→[Options]→[Text Editor]→[Zig]</li>
+</ul>
+<p><img src="Images/Tool_Option_TextEditor_Zig.png" /></p>
+<hr />
+<h1 id="syntax-highlighting">Syntax Highlighting</h1>
+<p>Example of changing Literals and Operators</p>
+<p><img src="Images/TextHighLight.png" /></p>
+<p>You can change the colors and fonts of the Syntax Highlighting. It is
+possible to create a more color-coded and visually appealing screen than
+the default settings of Visual Studio. The following Display Items can
+be modified.</p>
+<ul>
+<li>Plain Text</li>
+<li>Comment</li>
+<li>Keyword</li>
+<li>Literal</li>
+<li>Operator</li>
+<li>String</li>
+<li>Type</li>
+</ul>
+<p>[Tool]→[Environment]→[Fonts and Colors]→[Display items]</p>
+<p><img src="Images/Tool_Option_Environment_FontsAndColors.png" /></p>
+<hr />
+<h1 id="snippets">Snippets</h1>
+<ul>
+<li>Open Snippet manager<br />
+[Tool] → [Code Snippets Manager] → [Zig]</li>
+</ul>
+<p><img src="Images/CodeSnippetsManager.png" /></p>
+<ul>
+<li>Insert Snippets<br />
+Right-click in the code editor → <a href="#snippets">Snippets</a> →
+[Insert Snippet]</li>
+</ul>
+<p><img src="Images/SnippetsContextMenu.png" /></p>
+<p>Note: <a
+href="https://learn.microsoft.com/en-us/visualstudio/ide/code-snippets?view=vs-2022">Code
+snippets: what they are and how to add one</a></p>
+<hr />
+<h1 id="formatting-1">Formatting</h1>
+<p>Right-click in the solution explorer and select ‘zig fmt’</p>
+<p><img src="Images/zig_fmt.png" /></p>
+<hr />
+<h1 id="help">Help</h1>
+<p>[Extensions] → [ZigVS] → [User Manual Page]<br />
+<img src="Images/Extensions_ZigVS_UserManualPage.png" /></p>
+<hr />
+<h1 id="questions-requests-etc.">Questions, Requests, etc.</h1>
+<p>Please use the Q&amp;A page on Visual Studio Marketplace. Support is
+available in both English and Japanese.</p>
+<hr />
+<h1 id="license">License</h1>
+<p>Refer to the LICENSE.txt file for licensing information.</p>
+<hr />
+<h1 id="extension-name">Extension Name</h1>
+<p>ZigVS</p>
+<hr />
+<h1 id="publisher">Publisher</h1>
+<p>LuckyStar Studio LLC</p>
+<hr />
+<h1 id="version-history">Version History</h1>
+<pre><code>    Version 0.14.1.0 (2025/06/09):
+        Supported Zig 0.14.1.
+        Modifications to the file and folder layout to prepare the ZigVS source code for public release. https://github.com/luckystar-studio/ZigVS
+
+        Compatibility:
+        Visual Studio 2022 17.14.3
+        Zig Tool chain: zig-windows-x86_64-0.14.1.zip
+        ZLS Language Server: zls-windows-x86_64-0.14.0.zip
+
+    Version 0.14.0.1 (2025/03/07):
+        Supported Zig 0.14.0.
+        The compatibility issue between Visual Studio 2022 and ZLS has been resolved, so there is no longer a need to use a special version of ZLS.
+
+        Compatibility:
+        Visual Studio 2022 17.13.2
+        Zig Tool chain: zig-windows-x86_64-0.14.0.zip
+        ZLS Language Server: zls-windows-x86_64-0.14.0.zip
+
+    Version 0.13.0.13 (2025/02/22):
+        We modified the behavior so that if the Output window is not displayed when running the tool-chain or package installer, it will be shown automatically. This ensures that progress can be monitored.
+        Automatically insert the corresponding closing character when pressing (, {, or [ under certain conditions.
+
+        Compatibility:
+        Visual Studio 2022 17.13.1
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+
+    Version 0.13.0.12 (2024/08/17):
+        The user manual for ZigVS, which was included in the Visual Studio extension package,
+        has been removed from the package to reduce its size by hosting it on GitHub.
+        Updated the packages that ZigVS depends on.
+        Corrected some spelling errors.
+        Fixed minor bugs.
+
+        Compatibility:
+        Visual Studio 2022 17.11.0
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+
+    Version 0.13.0.11 (2024/08/15):
+        In the previous version of ZigVS, unit tests could only be managed and executed on 
+        a file-by-file basis from the Test Explorer. Now, they can be managed and executed individually.
+        Additionally, it is now possible to debug unit tests from the Test Explorer.
+
+        Compatibility:
+        Visual Studio 2022 17.10.5
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+
+    Version 0.13.0.10 (2024/08/11):
+        You can now toggle inlay hints on and off using Alt + F1.
+        We fixed the issue where typing &#39;_&#39; would prematurely end the completion.
+
+        Compatibility:
+        Visual Studio 2022 17.10.5
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+
+    Version 0.13.0.9 (2024/07/08):
+        In Open Folder mode
+            The debugger and tests now function correctly even when you open a folder higher than the one containing build.zig.
+            We have accelerated the startup of the debugger from the second time onward.
+
+        Compatibility:
+        Visual Studio 2022 17.10.3
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+        
+    Version 0.13.0.7 (2024/07/07):
+        Due to a bug in the extension installer, an exception occurred when creating a new project unless the user manually installed Desktop Development with C++. We have fixed the installer to ensure that the necessary components are installed automatically.
+        We have improved the error messages to make the situation clearer when zig.exe or zls.exe cannot be found.
+        We have made the behavior of the key to confirm auto-complete similar to C#.
+
+        Compatibility:
+        Visual Studio 2022 17.10.3
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+    
+    Version 0.13.0.3 (2024/06/18):
+        We have fixed the issue where you had to type the key twice for auto complete.
+
+        Compatibility:
+        Visual Studio 2022 17.10.1
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+        
+    Version 0.13.0.2 (2024/06/17):
+        You can now create a new Zig package by going to [File] → [New] → [Zig Package].
+        The project template now includes build.zig, so the project can be built from both build.zig and .zigproj files.
+
+        Compatibility:
+        Visual Studio 2022 17.10.1
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+        
+    Version 0.13.0.1 (2024/06/11):
+        We have released the compatible ZIGVS version due to the release of ZIG and ZLS version 0.13.0.
+        We have added support for building WebAssembly (WASM).
+        We have modified the message for cases where tests are skipped due to compilation errors.
+        We have improved the icons and logos.
+
+        Compatibility:
+        Visual Studio 2022 17.10.1
+        Zig Tool chain: zig-windows-x86_64-0.13.0.zip
+        ZLS Language Server: 0.13.0.VisualStudioCompatible
+        
+    Version 0.12.0.4 (2024/05/26):
+        1, The project file generated for new projects now supports incremental builds. This prevents unnecessary zig builds.  
+        2, The UI for setting modules in the project properties has been changed to allow multi-line editing instead of a single line.  
+        3, The &#39;zig fetch&#39; command now runs correctly for package installation through the package installer. Previously, the command was given a GitHub zip file, but zig couldn&#39;t handle the zip properly. Switching to .tar.gz resolved the issue.
+
+        Compatibility:
+        Visual Studio 2022 17.10.0
+        Zig Tool chain: zig-windows-x86_64-0.12.0.zip
+        ZLS Language Server: 0.12.0.VisualStudioCompatible
+
+     Version 0.12.0.3 (2024/05/23):
+        We have added an explanation on how to further color-code using Syntax Highlighting.
+        To fix the issue with ZLS not functioning correctly, the recommended setup method for the Zig Tool chain has been changed from using the ZIG_TOOL_PATH environment variable to using the PATH environment variable. Consequently, the installer has also been modified to set the PATH.
+
+        Compatibility:
+        Visual Studio 2022 17.10.0
+        Zig Tool chain: zig-windows-x86_64-0.12.0.zip
+        ZLS Language Server: 0.12.0.VisualStudioCompatible
+
+     Version 0.12.0.2 (2024/05/13):
+        In ZigVS unit tests, we use the &#39;zig.exe test&#39; command,
+        but the result output format of the test command was changed in Zig 0.12.0.
+        We have fixed cases where ZigVS could not correctly retrieve the test results.
+        Additionally, if the output of &#39;zig.exe test&#39; changes in the future and ZigVS can no longer read it,
+        an error message will now be displayed to indicate this.
+
+        Compatibility:
+        Visual Studio 2022 17.9.6
+        Zig Tool chain: zig-windows-x86_64-0.12.0.zip
+        ZLS Language Server: 0.12.0.VisualStudioCompatible
+
+     Version 0.12.0.1 (2024/05/07):
+        We have released the compatible ZIGVS version due to the release of ZIG and ZLS version 0.12.0.
+        Replace zig logo
+
+        Compatibility:
+        Visual Studio 2022 17.9.6
+        Zig Tool chain: zig-windows-x86_64-0.12.0.zip
+        ZLS Language Server: 0.12.0.VisualStudioCompatible
+        
+    Version 0.1.8 (2024/03/23):
+        cross-platform build and debug
+        fix a bug ZigVS disables CMake Project Debugger
+
+        Compatibility:
+        Visual Studio 2022 17.9.3
+        Zig Tool chain: zig-windows-x86_64-0.12.0-dev.1849+bb0f7d55e.zip
+        ZLS Language Server: 0.12.0.VisualStudioCompatible
+        
+    Version 0.1.6 (2024/02/24):
+        Add Package Installer
+
+        Compatibility:
+        Visual Studio 2022 17.9
+        Zig Tool chain: zig-windows-x86_64-0.12.0-dev.1849+bb0f7d55e.zip
+        ZLS Language Server: 0.12.0.VisualStudioCompatible
+
+    Version 0.1.5 (2024/01/28):
+        Support Visual Studio Profiling Tools
+        Minor Bug fix
+
+        Compatibility:
+        Visual Studio 2022 17.8.5
+        Zig Tool chain: zig-windows-x86_64-0.12.0-dev.1849+bb0f7d55e.zip
+        ZLS Language Server: 0.12.0.VisualStudioCompatible
+
+    Version 0.1.4 (2024/01/21):
+        Add Snippets Manager
+
+    Version 0.1.3.1 (2024/01/14):
+        ToolChainInstaller
+            Check if install path already exists
+            Extract empty directories during install
+
+    Version 0.1.3 (2024/01/14):
+        Project Property
+            Header files directory field handles both relative and absolute paths
+            Add library list and library directory fields
+            Implemented modules and dependencies field
+        Fix an issue where the User Manual does not appear in some cases
+        Add Zig Tool chain Installer Window
+
+    Version 0.1.2 (2024/01/07):
+        Add file icon
+        Support document formatting
+
+    Version 0.1.1 (2023/12/30):
+        Fixed not being able to specify the output destination in project mode
+        Add editor settings
+
+    Version 0.1 (2023/12/26):  
+        Initial release
+
+        Compatibility:
+        Zig Tool chain: zig-windows-x86_64-0.12.0-dev.1849+bb0f7d55e.zip
+        ZLS Language Server: 0.12.0.VisualStudioCompatible</code></pre>
+            </div>
+    </div>
+  </div>
+  <script src="https://vjs.zencdn.net/5.4.4/video.js"></script>
+
+</body>
+</html>

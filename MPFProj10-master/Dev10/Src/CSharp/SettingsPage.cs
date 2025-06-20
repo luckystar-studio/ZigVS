@@ -248,8 +248,12 @@ namespace Microsoft.VisualStudio.Project
 				this.panel.Size = new Size(pRect[0].right - pRect[0].left, pRect[0].bottom - pRect[0].top);
                 this.panel.Text = SR.GetString(SR.Settings, CultureInfo.CurrentUICulture);
 				this.panel.Visible = false;
-				this.panel.Size = new Size(550, 300);
-				this.panel.CreateControl();
+				this.panel.Margin = new Padding(1, 1, 1, 1);
+				this.panel.AutoSize = true;
+				this.panel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
+
+                //      this.panel.Size = new Size(550, 400);
+                this.panel.CreateControl();
 				NativeMethods.SetParent(this.panel.Handle, parent);
 			}
 
@@ -264,15 +268,18 @@ namespace Microsoft.VisualStudio.Project
 				this.active = true;
 
 
-				Control cGrid = Control.FromHandle(new IntPtr(this.grid.Handle));
+				Control cGrid = Control.FromHandle(this.grid.Handle);
 
 				cGrid.Parent = Control.FromHandle(parent);//this.panel;
-				cGrid.Size = new Size(544, 294);
-				cGrid.Location = new Point(3, 3);
+                cGrid.Size = new Size(pRect[0].right - pRect[0].left-6, pRect[0].bottom - pRect[0].top-6);
+                cGrid.Margin = new Padding(1, 1, 1, 1);
+                cGrid.AutoSize = true;
+                cGrid.Location = new Point(3, 3);
+				cGrid.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
 				cGrid.Visible = true;
 				this.grid.SetOption(_PROPERTYGRIDOPTION.PGOPT_TOOLBAR, false);
 				this.grid.GridSort = _PROPERTYGRIDSORT.PGSORT_CATEGORIZED | _PROPERTYGRIDSORT.PGSORT_ALPHABETICAL;
-				NativeMethods.SetParent(new IntPtr(this.grid.Handle), this.panel.Handle);
+				NativeMethods.SetParent(this.grid.Handle, this.panel.Handle);
 				UpdateObjects();
 			}
 		}
@@ -311,7 +318,7 @@ namespace Microsoft.VisualStudio.Project
 			info.pszHelpFile = null;
 			info.pszTitle = this._name;
 			info.SIZE.cx = 550;
-			info.SIZE.cy = 300;
+			info.SIZE.cy = 420;
 			arrInfo[0] = info;
 		}
 
@@ -463,21 +470,23 @@ namespace Microsoft.VisualStudio.Project
 				new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
 
 				IntPtr p = Marshal.GetIUnknownForObject(this);
-				IntPtr ppUnk = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(IntPtr)));
+				//IntPtr ppUnk = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(IntPtr)));
 				try
 				{
-					Marshal.WriteIntPtr(ppUnk, p);
+					//Marshal.WriteIntPtr(ppUnk, p);
 					this.BindProperties();
 					// BUGBUG -- this is really bad casting a pointer to "int"...
-					this.grid.SetSelectedObjects(1, ppUnk.ToInt32());
+                    IntPtr[] propPtrArr = new IntPtr[1];
+                    propPtrArr[0] = p;
+					this.grid.SetSelectedObjects(1, propPtrArr); //ppUnk);
 					this.grid.Refresh();
 				}
 				finally
 				{
-					if(ppUnk != IntPtr.Zero)
-					{
-						Marshal.FreeCoTaskMem(ppUnk);
-					}
+					//if(ppUnk != IntPtr.Zero)
+					//{
+					//	Marshal.FreeCoTaskMem(ppUnk);
+					//}
 					if(p != IntPtr.Zero)
 					{
 						Marshal.Release(p);

@@ -100,6 +100,7 @@ namespace Microsoft.VisualStudio.Project
 		internal const string Always = "Always";
 		internal const string AssemblyReferenceAlreadyExists = "AssemblyReferenceAlreadyExists";
 		internal const string AttributeLoad = "AttributeLoad";
+		internal const string Android = "Android";
 		internal const string BuildAction = "BuildAction";
 		internal const string BuildActionDescription = "BuildActionDescription";
 		internal const string BuildCaption = "BuildCaption";
@@ -142,7 +143,7 @@ namespace Microsoft.VisualStudio.Project
 		internal const string ErrorReferenceCouldNotBeAdded = "ErrorReferenceCouldNotBeAdded";
 		internal const string ErrorMsBuildRegistration = "ErrorMsBuildRegistration";
 		internal const string ErrorSaving = "ErrorSaving";
-		internal const string Exe = "Exe";
+		internal const string Exe = "Application";
 		internal const string ExpectedObjectOfType = "ExpectedObjectOfType";
 		internal const string FailedToGetService = "FailedToGetService";
 		internal const string FailedToRetrieveProperties = "FailedToRetrieveProperties";
@@ -165,12 +166,17 @@ namespace Microsoft.VisualStudio.Project
 		internal const string FullPath = "FullPath";
 		internal const string FullPathDescription = "FullPathDescription";
 		internal const string ItemDoesNotExistInProjectDirectory = "ItemDoesNotExistInProjectDirectory";
+		internal const string iOS = "iOS";
 		internal const string InvalidAutomationObject = "InvalidAutomationObject";
 		internal const string InvalidLoggerType = "InvalidLoggerType";
 		internal const string InvalidParameter = "InvalidParameter";
-		internal const string Library = "Library";
+		internal const string Library = "DynamicLibrary";
 		internal const string LinkedItemsAreNotSupported = "LinkedItemsAreNotSupported";
-		internal const string Minimal = "Minimal";
+		internal const string Linux = "Linux";
+		internal const string MacOS = "macOS";
+        internal const string WASI = "WASI";
+        internal const string MIEngine = "MIEngine";
+        internal const string Minimal = "Minimal";
 		internal const string Misc = "Misc";
 		internal const string None = "None";
 		internal const string Normal = "Normal";
@@ -194,7 +200,7 @@ namespace Microsoft.VisualStudio.Project
 		internal const string Quiet = "Quiet";
 		internal const string QueryReloadNestedProject = "QueryReloadNestedProject";
 		internal const string ReferenceAlreadyExists = "ReferenceAlreadyExists";
-		internal const string ReferencesNodeName = "ReferencesNodeName";
+        internal const string ReferencesNodeName = "ReferencesNodeName";
 		internal const string ReferenceProperties = "ReferenceProperties";
 		internal const string RefName = "RefName";
 		internal const string RefNameDescription = "RefNameDescription";
@@ -208,7 +214,9 @@ namespace Microsoft.VisualStudio.Project
 		internal const string URL = "URL";
 		internal const string UseOfDeletedItemError = "UseOfDeletedItemError";
         internal const string Warning = "Warning";
-		internal const string WinExe = "WinExe";
+		internal const string Windows = "Windows";
+        internal const string WindowsNative = "WindowsNative";
+        internal const string StaticLibrary = "StaticLibrary";
 		internal const string CannotLoadUnknownTargetFrameworkProject = "CannotLoadUnknownTargetFrameworkProject";
 
 		static SR loader;

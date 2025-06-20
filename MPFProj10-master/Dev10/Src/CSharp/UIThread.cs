@@ -222,7 +222,7 @@ namespace Microsoft.VisualStudio.Project
             if (IsUnitTest)
                 return callback();
 
-            return ThreadHelper.Generic.Invoke<T>(callback);
+            return ThreadHelper.JoinableTaskFactory.Run(() => System.Threading.Tasks.Task.FromResult(callback()));
         }
 
         /// <summary>
@@ -237,8 +237,12 @@ namespace Microsoft.VisualStudio.Project
                 return;
             }
 
-            ThreadHelper.Generic.Invoke(callback);
-        }
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                callback();
+            });
+		}
 
         /// <summary>
         /// Initializes this object.
