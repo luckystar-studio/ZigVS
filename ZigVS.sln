@@ -62,31 +62,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B410150-B8A4-4EEC-8EFC-AF9CCDB9F05B}
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://luckystar.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ZigVS\\ZigVS.csproj
-		SccProjectName1 = ZigVS
-		SccLocalPath1 = ZigVS
-		SccProjectUniqueName2 = Zig_AppProject_Template1\\Zig_AppProject_Template1.csproj
-		SccProjectName2 = Zig_AppProject_Template1
-		SccLocalPath2 = Zig_AppProject_Template1
-		SccProjectUniqueName3 = Zig_Item_Template1\\Zig_Item_Template1.csproj
-		SccProjectName3 = Zig_Item_Template1
-		SccLocalPath3 = Zig_Item_Template1
-		SccProjectUniqueName4 = Zig_LibProject_Template1\\Zig_LibProject_Template1.csproj
-		SccProjectName4 = Zig_LibProject_Template1
-		SccLocalPath4 = Zig_LibProject_Template1
-		SccProjectUniqueName5 = Zig_AppProject_Template2\\Zig_AppProject_Template2.csproj
-		SccProjectName5 = Zig_AppProject_Template2
-		SccLocalPath5 = Zig_AppProject_Template2
-		SccProjectUniqueName6 = MPFProj10-master\\Dev10\\Src\\CSharp\\Microsoft.VisualStudio.Project.15.0.csproj
-		SccProjectName6 = MPFProj10-master/Dev10/Src/CSharp
-		SccLocalPath6 = MPFProj10-master\\Dev10\\Src\\CSharp
-		SccProjectUniqueName7 = Zig_Item_Template2\\Zig_Item_Template2.csproj
-		SccProjectName7 = Zig_Item_Template2
-		SccLocalPath7 = Zig_Item_Template2
-	EndGlobalSection
 EndGlobal
