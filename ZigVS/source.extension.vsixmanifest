@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ZigVS.510DAB03-EFE4-4C8D-9715-8E85E8241A73" Version="0.14.1.0" Language="en-US" Publisher="LuckyStar Studio LLC" />
+        <Identity Id="ZigVS.510DAB03-EFE4-4C8D-9715-8E85E8241A73" Version="0.14.1.1" Language="en-US" Publisher="LuckyStar Studio LLC" />
         <DisplayName>ZigVS</DisplayName>
         <Description xml:space="preserve">Zig language support for Visual Studio</Description>
         <License>LICENSE.txt</License>

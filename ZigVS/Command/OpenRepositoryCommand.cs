@@ -1,4 +1,4 @@
-﻿/********************************************************************************************
+/********************************************************************************************
 Copyright(c) 2023 LuckyStar Studio LLC
 All rights reserved.
 
@@ -47,23 +47,64 @@ a particular purpose and non-infringement.
 
 namespace ZigVS.Command
 {
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
     using System;
-    public class CommandDefinition
-    {
-        public static readonly Guid s_CommandSetGuid = new Guid("875694cf-4e47-4e92-a15e-c6f296281c12");
-        public enum CommandId
-        {
-            Formatting = 0x0300,
-            //            DebuggerDropDownComboId = 0x0500,
-            //            DebuggerDropDownComboListCommandId = 0x0600,
+    using System.ComponentModel.Design;
+    using System.Globalization;
+    using Task = System.Threading.Tasks.Task;
 
-            ToolchainInstaller = 0x1000,
-            PackageInstaller = 0x2000,
-            Help = 0x3000,
-            PackageCreator = 0x4000,
-            QAndA = 0x6000,
-            RatingAndReview = 0x7000,
-            OpenRepository = 0x8000,
+#nullable enable
+
+    internal sealed class OpenRepositoryCommand
+    {
+        static OpenRepositoryCommand? s_Instance = null;
+
+        private OpenRepositoryCommand(OleMenuCommandService? i_OleMenuCommandService)
+        {
+            if (i_OleMenuCommandService != null)
+            {
+                i_OleMenuCommandService = i_OleMenuCommandService ?? throw new ArgumentNullException(nameof(i_OleMenuCommandService));
+
+                var l_CommandID = new CommandID(CommandDefinition.s_CommandSetGuid, (int)CommandDefinition.CommandId.OpenRepository);
+                var l_MenuCommand = new MenuCommand(this.Execute, l_CommandID);
+                i_OleMenuCommandService.AddCommand(l_MenuCommand);
+            }
+        }
+
+        public static Task InitializeAsync()
+        {
+            var commandService = ZigVSPackage.GetInstance().GetService<IMenuCommandService, OleMenuCommandService>();
+            s_Instance = new OpenRepositoryCommand(commandService);
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        private void Execute(object i_senderObject, EventArgs i_EventArgs)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            try
+            {
+                string l_URLString = "https://github.com/luckystar-studio/ZigVS";
+
+                if (string.IsNullOrEmpty(l_URLString))
+                {
+                    string l_messageString = string.Format(CultureInfo.CurrentCulture, "Could not find repository page: " + l_URLString, this.GetType().FullName);
+                    string l_titleString = "Open Repository";
+
+                    VsShellUtilities.ShowMessageBox(
+                        ZigVSPackage.GetInstance(),
+                        l_messageString,
+                        l_titleString,
+                        OLEMSGICON.OLEMSGICON_INFO,
+                        OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                        OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                }
+                else
+                {
+                    System.Diagnostics.Process.Start(l_URLString);
+                }
+            }
+            catch { }
         }
     }
 }

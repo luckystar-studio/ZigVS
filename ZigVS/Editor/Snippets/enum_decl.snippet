@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>enum decl</Title>
+			<Shortcut>enumdecl</Shortcut>
+			<Description>Code snippet for enum declaration</Description>
+			<Author>LuckyStar Studio LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>name</ID>
+					<ToolTip>Enum name</ToolTip>
+					<Default>MyEnum</Default>
+				</Literal>
+				<Literal>
+					<ID>type</ID>
+					<ToolTip>type</ToolTip>
+					<Default>i8</Default>
+				</Literal>
+				<Literal>
+					<ID>fields</ID>
+					<ToolTip>Enum fields</ToolTip>
+					<Default>Field1, Field2</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="zig"><![CDATA[const $name$ = enum($type$) {
+	$fields$
+};$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

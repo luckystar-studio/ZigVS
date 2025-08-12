@@ -76,7 +76,7 @@ namespace ZigVS
     [ProvideOptionPage(typeof(DialogPageProvider.ProjectMode), Parameter.c_PackageNameStrig, "Project Mode", 0, 0, true)]
     [ProvideOptionPage(typeof(DialogPageProvider.FolderMode), Parameter.c_PackageNameStrig, "Folder Mode", 0, 0, true)]
     // [Tool] -> [Option] -> [Text Editor] page attributes
-    // [ProvideLanguageEditorOptionPage(typeof(DialogPageProvider.TextEditorAdvanced), Parameter.c_PackageNameStrig, null, "Advanced", "#110")]
+	//   [ProvideLanguageEditorOptionPage(typeof(ZigVS.Options.TextEditorAdvancedOptions), Parameter.c_PackageNameStrig, "Advanced","Abc","",0)]
     // [Extensions] -> [ZigVS]
     [ProvideToolWindow(typeof(ZigVS.ToolchainInstallerWindow))]
     [ProvideToolWindow(typeof(ZigVS.PackageInstallerWindow))]
@@ -110,6 +110,7 @@ namespace ZigVS
             _ = Command.HelpCommand.InitializeAsync();
             _ = Command.QAndACommand.InitializeAsync();
             _ = Command.RatingAndReviewCommand.InitializeAsync();
+            _ = Command.OpenRepositoryCommand.InitializeAsync();
             //      _ = Command.DebugEngineSelectorCommand.InitializeAsync(this);
 
             // Initialize Project

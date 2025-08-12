@@ -97,7 +97,6 @@
 			</Button>
 			
 			<Button guid="guidZigVSPackageCmdSet" id="HelpId" priority="0x9030" type="Button">
-				<!--Parent guid="VSMainMenu" id="Extensions.DefaultGroup"/-->
 				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
 				<Strings>
 					<ButtonText>User Manual Page</ButtonText>
@@ -105,7 +104,6 @@
 			</Button>
 
 			<Button guid="guidZigVSPackageCmdSet" id="QAndAId" priority="0x9040" type="Button">
-				<!--Parent guid="VSMainMenu" id="Extensions.DefaultGroup"/-->
 				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
 				<Strings>
 					<ButtonText>Q and A Page</ButtonText>
@@ -113,10 +111,16 @@
 			</Button>
 
 			<Button guid="guidZigVSPackageCmdSet" id="RatingAndReviewId" priority="0x9050" type="Button">
-				<!--Parent guid="VSMainMenu" id="Extensions.DefaultGroup"/-->
 				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
 				<Strings>
 					<ButtonText>Rating and Review Page</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidZigVSPackageCmdSet" id="GithubId" priority="0x9080" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="SubMenuGroupId" />
+				<Strings>
+					<ButtonText>Github Page</ButtonText>
 				</Strings>
 			</Button>
 			
@@ -169,6 +173,7 @@
 			<IDSymbol name="HelpId" value="0x3000" />
 			<IDSymbol name="QAndAId" value="0x6000" />
 			<IDSymbol name="RatingAndReviewId" value="0x7000" />
+			<IDSymbol name="GithubId" value="0x8000" />
 			<IDSymbol name="PachageCreatorId" value="0x4000" />
 			<IDSymbol name="FormattingCommandId" value="0x0300" />
 			<IDSymbol name="ToggleInlyHintsId" value="0x5000" />

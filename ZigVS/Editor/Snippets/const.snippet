@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>const</Title>
+			<Shortcut>const</Shortcut>
+			<Description>Code snippet for constant declaration</Description>
+			<Author>LuckyStar Studio LLC</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+				<SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>name</ID>
+					<ToolTip>Constant name</ToolTip>
+					<Default>myConst</Default>
+				</Literal>
+				<Literal>
+					<ID>type</ID>
+					<ToolTip>Constant type</ToolTip>
+					<Default>i32</Default>
+				</Literal>
+				<Literal>
+					<ID>value</ID>
+					<ToolTip>Constant value</ToolTip>
+					<Default>0</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="zig"><![CDATA[const $name$: $type$ = $value$;$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

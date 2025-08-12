@@ -1,6 +1,16 @@
 ﻿___
 # Version History
 ```
+    Version 0.14.1.1 (2025/08/12):
+        Fixed a bug where incomplete support for the Zig 0.14 spec changes meant the output file name wasn’t correctly retrieved from Build.zig, preventing debugging from starting.
+        Added 14 code snippets.
+        You can now open the ZigVS GitHub page from the menu.
+
+        Compatibility:
+        Visual Studio 2022 17.14.3
+        Zig Tool chain: zig-windows-x86_64-0.14.1.zip
+        ZLS Language Server: zls-windows-x86_64-0.14.0.zip
+
     Version 0.14.1.0 (2025/06/16):
         Supported Zig 0.14.1.
         Modifications to the file and folder layout to prepare the ZigVS source code for public release. https://github.com/luckystar-studio/ZigVS

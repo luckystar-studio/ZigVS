@@ -46,17 +46,21 @@ a particular purpose and non-infringement.
 ********************************************************************************************/
 
 #if false
-namespace ZigVS
+namespace ZigVS.Options
 {
+    using Microsoft.VisualStudio.Shell;
     using System.ComponentModel;
+    using System.Runtime.InteropServices;
 
-    internal class TextEditorAdvancedOptions : BaseOptionModel<TextEditorAdvancedOptions>
+    [ComVisible(true)]
+    [Guid("9BE877D0-D32C-4F32-A673-3FFF4129EDAD")]
+    public class TextEditorAdvancedOptions : DialogPage
     {
-        [Category("abc")]
-        [DisplayName("Tool Path (zig)")]
-        [Description("Path to the build tool.")]
+        [Category("General")]
+        [DisplayName("Enable ZLS")]
+        [Description("Enable Zig Language Server features.")]
         [DefaultValue(true)]
-        public bool BracketsAssist { get; set; } = true;
+        public bool EnableZls { get; set; } = true;
     }
 }
 #endif

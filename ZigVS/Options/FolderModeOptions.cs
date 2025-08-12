@@ -185,6 +185,11 @@ pub fn main() !void
         .handle = try __std.fs.cwd().makeOpenPath(""\\"", .{}),
     };
 
+    const zig_lib_directory: __std.Build.Cache.Directory = .{
+        .path = ""\\"",
+        .handle = try __std.fs.cwd().makeOpenPath(""\\"", .{}),
+    };
+
     var graph: std.Build.Graph = .{
         .arena = arena,
         .cache = .{
@@ -194,6 +199,7 @@ pub fn main() !void
         .zig_exe = """", // ToDo
         .env_map = try __process.getEnvMap(arena),
         .global_cache_root = global_cache_directory,
+        .zig_lib_directory = zig_lib_directory,
         .host = .{
             .query = .{},
             .result = try std.zig.system.resolveTargetQuery(.{}),
@@ -205,26 +211,40 @@ pub fn main() !void
     graph.cache.addPrefix(local_cache_directory);
     graph.cache.addPrefix(global_cache_directory);
 
-    const l_AvailableDeps: []const struct { []const u8, []const u8 } = &.{};
+    const available_deps: []const struct { []const u8, []const u8 } = &.{};
 
     const builder = try std.Build.create(
         &graph,
         build_root_directory,
         local_cache_directory,
-        l_AvailableDeps,
+        available_deps,
     );
     build(builder);
 
-    const l_name = builder.getInstallStep().dependencies.items[0].name[8..]; // ToDo
-    const stdout = std.io.getStdOut().writer();
-    try stdout.print(""{s}"", .{l_name});
+    const install_step = builder.getInstallStep();
+
+    var selected_basename: ?[]const u8 = null;
+
+    var i: usize = 0;
+    while (i < install_step.dependencies.items.len) : (i += 1) {
+        const dep = install_step.dependencies.items[i];
+        if (__std.Build.Step.cast(dep, __std.Build.Step.InstallArtifact)) |ia| {
+            if (ia.artifact.kind == .exe or ia.artifact.kind == .@""test"") {
+                selected_basename = __std.fs.path.basename(ia.dest_sub_path);
+                break;
+            }
+        }
+    }
+
+    const stdout = __std.io.getStdOut().writer();
+    if (selected_basename) |name| {
+        try stdout.print(""{s}"", .{name});
+        return;
+    }
+
+    return error.NoInstallableArtifactFound;
 }
 
-fn nextArg(args: [][:0]const u8, idx: *usize) ?[:0]const u8 {
-    if (idx.* >= args.len) return null;
-    defer idx.* += 1;
-    return args[idx.*];
-}
 ";
     }
 

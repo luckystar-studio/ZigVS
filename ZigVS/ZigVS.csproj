@@ -75,6 +75,7 @@
     <Compile Include="Command\CommandDefinition.cs" />
     <Compile Include="Command\DebugEngineSelectorCommand.cs" />
     <Compile Include="Command\HelpCommand.cs" />
+    <Compile Include="Command\OpenRepositoryCommand.cs" />
     <Compile Include="Command\PackageCreaterCommand.cs" />
     <Compile Include="Command\PackageCreator\PackageCreator.cs" />
     <Compile Include="Command\PackageCreator\PackageCreatorWindow.cs" />
@@ -163,6 +164,48 @@
     <Content Include="Editor\language-configuration.json">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Editor\Snippets\const.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\enum_decl.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\fn.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\fn_extern.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\fn_gen.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\fn_pub.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\import_std.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\main_hello.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\struct_decl.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\struct_val.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\switch_expr.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\test.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\var.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Editor\Snippets\while.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="Test\HowToIntegrateUnitTestWithTestExplorer.pdf" />
     <Resource Include="Resources\file_icon.16.16.png" />
     <Content Include="Resources\ziglang_logo_icon.png">
@@ -214,6 +257,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Tasks.Core">
+      <Version>17.8.29</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.IO.Redist">
       <Version>6.1.3</Version>
     </PackageReference>
