@@ -21,6 +21,65 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.Proj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zig_Item_Template2", "Zig_Item_Template2\Zig_Item_Template2.csproj", "{4732B278-F458-4EBF-A1C0-137E4BC59F8B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		ZigVS\Documents\index.html = ZigVS\Documents\index.html
+		ZigVS\Documents\User'sManual_en.md = ZigVS\Documents\User'sManual_en.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{83DC1381-DE64-413B-ABEA-8B4FC248592B}"
+	ProjectSection(SolutionItems) = preProject
+		ZigVS\Documents\Images\CodeSnippetsManager.png = ZigVS\Documents\Images\CodeSnippetsManager.png
+		ZigVS\Documents\Images\ExtensionManager.png = ZigVS\Documents\Images\ExtensionManager.png
+		ZigVS\Documents\Images\Extensions_ZigVS_PackageInstaller.png = ZigVS\Documents\Images\Extensions_ZigVS_PackageInstaller.png
+		ZigVS\Documents\Images\Extensions_ZigVS_ToolChainInstaller.png = ZigVS\Documents\Images\Extensions_ZigVS_ToolChainInstaller.png
+		ZigVS\Documents\Images\Extensions_ZigVS_UserManualPage.png = ZigVS\Documents\Images\Extensions_ZigVS_UserManualPage.png
+		ZigVS\Documents\Images\New_Project.png = ZigVS\Documents\Images\New_Project.png
+		ZigVS\Documents\Images\New_ZigPackage.png = ZigVS\Documents\Images\New_ZigPackage.png
+		ZigVS\Documents\Images\New_ZigProject.png = ZigVS\Documents\Images\New_ZigProject.png
+		ZigVS\Documents\Images\Open_LocalFolder.png = ZigVS\Documents\Images\Open_LocalFolder.png
+		ZigVS\Documents\Images\PackageCreator.png = ZigVS\Documents\Images\PackageCreator.png
+		ZigVS\Documents\Images\PackageInstaller.png = ZigVS\Documents\Images\PackageInstaller.png
+		ZigVS\Documents\Images\Profiler.png = ZigVS\Documents\Images\Profiler.png
+		ZigVS\Documents\Images\ProjectModeBuildDebug.png = ZigVS\Documents\Images\ProjectModeBuildDebug.png
+		ZigVS\Documents\Images\ProjectPropery_Build.png = ZigVS\Documents\Images\ProjectPropery_Build.png
+		ZigVS\Documents\Images\ProjectPropety_General_AbsolutePath.png = ZigVS\Documents\Images\ProjectPropety_General_AbsolutePath.png
+		ZigVS\Documents\Images\ProjectPropety_General_ZIG_HOME.png = ZigVS\Documents\Images\ProjectPropety_General_ZIG_HOME.png
+		ZigVS\Documents\Images\Set_as_Startup_Item_1.png = ZigVS\Documents\Images\Set_as_Startup_Item_1.png
+		ZigVS\Documents\Images\Set_as_Startup_Item_2.png = ZigVS\Documents\Images\Set_as_Startup_Item_2.png
+		ZigVS\Documents\Images\Set_as_Startup_Item_3.png = ZigVS\Documents\Images\Set_as_Startup_Item_3.png
+		ZigVS\Documents\Images\SnippetsContextMenu.png = ZigVS\Documents\Images\SnippetsContextMenu.png
+		ZigVS\Documents\Images\TestExplorer.png = ZigVS\Documents\Images\TestExplorer.png
+		ZigVS\Documents\Images\TextHighLight.png = ZigVS\Documents\Images\TextHighLight.png
+		ZigVS\Documents\Images\ToolChainInstaller.png = ZigVS\Documents\Images\ToolChainInstaller.png
+		ZigVS\Documents\Images\ToolChainInstaller_output.png = ZigVS\Documents\Images\ToolChainInstaller_output.png
+		ZigVS\Documents\Images\Tool_Option_Environment_FontsAndColors.png = ZigVS\Documents\Images\Tool_Option_Environment_FontsAndColors.png
+		ZigVS\Documents\Images\Tool_Option_TextEditor_Zig.png = ZigVS\Documents\Images\Tool_Option_TextEditor_Zig.png
+		ZigVS\Documents\Images\Tool_Option_TextEditor_Inlay_Hints.png = ZigVS\Documents\Images\Tool_Option_TextEditor_Inlay_Hints.png
+		ZigVS\Documents\Images\Tool_Option_TextEditor_Zig._ScrollBar.png = ZigVS\Documents\Images\Tool_Option_TextEditor_Zig._ScrollBar.png
+		ZigVS\Documents\Images\Tool_Option_TextEditor_Zig_Advanced.png = ZigVS\Documents\Images\Tool_Option_TextEditor_Zig_Advanced.png
+		ZigVS\Documents\Images\Tool_Option_TextEditor_Zig_General.png = ZigVS\Documents\Images\Tool_Option_TextEditor_Zig_General.png
+		ZigVS\Documents\Images\Tool_Option_TextEditor_Zig_Tabs.png = ZigVS\Documents\Images\Tool_Option_TextEditor_Zig_Tabs.png
+		ZigVS\Documents\Images\Tool_Option_Zig_FolderMode.png = ZigVS\Documents\Images\Tool_Option_Zig_FolderMode.png
+		ZigVS\Documents\Images\Tool_Option_Zig_General_AbsolutePath.png = ZigVS\Documents\Images\Tool_Option_Zig_General_AbsolutePath.png
+		ZigVS\Documents\Images\Tool_Option_Zig_General_BuiltTool_AbsolutePath.png = ZigVS\Documents\Images\Tool_Option_Zig_General_BuiltTool_AbsolutePath.png
+		ZigVS\Documents\Images\Tool_Option_Zig_General_BuiltTool_ZIG_HOME.png = ZigVS\Documents\Images\Tool_Option_Zig_General_BuiltTool_ZIG_HOME.png
+		ZigVS\Documents\Images\ZigVS_marketplace.png = ZigVS\Documents\Images\ZigVS_marketplace.png
+		ZigVS\Documents\Images\zig_fmt.png = ZigVS\Documents\Images\zig_fmt.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tool", "tool", "{37E9012E-18D5-4C6E-89A0-26617D925EAB}"
+	ProjectSection(SolutionItems) = preProject
+		ZigVS\Documents\tool\bootstrap_menu.html = ZigVS\Documents\tool\bootstrap_menu.html
+		ZigVS\Documents\tool\GenerateHtml.bat = ZigVS\Documents\tool\GenerateHtml.bat
+		ZigVS\Documents\tool\pandoc.exe = ZigVS\Documents\tool\pandoc.exe
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,7 +118,39 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}
+		{83DC1381-DE64-413B-ABEA-8B4FC248592B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{37E9012E-18D5-4C6E-89A0-26617D925EAB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B410150-B8A4-4EEC-8EFC-AF9CCDB9F05B}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://dev.azure.com/luckystar
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ZigVS\\ZigVS.csproj
+		SccProjectName1 = ZigVS
+		SccLocalPath1 = ZigVS
+		SccProjectUniqueName2 = Zig_AppProject_Template1\\Zig_AppProject_Template1.csproj
+		SccProjectName2 = Zig_AppProject_Template1
+		SccLocalPath2 = Zig_AppProject_Template1
+		SccProjectUniqueName3 = Zig_Item_Template1\\Zig_Item_Template1.csproj
+		SccProjectName3 = Zig_Item_Template1
+		SccLocalPath3 = Zig_Item_Template1
+		SccProjectUniqueName4 = Zig_LibProject_Template1\\Zig_LibProject_Template1.csproj
+		SccProjectName4 = Zig_LibProject_Template1
+		SccLocalPath4 = Zig_LibProject_Template1
+		SccProjectUniqueName5 = Zig_AppProject_Template2\\Zig_AppProject_Template2.csproj
+		SccProjectName5 = Zig_AppProject_Template2
+		SccLocalPath5 = Zig_AppProject_Template2
+		SccProjectUniqueName6 = MPFProj10-master\\Dev10\\Src\\CSharp\\Microsoft.VisualStudio.Project.15.0.csproj
+		SccProjectName6 = MPFProj10-master/Dev10/Src/CSharp
+		SccLocalPath6 = MPFProj10-master\\Dev10\\Src\\CSharp
+		SccProjectUniqueName7 = Zig_Item_Template2\\Zig_Item_Template2.csproj
+		SccProjectName7 = Zig_Item_Template2
+		SccLocalPath7 = Zig_Item_Template2
 	EndGlobalSection
 EndGlobal

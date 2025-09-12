@@ -82,11 +82,11 @@ namespace ZigVS
             try
             {
                 var l_FolderModeOptions = await FolderModeOptions.GetLiveInstanceAsync();
-                if (!string.IsNullOrEmpty(l_FolderModeOptions.PreDebugCommand))
+                if (!string.IsNullOrEmpty(l_FolderModeOptions.PreDebugCommandExpanded))
                 {
                     ProcessStartInfo startInfo = new ProcessStartInfo
                     {
-                        FileName = l_FolderModeOptions.PreDebugCommand,
+                        FileName = l_FolderModeOptions.PreDebugCommandExpanded,
                         Arguments = l_FolderModeOptions.PreDebugCommandArguments,
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
@@ -133,7 +133,7 @@ namespace ZigVS
                         new ProjectTargetFileContext(l_relativeTargetPath/*Build.c_buildFileName*/));
 #pragma warning restore cs8602
 
-                    string l_intPath = Build.GetIntermeditatePath(l_locationPath, l_Configuration);
+                    string l_intPath = Build.GetIntermediatePath(l_locationPath, l_Configuration);
                     string l_outPath = Build.GetOutputPath(l_locationPath, l_Configuration);
 
                     string l_ExeString = BuildInfo.GetExeName(l_absoluteTargetPath, l_intPath);

@@ -58,8 +58,8 @@ namespace ZigVS
         #region Constants
   
 		internal const string Category_Tool = "Tool";
-        internal const string ToolName = "Tool Name";
-        internal const string ToolNameCaption = "Compiler Name (ex:zig.exe)";
+        internal const string ToolPath = "Tool Path";
+        internal const string ToolPathCaption = "Full path to the compiler (ex: $(ZIG_HOME)\\zig.exe). Environment variable expansion is supported.";
 
         internal const string Category_Assembly = "Assembly";
         internal const string AssemblyName = "Name";

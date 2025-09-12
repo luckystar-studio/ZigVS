@@ -26,11 +26,6 @@
 
             m_PackageCreatorWindowControl = this;
 
-            m_DoNotOpen_Radio_Button.Foreground = m_Directory_TextBlock.Foreground;
-            m_DoNotOpen_Radio_Button.Background = m_Directory_TextBlock.Background;
-            m_Open_Radio_Button.Foreground = m_Directory_TextBlock.Foreground;
-            m_Open_Radio_Button.Background = m_Directory_TextBlock.Background;
-
             Reset();
         }
 

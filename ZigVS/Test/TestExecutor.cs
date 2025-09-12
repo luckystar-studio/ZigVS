@@ -52,6 +52,7 @@ namespace ZigVS.Test
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
     using System.Collections.Generic;
     using System.IO;
+    using System.Xml.Linq;
 
     [ExtensionUri(Parameter.c_TestExecutorUriString)]
     public class TestExecutor : ITestExecutor
@@ -67,7 +68,11 @@ namespace ZigVS.Test
         {
             if (i_IRunContext != null && i_TestCaseEnumerable != null && i_IFrameworkHandle != null)
             {
-                var l_toolPathString = Utilities.GetToolPathFromEnvironmentValue();
+                var xml = i_IRunContext.RunSettings?.SettingsXml;
+                var doc = XDocument.Parse(xml);
+                var toolPath = doc.Root?.Element("ZigVs")?.Element("ToolPath")?.Value;
+
+                //i_IFrameworkHandle.SendMessage(Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging.TestMessageLevel.Informational, string.Format("In RunTests 1, path: {0}", toolPath));
 
                 m_cancelledBool = false;
                 foreach (var i_TestCase in i_TestCaseEnumerable)
@@ -100,7 +105,7 @@ namespace ZigVS.Test
                     else
                     {
                         l_ResultSet = Common.Test.RunTestProcess(
-                        Path.Combine(l_toolPathString, Parameter.c_compilerFileName),
+                        toolPath,
                         "test --test-filter \"" + i_TestCase.DisplayName + "\" " + i_TestCase.Source);
                     }
 
@@ -137,7 +142,11 @@ namespace ZigVS.Test
 
                     i_IFrameworkHandle.RecordStart(l_TestCase);
 
-                    var l_toolPathString = Utilities.GetToolPathFromEnvironmentValue();
+                    var xml = i_IRunContext?.RunSettings?.SettingsXml;
+                    var doc = XDocument.Parse(xml);
+                    var toolPath = doc.Root?.Element("ZigVs")?.Element("ToolPath")?.Value;
+
+                    //i_IFrameworkHandle.SendMessage(Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging.TestMessageLevel.Informational, string.Format("In RunTests 2, path: {0}", toolPath));
 
                     var l_ResultSet = new Common.Test.ResultSet();
                     /*                   if (i_IRunContext.IsBeingDebugged)
@@ -193,7 +202,7 @@ namespace ZigVS.Test
                                        else
                                        {
                                        }*/
-                    l_ResultSet = Common.Test.RunTestProcess(Path.Combine(l_toolPathString, Parameter.c_compilerFileName), "test " + l_sourceString);
+                    l_ResultSet = Common.Test.RunTestProcess(toolPath, "test " + l_sourceString);
 
                     var l_TestResult = new TestResult(l_TestCase);
                     l_TestResult.Outcome = l_ResultSet.m_TestOutcome;

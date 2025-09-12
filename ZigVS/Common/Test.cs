@@ -112,7 +112,12 @@ namespace ZigVS.Common
                 };
                 watcher.EnableRaisingEvents = true;
                 var l_argString = "test --test-no-exec --test-filter \"" + i_testNameString + "\" " + i_sourceCodePathString;
-                RunProcess(Parameter.c_compilerFileName, l_argString);
+
+                var l_GeneralOptions = Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => {
+                    return await GeneralOptions.GetLiveInstanceAsync();
+                });
+
+                RunProcess(l_GeneralOptions.ToolPathExpanded, l_argString);
                 watcher.EnableRaisingEvents = false;
             }
             return r_createdFileList;

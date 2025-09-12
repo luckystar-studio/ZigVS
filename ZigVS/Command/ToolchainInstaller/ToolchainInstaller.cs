@@ -56,7 +56,13 @@ namespace ZigVS
 #pragma warning disable VSTHRD002
     public class ToolchainInstaller : InstallerBase
     {
-        public void Start(string i_ZigToolChainString, string i_ZLSString, string i_CPUString, string i_DirectoryString, bool i_EnvBool)
+        public enum EnviromentType
+        {
+            DO_NOT,
+            DO_PATH,
+            DO_ZIG_HOME
+        }
+        public void Start(string i_ZigToolChainString, string i_ZLSString, string i_CPUString, string i_DirectoryString, EnviromentType i_EnviromentType)
         {
             if (m_IsRunningBool)
             {
@@ -66,12 +72,12 @@ namespace ZigVS
             {
                 SetStatusInstalling();
                 m_Thread = new Thread(new ThreadStart(() => InstallToolChain(
-                    i_ZigToolChainString, i_ZLSString, i_CPUString, i_DirectoryString, i_EnvBool)));
+                    i_ZigToolChainString, i_ZLSString, i_CPUString, i_DirectoryString, i_EnviromentType)));
                 m_Thread.Start();
             }
         }
 
-        void InstallToolChain(string i_ZigVersionString, string i_ZLSVersionString, string i_CPUString, string i_DirectoryString, bool i_EnvBool)
+        void InstallToolChain(string i_ZigVersionString, string i_ZLSVersionString, string i_CPUString, string i_DirectoryString, EnviromentType i_EnviromentType)
         {
             try
             {
@@ -98,13 +104,22 @@ namespace ZigVS
                             IfCanceledThrowException();
                             var l_ZLSPathString = ExtractZip(l_ZLSZipMemoryStream, l_toolChainPathString);
 
-                            if (i_EnvBool)
+                            switch(i_EnviromentType)
                             {
-                                Utilities.SetPATHEnvironmentValue(l_toolChainPathString);
+                                case EnviromentType.DO_ZIG_HOME:
+                                    Environment.SetEnvironmentVariable("ZIG_HOME", l_toolChainPathString, EnvironmentVariableTarget.User);
+                                    Environment.SetEnvironmentVariable("ZIG_HOME", l_toolChainPathString, EnvironmentVariableTarget.Process);
+                                    break;
+                                case EnviromentType.DO_PATH:
+                                    Utilities.SetPATHEnvironmentValue(l_toolChainPathString, EnvironmentVariableTarget.User);
+                                    Utilities.SetPATHEnvironmentValue(l_toolChainPathString, EnvironmentVariableTarget.Process);
+                                    break;
+                                case EnviromentType.DO_NOT:
+                                default:
+                                    break;
                             }
-
+ 
                             Common.OutputWindowPane.OutputString("Installation Complete --------------------" + Environment.NewLine);
-                            Common.OutputWindowPane.OutputString("You might need to restart Visual Studio." + Environment.NewLine);
                         }
                     }
                 }

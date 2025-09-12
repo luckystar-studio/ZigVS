@@ -45,22 +45,93 @@ a particular purpose and non-infringement.
 
 ********************************************************************************************/
 
-#if false
+#if true
 namespace ZigVS.Options
 {
     using Microsoft.VisualStudio.Shell;
+    using System;
     using System.ComponentModel;
     using System.Runtime.InteropServices;
 
     [ComVisible(true)]
     [Guid("9BE877D0-D32C-4F32-A673-3FFF4129EDAD")]
-    public class TextEditorAdvancedOptions : DialogPage
+    internal class TextEditorAdvancedOptions : BaseOptionModel<TextEditorAdvancedOptions>
     {
-        [Category("General")]
-        [DisplayName("Enable ZLS")]
-        [Description("Enable Zig Language Server features.")]
-        [DefaultValue(true)]
-        public bool EnableZls { get; set; } = true;
+        [Category("Inlay hints")]
+        [DisplayName("Show variable type")]
+        [Description("Toggle Zig Language Server inlay hints settings")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch inlay_hints_show_variable_type_hints { get; set; } = Switch.on;
+
+        [Category("Inlay hints")]
+        [DisplayName("Show struct literal field type")]
+        [Description("Toggle Zig Language Server inlay hints settings")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch inlay_hints_show_struct_literal_field_type { get; set; } = Switch.on;
+
+        [Category("Inlay hints")]
+        [DisplayName("Show parameter name")]
+        [Description("Toggle Zig Language Server inlay hints settings")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch inlay_hints_show_parameter_name { get; set; } = Switch.on;
+
+        [Category("Inlay hints")]
+        [DisplayName("Show builtin")]
+        [Description("Toggle Zig Language Server inlay hints settings")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch inlay_hints_show_builtin { get; set; } = Switch.on;
+
+        [Category("Inlay hints")]
+        [DisplayName("Exclude single argument")]
+        [Description("Toggle Zig Language Server inlay hints settings")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch inlay_hints_exclude_single_argument { get; set; } = Switch.on;
+
+        [Category("Inlay hints")]
+        [DisplayName("Hide redundant parameter names")]
+        [Description("Toggle Zig Language Server inlay hints settings")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch inlay_hints_hide_redundant_param_names { get; set; } = Switch.on;
+
+        [Category("Inlay hints")]
+        [DisplayName("Hide redundant parameter names last token")]
+        [Description("Toggle Zig Language Server inlay hints settings")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch inlay_hints_hide_redundant_param_names_last_token { get; set; } = Switch.on;
+
+        [Category("Auto-Insert")]
+        [DisplayName("Parentheses")]
+        [Description("Automatically inserts a closing parenthesis")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch AutoInsertParenthesesSwitch { get; set; } = Switch.on;
+
+        [Category("Auto-Insert")]
+        [DisplayName("Braces")]
+        [Description("Automatically inserts a closing brace")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch AutoInsertBracesSwitch { get; set; } = Switch.on;
+
+        [Category("Auto-Insert")]
+        [DisplayName("Brackets")]
+        [Description("Automatically inserts a closing bracket")]
+        [DefaultValue(Switch.on)]
+        [TypeConverter(typeof(EnumConverter))]
+        public Switch AutoInsertBracketsSwitch { get; set; } = Switch.on;
+
+/*        protected override void OnApply(Microsoft.VisualStudio.Shell.PageApplyEventArgs e)
+        {
+            base.OnApply(e);
+            LanguageClient.UpdateConfiguration();
+        }*/
     }
 }
 #endif

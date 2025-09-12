@@ -47,79 +47,74 @@ a particular purpose and non-infringement.
 
 namespace ZigVS
 {
+    using System;
     using System.ComponentModel;
 
     internal class GeneralOptions : BaseOptionModel<GeneralOptions>
     {
-        [Category("1) Language Server")]
+        [Category("Build Tool")]
+        [DisplayName("Tool Path (zig)")]
+        [Description("Path to the build tool. Can use Visual Studio macros or environment variables (e.g. $(ZIG_HOME)\\zig.exe)")]
+        [DefaultValue(Parameter.c_compilerFileName)]
+        public string ToolPath { get; set; } = Parameter.c_compilerFileName;
+
+        [Browsable(false)]
+        public string ToolPathExpanded => EnvExpander.Expand(ToolPath);
+
+        [Category("Language Server")]
         [DisplayName("Language Server File Name (zls)")]
         [Description("Language Server File Name.")]
-        [DefaultValue("zls.exe")]
-        public string LanguageServerPath { get; set; } = "zls.exe";
+        [DefaultValue(Parameter.c_languageServerFileName)]
+        public string LanguageServerPath { get; set; } = Parameter.c_languageServerFileName;
 
-        [Category("1) Language Server")]
+        [Browsable(false)]
+        public string LanguageServerPathExpanded => EnvExpander.Expand(LanguageServerPath);
+
+        [Category("Language Server")]
         [DisplayName("Debug Mode")]
-        [Description("Show communication between Language server and client.")]
+        [Description("Show communication between language server and Visual Studio")]
         [DefaultValue(Switch.off)]
         [TypeConverter(typeof(EnumConverter))] // This will make use of enums more resilient
         public Switch TDebugSwitch { get; set; } = Switch.off;
 
-        [Category("1) Language Server")]
-        [DisplayName("")]
-        [Description("")]
+        [Category("Language Server")]
+        [DisplayName("Arguments")]
+        [Description("Arguments for ZLS when Debug Mode is off")]
         [DefaultValue("")]
         public string Arguments { get; set; } = "";
 
-        [Category("1) Language Server")]
+        [Category("Language Server")]
         [DisplayName("Debug Arguments")]
-        [Description("Debug Arguments")]
-        [DefaultValue("--enable-debug-log --enable-message-tracing")]
-        public string DebugArguments { get; set; } = "--enable-debug-log --enable-message-tracing";
+        [Description("Debug Arguments for ZLS")]
+        [DefaultValue("--enable-stderr-logs --log-level debug")]
+        public string DebugArguments { get; set; } = "--enable-stderr-logs --log-level debug";
 
-        [Category("2) Package Installer")]
-        [DisplayName(" Home URL")]
+        [Category("Package Installer")]
+        [DisplayName("Home URL")]
         [Description("Home URL")]
         [DefaultValue(@"https://github.com/search?q=language%3Azig+path%3Abuild.zig+content%3AREADME.md+lib&type=repositories&s=stars&o=desc")]
         public string HomeUrl { get; set; } = @"https://github.com/search?q=language%3Azig+path%3Abuild.zig+content%3AREADME.md+lib&type=repositories&s=stars&o=desc";
 
-        [Category("2) Package Installer")]
+        [Category("Package Installer")]
         [DisplayName("Git Command")]
         [Description("Git Command")]
-        [DefaultValue("git.exe")]
-        public string GitPath { get; set; } = "git.exe";
+        [DefaultValue(Parameter.c_gitToolFileName)]
+        public string GitPath { get; set; } = Parameter.c_gitToolFileName;
 
-        [Category("2) Package Installer")]
+        [Browsable (false)]
+        public string GitPathExpanded => EnvExpander.Expand(GitPath);
+
+        [Category("Package Installer")]
         [DisplayName("Git Package Option")]
         [Description("Git Package Option")]
         [DefaultValue("clone --recursive")]
         public string GitOption { get; set; } = "clone --recursive";
 
-        [Category("2) Package Installer")]
+        [Category("Package Installer")]
         [DisplayName("Zig Package Option")]
         [Description("Zig Package Option")]
         [DefaultValue("fetch --save")]
         public string ZigFetchOption { get; set; } = "fetch --save";
-
-        [Category("3) Editor")]
-        [DisplayName("Auto-Insert Parentheses")]
-        [Description("Automatically inserts a closing parenthesis")]
-        [DefaultValue(Switch.on)]
-        [TypeConverter(typeof(EnumConverter))]
-        public Switch AutoInsertParenthesesSwitch { get; set; } = Switch.on;
-
-        [Category("3) Editor")]
-        [DisplayName("Auto-Insert Braces")]
-        [Description("Automatically inserts a closing brace ")]
-        [DefaultValue(Switch.on)]
-        [TypeConverter(typeof(EnumConverter))]
-        public Switch AutoInsertBracesSwitch { get; set; } = Switch.on;
-
-        [Category("3) Editor")]
-        [DisplayName("Auto-Insert Brackets")]
-        [Description("Automatically inserts a closing Bracket")]
-        [DefaultValue(Switch.on)]
-        [TypeConverter(typeof(EnumConverter))]
-        public Switch AutoInsertBrackets { get; set; } = Switch.on;
     }
 
     public enum Switch

@@ -245,16 +245,26 @@ namespace Microsoft.VisualStudio.Project
                 }
 
 				this.panel = new Panel();
-				this.panel.Size = new Size(pRect[0].right - pRect[0].left, pRect[0].bottom - pRect[0].top);
                 this.panel.Text = SR.GetString(SR.Settings, CultureInfo.CurrentUICulture);
 				this.panel.Visible = false;
-				this.panel.Margin = new Padding(1, 1, 1, 1);
-				this.panel.AutoSize = true;
-				this.panel.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
+				this.panel.Margin = Padding.Empty;
+                this.panel.Padding = Padding.Empty;
+				this.panel.AutoSize = false;
 
-                //      this.panel.Size = new Size(550, 400);
                 this.panel.CreateControl();
 				NativeMethods.SetParent(this.panel.Handle, parent);
+
+                {
+                    this.panel.SuspendLayout();
+
+                    int w = pRect[0].right - pRect[0].left;
+                    int h = pRect[0].bottom - pRect[0].top;
+                    this.panel.Bounds = new Rectangle(0, 0, w, h);
+
+                    this.panel.ResumeLayout(performLayout: true);
+                }
+
+                this.panel.Visible = true;
 			}
 
 			if(this.grid == null && this.ProjectManager != null && this.ProjectManager.Site != null)
@@ -267,20 +277,18 @@ namespace Microsoft.VisualStudio.Project
 			{
 				this.active = true;
 
-
 				Control cGrid = Control.FromHandle(this.grid.Handle);
 
-				cGrid.Parent = Control.FromHandle(parent);//this.panel;
-                cGrid.Size = new Size(pRect[0].right - pRect[0].left-6, pRect[0].bottom - pRect[0].top-6);
-                cGrid.Margin = new Padding(1, 1, 1, 1);
-                cGrid.AutoSize = true;
-                cGrid.Location = new Point(3, 3);
-				cGrid.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
-				cGrid.Visible = true;
+                cGrid.Parent = this.panel;
+                cGrid.AutoSize = false;
+                cGrid.Dock = DockStyle.Fill;
+
 				this.grid.SetOption(_PROPERTYGRIDOPTION.PGOPT_TOOLBAR, false);
 				this.grid.GridSort = _PROPERTYGRIDSORT.PGSORT_CATEGORIZED | _PROPERTYGRIDSORT.PGSORT_ALPHABETICAL;
-				NativeMethods.SetParent(this.grid.Handle, this.panel.Handle);
+
 				UpdateObjects();
+
+                this.panel.PerformLayout();
 			}
 		}
 
@@ -338,11 +346,12 @@ namespace Microsoft.VisualStudio.Project
             {
                 throw new ArgumentNullException("arrRect");
             }
-			
-            RECT r = arrRect[0];
 
-			this.panel.Location = new Point(r.left, r.top);
-			this.panel.Size = new Size(r.right - r.left, r.bottom - r.top);
+            int w = arrRect[0].right - arrRect[0].left;
+            int h = arrRect[0].bottom - arrRect[0].top;
+
+            this.panel.Bounds = new Rectangle(0, 0, w, h);
+            this.panel.PerformLayout();
 		}
 
 		public virtual void SetObjects(uint count, object[] punk)

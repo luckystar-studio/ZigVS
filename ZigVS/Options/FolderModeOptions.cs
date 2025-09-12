@@ -51,13 +51,7 @@ namespace ZigVS
 
     internal class FolderModeOptions : BaseOptionModel<FolderModeOptions>
     {
-        [Category("1) Build Tool")]
-        [DisplayName("Tool Path (zig)")]
-        [Description("Path to the build tool.")]
-        [DefaultValue(Parameter.c_compilerFileName)]
-        public string ToolPath { get; set; } = Parameter.c_compilerFileName;
-
-        [Category("1) Build Tool")]
+        [Category("1) Build File")]
         [DisplayName("Build File name")]
         [Description("The description of the property")]
         [DefaultValue(Parameter.c_buildFileName)]
@@ -122,6 +116,9 @@ namespace ZigVS
         [Description("This command will be executed before the debugger launches. It is useful for copying the output files to the target platform.")]
         [DefaultValue("")]
         public string PreDebugCommand { get; set; } = "";
+
+        [Browsable(false)]
+        public string PreDebugCommandExpanded => EnvExpander.Expand(PreDebugCommand);
 
         [Category("5) Pre Debug")]
         [DisplayName("Pre Debug Command Arguments")]
@@ -204,6 +201,7 @@ pub fn main() !void
             .query = .{},
             .result = try std.zig.system.resolveTargetQuery(.{}),
         },
+	    .time_report = false
     };
 
     graph.cache.addPrefix(.{ .path = null, .handle = __std.fs.cwd() });
@@ -236,9 +234,8 @@ pub fn main() !void
         }
     }
 
-    const stdout = __std.io.getStdOut().writer();
     if (selected_basename) |name| {
-        try stdout.print(""{s}"", .{name});
+        try __std.fs.File.stdout().writeAll(name);
         return;
     }
 

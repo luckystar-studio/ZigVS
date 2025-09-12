@@ -36,20 +36,13 @@
 
             m_ToolchainInstallerWindowControl = this;
 
-            m_ZigVersion_ComboBox.Items.Add("0.14.1");
-            m_ZigVersion_ComboBox.Items.Add("0.14.0");
+            m_ZigVersion_ComboBox.Items.Add("0.15.1");
             m_ZigVersion_ComboBox.Items.Add("master");
 
-//            m_ZLSVersion_ComboBox.Items.Add("0.14.1");
-            m_ZLSVersion_ComboBox.Items.Add("0.14.0");
+            m_ZLSVersion_ComboBox.Items.Add("0.15.0");
 
             m_CPU_ComboBox.Items.Add("x86_64");
             m_CPU_ComboBox.Items.Add("aarch64");
-
-            m_DoNotSet_Radio_Button.Foreground = Title.Foreground;
-            m_DoNotSet_Radio_Button.Background = Title.Background;
-            m_DoSet_Path_Radio_Button.Foreground = Title.Foreground;
-            m_DoSet_Path_Radio_Button.Background = Title.Background;
 
             Reset();
         }
@@ -157,7 +150,7 @@
             Check_Status();
         }
 
-        void DoSet_Click(object sender, RoutedEventArgs e)
+        void DoSet_ZIG_HOME_Click(object sender, RoutedEventArgs e)
         {
             m_EnvBool = true;
             m_Env_TextBlock.Foreground = m_greenBrush;
@@ -173,10 +166,19 @@
         {
             if (m_ToolchainInstaller.GetState() == InstallerBase.State.None)
             {
+                ToolchainInstaller.EnviromentType l_envType = ToolchainInstaller.EnviromentType.DO_NOT;
+                if ((m_DoSet_Path_Radio_Button.IsChecked!=null && m_DoSet_Path_Radio_Button.IsChecked.Value))
+                {
+                    l_envType = ToolchainInstaller.EnviromentType.DO_PATH;
+                }
+                if ((m_DoSet_ZIG_HOME_Radio_Button.IsChecked != null && m_DoSet_ZIG_HOME_Radio_Button.IsChecked.Value))
+                {
+                    l_envType = ToolchainInstaller.EnviromentType.DO_ZIG_HOME;
+                }
                 bool l_checked = (m_DoSet_Path_Radio_Button.IsChecked != null) && m_DoSet_Path_Radio_Button.IsChecked.Value;
 
 #pragma warning disable VSTHRD010
-                m_ToolchainInstaller.Start(m_ZigVersion_ComboBox.Text, m_ZLSVersion_ComboBox.Text, m_CPU_ComboBox.Text, m_DirecotryPath_TextBox.Text, l_checked);
+                m_ToolchainInstaller.Start(m_ZigVersion_ComboBox.Text, m_ZLSVersion_ComboBox.Text, m_CPU_ComboBox.Text, m_DirecotryPath_TextBox.Text, l_envType);
 #pragma warning restore VSTHRD010
             }
             else if (m_ToolchainInstaller.GetState() == InstallerBase.State.Installing)

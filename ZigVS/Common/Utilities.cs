@@ -52,7 +52,9 @@ namespace ZigVS
     using Microsoft.VisualStudio.Shell.Interop;
     using Microsoft.VisualStudio.Workspace.VSIntegration.Contracts;
     using System;
+    using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
 #nullable enable
     public class Utilities
@@ -63,45 +65,43 @@ namespace ZigVS
             return (TInterface)ServiceProvider.GlobalProvider.GetService(typeof(TService));
         }
 
-        public static string GetToolPathFromEnvironmentValue()
-        {
-            //            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            var r_toolPathString = Environment.GetEnvironmentVariable(Parameter.c_ToolPath_EvnironmentVariable_NameString);
-            if (r_toolPathString == null)
-            {
-                r_toolPathString = "";
-            }
-            return r_toolPathString;
-        }
+        //public static void SetEnvironmentValue(string i_ZigToolChainPathString)
+        //{
+        //    //            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
 
-        public static void SetEnvironmentValue(string i_ZigToolChainPathString)
+        //    i_ZigToolChainPathString = i_ZigToolChainPathString.TrimEnd('\\') + '\\';
+
+        //    Environment.SetEnvironmentVariable(Parameter.c_ToolPath_EnvironmentVariable_NameString, i_ZigToolChainPathString, EnvironmentVariableTarget.User);
+        //    Common.OutputWindowPane.OutputString(
+        //        "Environment Value '" +
+        //        Parameter.c_ToolPath_EnvironmentVariable_NameString +
+        //        "' = " + i_ZigToolChainPathString + Environment.NewLine);
+        //}
+
+        public static void SetPATHEnvironmentValue(string i_ZigToolChainPathString ,
+            EnvironmentVariableTarget i_EnvironmentVariableTarget)
         {
             //            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            Environment.SetEnvironmentVariable(Parameter.c_ToolPath_EvnironmentVariable_NameString, i_ZigToolChainPathString.TrimEnd('\\') + '\\', EnvironmentVariableTarget.User);
+
+            i_ZigToolChainPathString = i_ZigToolChainPathString.TrimEnd('\\') + '\\';
+
+            var l_currentPathString = Environment.GetEnvironmentVariable(
+                Parameter.c_PATH_EnvironmentVariable_NameString, i_EnvironmentVariableTarget);
+            string l_newPathString = i_ZigToolChainPathString;
+            if (string.IsNullOrEmpty(l_currentPathString))
+            {
+            }
+            else if( l_currentPathString.Split(';').Contains(i_ZigToolChainPathString) == false)
+            {
+                l_newPathString = i_ZigToolChainPathString + ";" + l_currentPathString;
+            }
+            Environment.SetEnvironmentVariable(
+                Parameter.c_PATH_EnvironmentVariable_NameString, l_newPathString, i_EnvironmentVariableTarget);
+
             Common.OutputWindowPane.OutputString(
-                "Environment Value '" +
-                Parameter.c_ToolPath_EvnironmentVariable_NameString +
-                "' = " + i_ZigToolChainPathString + Environment.NewLine);
-        }
-
-        public static void SetPATHEnvironmentValue(string i_ZigToolChainPathString)
-        {
-            //            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            var l_currentPathString = Environment.GetEnvironmentVariable("PATH");
-
-            if (l_currentPathString.Split(';').Contains(i_ZigToolChainPathString))
-            {
-
-            }
-            else
-            {
-                string l_updatedPathString = i_ZigToolChainPathString.TrimEnd('\\') + '\\' + ";" + l_currentPathString;
-                Environment.SetEnvironmentVariable(Parameter.c_PATH_EvnironmentVariable_NameString, l_updatedPathString, EnvironmentVariableTarget.User);
-                Common.OutputWindowPane.OutputString(
-                    "Updating environment variable '" +
-                    Parameter.c_PATH_EvnironmentVariable_NameString +
-                    "' = " + l_updatedPathString + Environment.NewLine);
-            }
+                "Updating environment variable '" +
+                Parameter.c_PATH_EnvironmentVariable_NameString +
+                "' = " + l_newPathString + Environment.NewLine);
         }
 
         public enum SolutionMode
@@ -182,6 +182,108 @@ namespace ZigVS
                 ((IVsWindowFrame)l_ToolWindowPane.Frame).Show();
 #pragma warning restore VSTHRD010   
             }
+        }
+
+        public static bool IsFullyQualifiedPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+
+            // Check if rooted (starts with drive letter or UNC prefix)
+            try {
+                if (!Path.IsPathRooted(path))
+                {
+                    return false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                // if it had invalid characters it's not fully qualified
+                return false;
+            }
+
+            // Ensure it's not just "C:" but "C:\something"
+            string root = Path.GetPathRoot(path);
+            if (string.IsNullOrEmpty(root))
+            {
+                return false;
+            }
+
+            // Fully qualified means more than just the root
+            return path.Length > root.Length;
+        }
+
+        public static string? ResolvePath(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+                return null;
+
+            // Case 1: Already fully qualified
+            if (IsFullyQualifiedPath(fileName))
+            {
+                return Path.GetFullPath(fileName);
+            }
+
+            // Case 2: Contains directory separators → relative to current dir
+            if (fileName.Contains(Path.DirectorySeparatorChar) || fileName.Contains(Path.AltDirectorySeparatorChar))
+            {
+                try
+                {
+                    string full = Path.GetFullPath(fileName);
+                    return full;
+                    //return File.Exists(full) ? full : null;
+                }
+                catch (ArgumentException)
+                {
+                    return null;
+                }
+            }
+
+            // Case 3: Search PATH
+            string? pathEnv = Environment.GetEnvironmentVariable(Parameter.c_PATH_EnvironmentVariable_NameString);
+            if (pathEnv == null)
+            {
+                return null;
+            }
+
+            foreach (string dir in pathEnv.Split(new [] { Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string candidate = Path.Combine(dir, fileName);
+                if (File.Exists(candidate))
+                {
+                    return candidate;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public static class EnvExpander
+    {
+        // Matches $(NAME) where NAME = letters, digits, underscore
+        private static readonly Regex MsBuildVar = new Regex(@"\$\((?<name>[A-Za-z0-9_]+)\)",
+            RegexOptions.Compiled);
+
+        public static string Expand(string? input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input ?? string.Empty;
+
+            // First, expand $(NAME) ourselves
+            string replaced = MsBuildVar.Replace(input!, m =>
+            {
+                var name = m.Groups["name"].Value;
+                var value = Environment.GetEnvironmentVariable(name);
+                return value ?? String.Empty; // remove token if not defined
+            });
+
+            // Then, also allow %NAME% style via the OS
+            replaced = Environment.ExpandEnvironmentVariables(replaced);
+
+            return replaced;
         }
     }
 }

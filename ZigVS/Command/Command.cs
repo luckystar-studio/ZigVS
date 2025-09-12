@@ -41,7 +41,6 @@ namespace ZigVS.Command
         public const int RatingAndReviewId = 0x7000;
         public const int PachageCreaterId = 0x4000;
         public const int FormattingCommandId = 0x0300;
-        public const int ToggleInlyHintsId = 0x5000;
         public const int ToolbarId = 0x0350;
         public const int ToolbarGroupid = 0x0400;
         public const int DebuggerDropDownComboId = 0x0500;

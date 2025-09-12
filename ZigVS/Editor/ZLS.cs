@@ -45,6 +45,11 @@ a particular purpose and non-infringement.
 
 ********************************************************************************************/
 
+using Microsoft.VisualStudio.Shell;
+using System;
+using System.Threading.Tasks;
+using ZigVS.Options;
+
 namespace ZigVS
 {
     public class ZLS
@@ -56,44 +61,39 @@ namespace ZigVS
             public bool inlay_hints_show_parameter_name { get; set; }
             public bool inlay_hints_show_builtin { get; set; }
             public bool inlay_hints_exclude_single_argument { get; set; }
+            public bool inlay_hints_hide_redundant_param_names { get; set; }
+            public bool inlay_hints_hide_redundant_param_names_last_token { get; set; }
 
-            public void SetOff()
+            public string zig_exe_path { get; set; }
+
+            public Settings()
             {
-                inlay_hints_show_variable_type_hints = false;
-                inlay_hints_show_struct_literal_field_type = false;
-                inlay_hints_show_parameter_name = false;
-                inlay_hints_show_builtin = false;
-                inlay_hints_exclude_single_argument = false;
-            }
-            public void SetOn()
-            {
-                inlay_hints_show_variable_type_hints = true;
-                inlay_hints_show_struct_literal_field_type = true;
-                inlay_hints_show_parameter_name = true;
-                inlay_hints_show_builtin = true;
-                inlay_hints_exclude_single_argument = true;
+                var l_GeneralOptions = Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => {
+                    return await GeneralOptions.GetLiveInstanceAsync();
+                });
+
+                zig_exe_path = Utilities.ResolvePath(l_GeneralOptions.ToolPathExpanded);
             }
         }
 
-        static bool m_inlyHintBool = true;
-
-        public static void ToggleInlyHint()
-        {
-            m_inlyHintBool = !m_inlyHintBool;
-        }
-
-        public static object GetSettings()
+        public async static Task<Settings> GetSettingsAsync()
         {
             var r_Settings = new Settings();
 
-            if (m_inlyHintBool)
-            {
-                r_Settings.SetOn();
-            }
-            else
-            {
-                r_Settings.SetOff();
-            }
+             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            var textEditorOption = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await TextEditorAdvancedOptions.GetLiveInstanceAsync();
+            });
+
+            r_Settings.inlay_hints_show_variable_type_hints = textEditorOption.inlay_hints_show_variable_type_hints == Switch.on;
+            r_Settings.inlay_hints_show_struct_literal_field_type = textEditorOption.inlay_hints_show_struct_literal_field_type == Switch.on;
+            r_Settings.inlay_hints_show_parameter_name = textEditorOption.inlay_hints_show_parameter_name == Switch.on;
+            r_Settings.inlay_hints_show_builtin = textEditorOption.inlay_hints_show_builtin == Switch.on;
+            r_Settings.inlay_hints_exclude_single_argument = textEditorOption.inlay_hints_exclude_single_argument == Switch.on;
+            r_Settings.inlay_hints_hide_redundant_param_names = textEditorOption.inlay_hints_hide_redundant_param_names == Switch.on;
+            r_Settings.inlay_hints_hide_redundant_param_names_last_token = textEditorOption.inlay_hints_hide_redundant_param_names_last_token == Switch.on;
+
             return r_Settings;
         }
     }

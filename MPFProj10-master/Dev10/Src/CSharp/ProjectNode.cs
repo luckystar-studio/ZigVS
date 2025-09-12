@@ -2838,6 +2838,8 @@ namespace Microsoft.VisualStudio.Project
             if (oldProp != null)
                 oldValue = oldProp.EvaluatedValue;
 
+            string oldValueUnevaluated = GetProjectPropertyUnevaluated(propertyName, storageType);
+
             if (propertyValue == null)
             {
                 // if property already null, do nothing
@@ -2849,7 +2851,7 @@ namespace Microsoft.VisualStudio.Project
             }
 
             // Only do the work if this is different to what we had before
-            if (!String.Equals(oldValue, propertyValue, StringComparison.Ordinal))
+            if (!String.Equals(oldValue, propertyValue, StringComparison.Ordinal) && !String.Equals(oldValueUnevaluated, propertyValue, StringComparison.Ordinal))
             {
                 // Check out the project file.
                 if (storageType == _PersistStorageType.PST_PROJECT_FILE && !this.ProjectManager.QueryEditProjectFile(false))
@@ -4942,15 +4944,34 @@ namespace Microsoft.VisualStudio.Project
             return this.GetProjectProperty(propertyName, storageType, true);
         }
 
-		/// <summary>
-		/// Gets the unevaluated value of a project property.
-		/// </summary>
-		/// <param name="propertyName">The name of the property to retrieve.</param>
-		/// <returns>Unevaluated value of the property.</returns>
-		public virtual string GetProjectPropertyUnevaluated(string propertyName)
-		{
-			return this.buildProject.GetProperty(propertyName).UnevaluatedValue;
-		}
+        /// <summary>
+        /// Gets the unevaluated value of a project property.
+        /// </summary>
+        /// <param name="propertyName">The name of the property to retrieve.</param>
+        /// <returns>Unevaluated value of the property.</returns>
+        public virtual string GetProjectPropertyUnevaluated(string propertyName, _PersistStorageType storageType)
+        {
+            MSBuild.Project project = this.buildProject;
+
+            if (storageType == _PersistStorageType.PST_PROJECT_FILE)
+            {
+                project = this.buildProject;
+            }
+            else
+            {
+                project = this.GetOrCreateUserBuildProject();
+            }
+
+            ProjectProperty property = project.GetProperty(propertyName);
+            if (property != null)
+            {
+                return property.UnevaluatedValue;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// Set dirty state of project

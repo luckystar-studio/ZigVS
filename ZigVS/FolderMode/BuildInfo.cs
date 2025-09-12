@@ -97,13 +97,18 @@ namespace ZigVS
 
                 if (s_BuildInfoString == "")
                 {
-                    var l_FolderModelOption = FolderModeOptions.GetLiveInstanceAsync().Result;
-                    if (File.Exists(i_buildFilePath) && (l_FolderModelOption != null))
+                    var l_GeneralOptions = Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => {
+                        return await GeneralOptions.GetLiveInstanceAsync();
+                    });
+                    var l_FolderModeOptions = Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => {
+                        return await FolderModeOptions.GetLiveInstanceAsync();
+                    });
+
+                    if (File.Exists(i_buildFilePath) && (l_GeneralOptions != null) && (l_FolderModeOptions != null))
                     {
-                        string l_BuildFile = File.ReadAllText(i_buildFilePath) + l_FolderModelOption.BuildInfoCapturer;
+                        string l_BuildFile = File.ReadAllText(i_buildFilePath) + l_FolderModeOptions.BuildInfoCapturer;
 
                         string l_BuildInfoPathString = System.IO.Path.Combine(i_intDirectory, c_BuildInfo + Parameter.c_fileExtension);
-                        var l_toolPathString = Utilities.GetToolPathFromEnvironmentValue();
 
                         if (File.Exists(l_BuildInfoPathString))
                         {
@@ -115,9 +120,9 @@ namespace ZigVS
                             {
                                 StartInfo = new ProcessStartInfo
                                 {
-                                    FileName = Path.Combine(l_toolPathString, l_FolderModelOption.ToolPath),
+                                    FileName = l_GeneralOptions.ToolPathExpanded,
                                     WorkingDirectory = i_intDirectory,
-                                    Arguments = l_FolderModelOption.BuildCommand_buildexe + " " + l_BuildInfoPathString,
+                                    Arguments = l_FolderModeOptions.BuildCommand_buildexe + " " + l_BuildInfoPathString,
                                     UseShellExecute = false,
                                     RedirectStandardOutput = true,
                                     RedirectStandardError = true,

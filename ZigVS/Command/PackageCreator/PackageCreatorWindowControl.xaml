@@ -9,9 +9,7 @@
              xmlns:local="clr-namespace:ZigVS"
              mc:Ignorable="d">
     <Grid>
-            
         <StackPanel Orientation="Vertical">
-
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock x:Name="m_One_TextBlock" Width="40" FontSize="30">❶</TextBlock>
                 <TextBlock x:Name="m_Directory_TextBlock" Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Directory</TextBlock>
@@ -26,9 +24,8 @@
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock x:Name="m_Three_TextBlock" Width="40" FontSize="30">❸</TextBlock>
                 <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Open Folder Mode</TextBlock>
-                <RadioButton x:Name="m_DoNotOpen_Radio_Button" Content="Do not open    " FontSize="16" VerticalAlignment="Center" Checked="m_DoNotOpen_Radio_Button_Checked"/>
-                <RadioButton x:Name="m_Open_Radio_Button" Content="Open" FontSize="16" VerticalAlignment="Center" Checked="m_Open_Radio_Button_Checked" />
-                <!--RadioButton x:Name="m_DoSet_Radio_Button" Content="Set Environment Value 'ZIG__TOOL__PATH'" FontSize="16" VerticalAlignment="Center" Click="DoSet_Click" /-->
+                <RadioButton x:Name="m_DoNotOpen_Radio_Button" Content="Do not open    " FontSize="16" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}" Checked="m_DoNotOpen_Radio_Button_Checked"/>
+                <RadioButton x:Name="m_Open_Radio_Button" Content="Open" FontSize="16" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}" Checked="m_Open_Radio_Button_Checked" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock Width="40" FontSize="30">　</TextBlock>

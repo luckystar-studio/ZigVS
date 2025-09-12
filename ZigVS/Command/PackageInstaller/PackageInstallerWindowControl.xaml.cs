@@ -24,7 +24,7 @@
 
         System.Windows.Media.Brush m_greenBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x16, 0x84, 0x00));
 
-        bool m_repogitoryBool = false;
+        bool m_repositoryBool = false;
         bool m_methodBool = false;
 
         string m_zipUrlString = "";
@@ -35,10 +35,11 @@
 
         const string c_targzExtensionString = ".tar.gz";
         const string c_zipExtensionString = ".zip";
-        const string c_methodGit = "git";
-        const string c_methodUnzip = "unzip";
+
+        const string c_methodGit =      "git";
+        const string c_methodUnzip =    "unzip";
         const string c_methodZigFetch = "zig fetch   (Open Folder Mode)";
-        const string c_methodAdd = "add package (Project File Mode)";
+        const string c_methodAdd =      "add package (Project File Mode)";
 
         public PackageInstallerWindowControl()
         {
@@ -55,8 +56,16 @@
 
             m_Method_ComboBox.Items.Add(c_methodZigFetch);
             m_Method_ComboBox.Items.Add(c_methodGit);
-            m_Method_ComboBox.Items.Add(c_methodUnzip);
-            m_Method_ComboBox.Items.Add(c_methodAdd);
+
+            // Don't add methods that aren't supported in the current Solution mode.  Installer check would fail in these cases anyway.
+            if (Utilities.GetSolutionMode() == Utilities.SolutionMode.OpenFolderMode)
+            {
+                m_Method_ComboBox.Items.Add(c_methodUnzip);
+            }
+            if (Utilities.GetSolutionMode() == Utilities.SolutionMode.ProjectMode)
+            {
+                m_Method_ComboBox.Items.Add(c_methodAdd);
+            }
 
             Reset();
         }
@@ -88,7 +97,7 @@
         {
             // create webview2 environment and load the webview
             string l_webViewDirectoryString = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            l_webViewDirectoryString = System.IO.Path.Combine(l_webViewDirectoryString, "LuckyStarStudio","ZigVS");
+            l_webViewDirectoryString = System.IO.Path.Combine(l_webViewDirectoryString, "LuckyStarStudio", "ZigVS");
             System.IO.Directory.CreateDirectory(l_webViewDirectoryString);
 
             var l_CoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, l_webViewDirectoryString);
@@ -106,7 +115,9 @@
         
         void GoHome()
         {
-            var l_GeneralOptions = GeneralOptions.GetLiveInstanceAsync().Result;
+            var l_GeneralOptions = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                                    return await GeneralOptions.GetLiveInstanceAsync();
+                                });
             m_WebView2.Source = new Uri(l_GeneralOptions.HomeUrl);
         }
 
@@ -118,7 +129,7 @@
             }
         }
 
-        void Forword_Click(object sender, RoutedEventArgs e)
+        void Forward_Click(object sender, RoutedEventArgs e)
         {
             if(m_WebView2.CanGoForward)
             {
@@ -150,15 +161,16 @@
             {
                 if (m_PackageInstaller.GetState() == InstallerBase.State.None)
                 {
-                    var l_GeneralOptions = GeneralOptions.GetLiveInstanceAsync().Result;
-                    var l_FolderModeOptions = FolderModeOptions.GetLiveInstanceAsync().Result;
+                    var l_GeneralOptions = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                        return await GeneralOptions.GetLiveInstanceAsync();
+                    });
 
                     if (string.IsNullOrEmpty(m_Method_ComboBox.Text))
                     {
                     }
                     else if (m_Method_ComboBox.Text == c_methodGit)
                     {
-                        m_PackageInstaller.StartCommand(m_workingDirectoryPathString, l_GeneralOptions.GitPath, l_GeneralOptions.GitOption + ' ' + m_gitUrlString);
+                        m_PackageInstaller.StartCommand(m_workingDirectoryPathString, l_GeneralOptions.GitPathExpanded, l_GeneralOptions.GitOption + ' ' + m_gitUrlString);
                     }
                     else if (m_Method_ComboBox.Text == c_methodUnzip)
                     {
@@ -166,7 +178,7 @@
                     }
                     else if (m_Method_ComboBox.Text == c_methodZigFetch && Utilities.GetSolutionMode() == Utilities.SolutionMode.OpenFolderMode)
                     {
-                        var l_toolPathString = System.IO.Path.Combine(Utilities.GetToolPathFromEnvironmentValue(), l_FolderModeOptions.ToolPath);
+                        var l_toolPathString = l_GeneralOptions.ToolPathExpanded;
                         m_PackageInstaller.StartCommand(m_workingDirectoryPathString, l_toolPathString, l_GeneralOptions.ZigFetchOption + ' ' + m_targzUrlString);
                     }
                     else if (m_Method_ComboBox.Text == c_methodAdd && Utilities.GetSolutionMode() == Utilities.SolutionMode.ProjectMode)
@@ -198,8 +210,10 @@
         {
             if (Utilities.GetSolutionMode() == Utilities.SolutionMode.OpenFolderMode)
             {
-                var l_FolderModelOption = FolderModeOptions.GetLiveInstanceAsync().Result;
-                m_workingDirectoryPathString = System.IO.Path.Combine(Utilities.GetOpenFolderPath(), l_FolderModelOption.PackageDirectoryName);
+                var l_FolderModeOptions = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                                        return await FolderModeOptions.GetLiveInstanceAsync();
+                                    });
+                m_workingDirectoryPathString = System.IO.Path.Combine(Utilities.GetOpenFolderPath(), l_FolderModeOptions.PackageDirectoryName);
             }
             else if (Utilities.GetSolutionMode() == Utilities.SolutionMode.ProjectMode)
             {
@@ -219,7 +233,7 @@
             var l_repoTopMatch = l_repoTopRegex.Match(m_URL_TextBlock.Text);
             var l_tagMatch = l_tagRegex.Match(m_URL_TextBlock.Text);
             var l_commitMatch = l_commitRegex.Match(m_URL_TextBlock.Text);
-            m_repogitoryBool = l_repoTopMatch.Success || l_tagMatch.Success || l_commitMatch.Success;
+            m_repositoryBool = l_repoTopMatch.Success || l_tagMatch.Success || l_commitMatch.Success;
 
             m_zipUrlString = "";
             m_targzUrlString = "";
@@ -262,7 +276,7 @@
                 m_gitUrlString = $"https://github.com/{l_commitMatch.Groups["username"]}/{l_commitMatch.Groups["repo"]}.git";
             }
 
-            m_One_TextBlock.Foreground = m_repogitoryBool ? m_greenBrush : Text.Foreground;
+            m_One_TextBlock.Foreground = m_repositoryBool ? m_greenBrush : Text.Foreground;
         }
 
         void CheckMethodStatus()
@@ -270,8 +284,9 @@
             m_methodBool = false;
             string l_displayString = "";
 
-            var l_GeneralOptions = GeneralOptions.GetLiveInstanceAsync().Result;
-            var l_FolderModeOptions = FolderModeOptions.GetLiveInstanceAsync().Result;
+            var l_GeneralOptions = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GeneralOptions.GetLiveInstanceAsync();
+            });
 
             if (string.IsNullOrEmpty(m_Method_ComboBox.Text))
             {
@@ -279,7 +294,7 @@
             else if (m_Method_ComboBox.Text == c_methodGit)
             {
                 m_methodBool = true;
-                l_displayString = l_GeneralOptions.GitPath + ' ' + l_GeneralOptions.GitOption + ' ' + m_gitUrlString;
+                l_displayString = l_GeneralOptions.GitPathExpanded + ' ' + l_GeneralOptions.GitOption + ' ' + m_gitUrlString;
             }
             else if(m_Method_ComboBox.Text== c_methodUnzip)
             {
@@ -289,8 +304,7 @@
             else if (m_Method_ComboBox.Text == c_methodZigFetch && Utilities.GetSolutionMode() == Utilities.SolutionMode.OpenFolderMode)
             {
                 m_methodBool = true;
-                var l_toolPathString = System.IO.Path.Combine(Utilities.GetToolPathFromEnvironmentValue(), l_FolderModeOptions.ToolPath);
-                l_displayString = l_toolPathString + ' ' + l_GeneralOptions.ZigFetchOption + ' ' + m_targzUrlString;
+                l_displayString = l_GeneralOptions.ToolPathExpanded + ' ' + l_GeneralOptions.ZigFetchOption + ' ' + m_targzUrlString;
             }
             else if (m_Method_ComboBox.Text == c_methodAdd && Utilities.GetSolutionMode() == Utilities.SolutionMode.ProjectMode)
             {
@@ -307,9 +321,9 @@
             if (Utilities.GetSolutionMode() == Utilities.SolutionMode.None)
             {
                 m_PackageInstallerWindowViewModel.InstallButtonEnabled = false;
-                m_Warning_TextBlock.Text = "Your folder or project file is not open. Not ready to install.";
+                m_Warning_TextBlock.Text = "Folder or project is not open. Not ready to install.";
             }
-            else if (!m_repogitoryBool)
+            else if (!m_repositoryBool)
             {
                 m_PackageInstallerWindowViewModel.InstallButtonEnabled = false;
                 m_Warning_TextBlock.Text = "Repository is not selected. Not ready to install.";

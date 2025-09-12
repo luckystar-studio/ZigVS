@@ -117,11 +117,11 @@ namespace ZigVS
         /// <returns>Returns the property pages that are independent of configuration.</returns>
         protected override Guid[] GetConfigurationIndependentPropertyPages()
         {
-            Guid[] r_GuildArray = new Guid[3];
-            r_GuildArray[0] = typeof(PropertyPage_General).GUID;
-            r_GuildArray[1] = typeof(PropertyPage_Build).GUID;
-            r_GuildArray[2] = typeof(PropertyPage_Debug).GUID;
-            return r_GuildArray;
+            Guid[] r_GuidArray = new Guid[3];
+            r_GuidArray[0] = typeof(PropertyPage_General).GUID;
+            r_GuidArray[1] = typeof(PropertyPage_Build).GUID;
+            r_GuidArray[2] = typeof(PropertyPage_Debug).GUID;
+            return r_GuidArray;
         }
 
         /// <summary>
@@ -130,11 +130,11 @@ namespace ZigVS
         /// <returns>Returns the GeneralPropertyPage GUID value.</returns>
         protected override Guid[] GetPriorityProjectDesignerPages()
         {
-            Guid[] r_GuildArray = new Guid[1];
-            r_GuildArray[0] = typeof(PropertyPage_General).GUID;
-            r_GuildArray[1] = typeof(PropertyPage_Build).GUID;
-            r_GuildArray[2] = typeof(PropertyPage_Debug).GUID;
-            return r_GuildArray;
+            Guid[] r_GuidArray = new Guid[3];
+            r_GuidArray[0] = typeof(PropertyPage_General).GUID;
+            r_GuidArray[1] = typeof(PropertyPage_Build).GUID;
+            r_GuidArray[2] = typeof(PropertyPage_Debug).GUID;
+            return r_GuidArray;
         }
 
         public override void AddFileFromTemplate(string i_sourceString, string i_targetString)

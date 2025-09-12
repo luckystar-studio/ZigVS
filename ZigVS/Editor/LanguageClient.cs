@@ -72,11 +72,14 @@ namespace ZigVS
     {
         static LanguageClient? s_Instance;
 
-        public string Name => Parameter.c_languageName + " language extension";
+        public string Name => Parameter.c_languageName + " language server (zls)";
         protected JsonRpc? m_JsonRpc = null;
 
         public IEnumerable<string>? ConfigurationSections => null;
-        public object? InitializationOptions => null;
+
+        public object? InitializationOptions {
+            get { return ZLS.GetSettingsAsync().Result; }
+        }
 
         public IEnumerable<string>? FilesToWatch => null;
         public bool ShowNotificationOnInitializeFailed => true;
@@ -96,10 +99,8 @@ namespace ZigVS
                 var l_GeneralOptions = await GeneralOptions.GetLiveInstanceAsync();
                 if (l_GeneralOptions != null)
                 {
-                    var l_toolPathString = Utilities.GetToolPathFromEnvironmentValue();
-
                     ProcessStartInfo l_ProcessStartInfo = new ProcessStartInfo();
-                    l_ProcessStartInfo.FileName = Path.Combine(l_toolPathString, l_GeneralOptions.LanguageServerPath);
+                    l_ProcessStartInfo.FileName = l_GeneralOptions.LanguageServerPathExpanded;
                     l_ProcessStartInfo.Arguments =
                         (l_GeneralOptions.TDebugSwitch == Switch.off) ? l_GeneralOptions.Arguments : l_GeneralOptions.DebugArguments;
                     l_ProcessStartInfo.RedirectStandardInput = true;
@@ -119,7 +120,7 @@ namespace ZigVS
             }
             catch (Exception l_Exception)
             {
-                Common.OutputWindowPane.OutputString("Failed to start the language server. Please check PATH to Zig Tool Chain." + Environment.NewLine + l_Exception.Message);
+                Common.OutputWindowPane.OutputString("Failed to start the language server. Please check tool path in Tools | Options | ZigVS | General." + Environment.NewLine + l_Exception.Message);
             }
 
             return r_Connection;
@@ -131,16 +132,23 @@ namespace ZigVS
             return Task.CompletedTask;
         }
 
-        public static void ToggleInlyHints()
+        public static void UpdateConfiguration()
         {
-            ZLS.ToggleInlyHint();
             s_Instance?.SendConfiguration();
+        }
+
+        public async static void RestartServer()
+        {
+            if (s_Instance != null) {
+                await s_Instance.StopAsync.InvokeAsync(s_Instance, EventArgs.Empty);
+                await s_Instance.StartAsync.InvokeAsync(s_Instance, EventArgs.Empty);
+            }
         }
 
         protected void SendConfiguration()
         {
 #pragma warning disable VSTHRD110
-            NotifyDidChangeConfigurationAsync(ZLS.GetSettings());
+            NotifyDidChangeConfigurationAsync(ZLS.GetSettingsAsync().Result);
 #pragma warning restore VSTHRD110
         }
 #pragma warning disable CS8603, VSTHRD114
@@ -157,10 +165,9 @@ namespace ZigVS
             }
             return null;
         }
-#pragma warning restore CS8603                                                                                                                             
+#pragma warning restore CS8603
         public Task OnServerInitializedAsync()
         {
-            SendConfiguration();
             return Task.CompletedTask;
         }
 
@@ -189,7 +196,7 @@ namespace ZigVS
 
         // For Custom Message 
 #pragma warning disable CS8603
-        public object MiddleLayer => null; //LanguageClientMiddleLayer.Instance;
+        public object MiddleLayer => LanguageClientMiddleLayer.Instance;
         public object? CustomMessageTarget => null;//throw new NotImplementedException();
 #pragma warning restore CS8603
     }

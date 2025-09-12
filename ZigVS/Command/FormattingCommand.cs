@@ -146,14 +146,13 @@ namespace ZigVS.Command
             }
             else
             {
-                var l_FolderModelOption = await FolderModeOptions.GetLiveInstanceAsync();
-                var l_toolPathString = Utilities.GetToolPathFromEnvironmentValue();
+                var l_GeneralOptions = await GeneralOptions.GetLiveInstanceAsync();
 
-                if (File.Exists(l_pathString) && (l_FolderModelOption != null))
+                if (File.Exists(l_pathString) && (l_GeneralOptions != null))
                 {
                     ProcessStartInfo startInfo = new ProcessStartInfo
                     {
-                        FileName = Path.Combine(l_toolPathString, l_FolderModelOption.ToolPath),
+                        FileName = l_GeneralOptions.ToolPathExpanded,
                         Arguments = "fmt " + l_pathString,
                         UseShellExecute = false,
                         RedirectStandardOutput = true,

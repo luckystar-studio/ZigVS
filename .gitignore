@@ -3,6 +3,7 @@
 *.suo
 *.vsscc
 *.vspscc
+$tf/
 obj/
 bin/
 
@@ -11,3 +12,20 @@ bin/
 
 # Ignore NuGet package output
 /packages/
+
+# Ignore publish files
+*.html
+*.ps1
+public_manifest.json
+
+# Ingore Dotument files
+*.bat
+*.exe
+Documents/tool/
+
+*.zip
+
+
+
+
+

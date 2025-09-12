@@ -62,7 +62,7 @@ namespace ZigVS
     [Guid("15F42713-60F2-43A3-9733-35F30F21F22E")]
     public class PropertyPage_General : SettingsPage
     {
-        private string toolName="";
+        private string toolPath="";
  
         static ProjectNode GetCurrentProject()
         {
@@ -91,12 +91,12 @@ namespace ZigVS
         }
  
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Tool)]
-        [LocDisplayName(PropertyPageUIText.ToolName)]
-        [ResourcesDescriptionAttribute(PropertyPageUIText.ToolNameCaption)]
-        public string ToolName
+        [LocDisplayName(PropertyPageUIText.ToolPath)]
+        [ResourcesDescriptionAttribute(PropertyPageUIText.ToolPathCaption)]
+        public string ToolPath
         {
-            get { return this.toolName!; }
-            set { this.toolName = value; this.IsDirty = true; }
+            get { return this.toolPath!; }
+            set { this.toolPath = value; this.IsDirty = true; }
         }
 
         public override string GetClassName()
@@ -106,12 +106,12 @@ namespace ZigVS
 
         protected override void BindProperties()
         {
-            if(this.ProjectManager == null)
+            if (this.ProjectManager == null)
             {
                 return;
             }
 
-            this.toolName = this.ProjectManager.GetProjectProperty("ToolName", _PersistStorageType.PST_PROJECT_FILE, false);
+            this.toolPath = this.ProjectManager.GetProjectPropertyUnevaluated( "ToolPath", _PersistStorageType.PST_PROJECT_FILE);
 
      /*       try
             {
@@ -130,27 +130,9 @@ namespace ZigVS
             }
 
             ThreadHelper.ThrowIfNotOnUIThread();
+
 			IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
-            //		bool reloadRequired = this.ProjectManager.TargetFrameworkMoniker != this.targetFrameworkMoniker;
-
-            this.ProjectManager.SetProjectProperty("ToolName", _PersistStorageType.PST_PROJECT_FILE, this.toolName);
-
-            /*	if (reloadRequired)
-                {
-                    if (MessageBox.Show(Resource.GetString(Resource.ReloadPromptOnTargetFxChanged), Resource.GetString(Resource.ReloadPromptOnTargetFxChangedCaption), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        this.ProjectManager.TargetFrameworkMoniker = this.targetFrameworkMoniker;
-                    }
-                }
-    */
-            this.IsDirty = false;
-
-		/*	if (reloadRequired)
-			{
-				// This prevents the property page from displaying bad data from the zombied (unloaded) project
-				propertyPageFrame.HideFrame();
-				propertyPageFrame.ShowFrame(this.GetType().GUID);
-			}*/
+            this.ProjectManager.SetProjectProperty("ToolPath", _PersistStorageType.PST_PROJECT_FILE, this.toolPath);
 
             return VSConstants.S_OK;
         }

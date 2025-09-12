@@ -204,7 +204,7 @@ namespace ZigVS
         {
             return GetType()
                 .GetProperties()
-                .Where(p => p.PropertyType.IsSerializable && p.PropertyType.IsPublic);
+                .Where(p => p.PropertyType.IsSerializable && p.PropertyType.IsPublic && p.CanWrite);
         }
     }
 }

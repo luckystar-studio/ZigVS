@@ -45,7 +45,7 @@ a particular purpose and non-infringement.
 
 ********************************************************************************************/
 
-#if false
+#if true
 namespace ZigVS
 {
     using EnvDTE;
@@ -55,6 +55,7 @@ namespace ZigVS
     using Microsoft.VisualStudio.TextManager.Interop;
     using Newtonsoft.Json.Linq;
     using System;
+    using System.Diagnostics;
     using System.Threading.Tasks;
 
     public class LanguageClientMiddleLayer : ILanguageClientMiddleLayer
@@ -67,7 +68,7 @@ namespace ZigVS
 
         public bool CanHandle(string methodName)
         {
-            return false;
+            return true;
         }
 
         public bool CanHandle2(string methodName)
@@ -115,95 +116,156 @@ namespace ZigVS
              await sendNotification(methodParam);
         }
 
-        public async Task<JToken> HandleRequestAsync(string methodName, JToken i_methodParamJToken, Func<JToken, Task<JToken>> sendRequest)
+// helper funcs from ChatGPT
+    // start ≤ (l,c) < end   (lexicographic; end is exclusive)
+    private static bool InRangeExclusive(int sL, int sC, int eL, int eC, int l, int c)
+    {
+        if (l < sL) return false;
+        if (l == sL && c < sC) return false;
+        if (l > eL) return false;
+        if (l == eL && c >= eC) return false;
+        return true;
+    }
+
+    private static int SafeInt(JToken t)
+    {
+        if (t == null) return -1;
+        if (t.Type == JTokenType.Integer) return (int)t;
+        int x; return int.TryParse(t.ToString(), out x) ? x : -1;
+    }
+
+    // Clone + coerce to a "boring" shape VS reliably digests
+    private static JArray NormalizeInlayHints(JArray src)
+    {
+        var outArr = new JArray();
+
+        foreach (var tok in src)
         {
-            JToken? r_JToken = await sendRequest(i_methodParamJToken);
-            return r_JToken;
-            // find triggerKind
-            /*    foreach (var l_childJToken in i_methodParamJToken.Children())
-                {
-                    if (l_childJToken.Type == JTokenType.Property &&
-                        ((JProperty)l_childJToken).Name == "context")
-                    {
-                        var l_JArray = ((JProperty)l_childJToken).Value;
-                        foreach (var l_childJToken2 in l_JArray.Children())
-                        {
-                            if (l_childJToken2.Type == JTokenType.Property &&
-                                ((JProperty)l_childJToken2).Name == "triggerKind")
-                            {
-                                var l_triggerKindInt = ((JProperty)l_childJToken2).Value;
-                                ((JProperty)l_childJToken2).Value = 1;
-                            }
-                        }
+            if (!(tok is JObject o)) continue;
 
-                        int a2 = 0;
-                    }
-                }*/
-/*
-            if (r_JToken == null)
+            // ensure position exists & ints are ints
+            if (!(o["position"] is JObject pos)) continue;
+            pos["line"] = CoerceInt(pos["line"]);
+            pos["character"] = CoerceInt(pos["character"]);
+
+            // label: keep string or array of parts with string "value"
+            var label = o["label"];
+            if (label == null) continue;
+
+            if (label.Type == JTokenType.Array)
             {
-                InsertCharacterAtCursor('.');
-            }*/
-          /*  foreach (var l_childJToken in r_JToken.Children())
-            {
-                if (l_childJToken.Type == JTokenType.Property &&
-                    ((JProperty)l_childJToken).Name == "items" )
+                var parts = (JArray)label;
+                for (int i = 0; i < parts.Count; i++)
                 {
-                    var l_JArray = ((JArray)((JProperty)l_childJToken).Value);
-                    int a = 0;
+                    if (parts[i] is JObject p && p["value"] != null)
+                        p["value"] = p["value"].ToString();
                 }
-            }*/
+            }
+            else if (label.Type != JTokenType.String)
+            {
+                o["label"] = label.ToString();
+            }
 
+            // kind → int (if present)
+            if (o["kind"] != null) o["kind"] = CoerceInt(o["kind"]);
 
-             /*   
+            // padding defaults (optional)
+            if (o["paddingLeft"] == null)  o["paddingLeft"]  = false;
+            if (o["paddingRight"] == null) o["paddingRight"] = false;
+
+            outArr.Add(o);
+        }
+        return outArr;
+
+        static JValue CoerceInt(JToken t)
+        {
+            if (t == null) return new JValue(0);
+            if (t.Type == JTokenType.Integer) return (JValue)t;
+            int x; return new JValue(int.TryParse(t.ToString(), out x) ? x : 0);
+        }
+    }
+// helper funcs end
+
+    // ---- feature switches ----
+    private const bool ENABLE_NORMALIZE   = true;  // set false to return server's array as-is
+    private const bool ENABLE_RANGE_FILTER = true; // set false to skip start ≤ pos < end check
+
+    public async Task<JToken> HandleRequestAsync(string methodName, JToken i_methodParamJToken, Func<JToken, Task<JToken>> sendRequest)
+        {
+            // capture request range (for cheap safety filter)
+            int sL = -1, sC = -1, eL = -1, eC = -1;
+            if (string.Equals(methodName, "textDocument/inlayHint", StringComparison.Ordinal))
+            {
                 try
                 {
-                    if (l_JToken != null)
-                    {
-                                         string l_shortcutString = "";
-                                          var l_uriString = methodParam.SelectToken("textDocument.uri").ToString();
-                                          var l_lineUint = Int32.Parse(methodParam.SelectToken("position.line").ToString());
-                                          var l_characterUint = Int32.Parse(methodParam.SelectToken("position.character").ToString());
-
-                                          await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                                          m_DTE = (EnvDTE.DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(EnvDTE.DTE));
-
-                                      //    var documents = m_DTE.Documents.Cast<EnvDTE.Document>();
-                                      //    documents.SingleOrDefault(d => d.FullName == l_uriString);
-                                          var l_Document = m_DTE.ActiveDocument; 
-
-                                          if (l_Document != null )
-                                          {
-                                              var l_TextDocument = (EnvDTE.TextDocument)l_Document.Object(nameof(EnvDTE.TextDocument));
-
-                                              var l_EditPoint = l_TextDocument.StartPoint.CreateEditPoint();
-                                              l_EditPoint.MoveToLineAndOffset(l_lineUint, l_characterUint);
-                                              l_shortcutString = l_EditPoint.GetText(1);
-                                          }
-                        
-                        foreach (var l_childJToken in l_JToken.Children())
-                        {
-                            if (l_childJToken.Type == JTokenType.Property &&
-                                ((JProperty)l_childJToken).Name == "items" &&
-                                m_IntellisenseItemList != null)
-                            {
-                                foreach (var l_IntellisenseItem in m_IntellisenseItemList)
-                                {
-                                    if (true)
-                                    {
-                                        var l_JObject = JObject.FromObject(l_IntellisenseItem);
-                                        var l_JArray = ((JArray)((JProperty)l_childJToken).Value);
-                                        l_JArray.Add(l_JObject);
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
+                    var r = i_methodParamJToken?["range"];
+                    var s = r?["start"];
+                    var e = r?["end"];
+                    sL = SafeInt(s?["line"]);       sC = SafeInt(s?["character"]);
+                    eL = SafeInt(e?["line"]);       eC = SafeInt(e?["character"]);
+                    var uri = i_methodParamJToken?["textDocument"]?["uri"]?.ToString();
+                    Debug.WriteLine($"INLAYHINT REQ uri={uri} range=({sL},{sC})-({eL},{eC})");
                 }
                 catch { }
-                return l_JToken;*/
+            }
 
+            // forward unchanged
+            JToken result;
+            try
+            {
+                result = await sendRequest(i_methodParamJToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"HandleRequestAsync forward ERROR for {methodName}: {ex}");
+                throw;
+            }
+
+            if (!string.Equals(methodName, "textDocument/inlayHint", StringComparison.Ordinal))
+                return result;
+
+            try
+            {
+                if (result == null || result.Type == JTokenType.Null) return result;
+                if (result.Type != JTokenType.Array) { Debug.WriteLine($"INLAYHINT RESP not array: {result.Type}"); return result; }
+
+                var arr = (JArray)result;
+                Debug.WriteLine($"INLAYHINT RESP count={arr.Count}");
+
+                // --- (A) cheap safety: range filter (end exclusive) ---
+                JArray postFilter = arr;
+                if (ENABLE_RANGE_FILTER && sL >= 0 && eL >= 0)
+                {
+                    var filtered = new JArray();
+                    for (int i = 0; i < arr.Count; i++)
+                    {
+                        if (!(arr[i] is JObject o)) continue;
+                        var pos = o["position"] as JObject; if (pos == null) continue;
+                        int l = SafeInt(pos["line"]);
+                        int c = SafeInt(pos["character"]);
+                        if (InRangeExclusive(sL, sC, eL, eC, l, c))
+                            filtered.Add(o);
+                    }
+                    if (filtered.Count != arr.Count)
+                        Debug.WriteLine($"INLAYHINT RESP filtered by range: {filtered.Count}/{arr.Count}");
+                    postFilter = filtered;
+                }
+
+                // --- (B) normalization (clone + coerce token types) ---
+                if (ENABLE_NORMALIZE)
+                {
+                    var normalized = NormalizeInlayHints(postFilter);
+                    return normalized;
+                }
+
+                // if normalization disabled, return filtered (or original) as-is
+                return postFilter;
+            }
+            catch
+            {
+                // never disrupt the pipeline
+                return result;
+            }
         }
         /*
         private void InsertCharacterAtCursor(char i_char)

@@ -48,6 +48,7 @@ a particular purpose and non-infringement.
 namespace ZigVS
 {
     using Microsoft.VisualStudio.Shell;
+    using ZigVS.Options;
 
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -72,11 +73,10 @@ namespace ZigVS
     // All menu item attribute
     [ProvideMenuResource("Menus.ctmenu", 1)]
     // [Tool] -> [Option] -> [Zig] page attributes
-    [ProvideOptionPage(typeof(DialogPageProvider.General), Parameter.c_PackageNameStrig, "General", 0, 0, true)]
-    [ProvideOptionPage(typeof(DialogPageProvider.ProjectMode), Parameter.c_PackageNameStrig, "Project Mode", 0, 0, true)]
-    [ProvideOptionPage(typeof(DialogPageProvider.FolderMode), Parameter.c_PackageNameStrig, "Folder Mode", 0, 0, true)]
+    [ProvideOptionPage(typeof(DialogPageProvider.General), Parameter.c_PackageNameString, "General", 0, 0, true)]
+    [ProvideOptionPage(typeof(DialogPageProvider.FolderMode), Parameter.c_PackageNameString, "Folder Mode", 0, 0, true)]
     // [Tool] -> [Option] -> [Text Editor] page attributes
-	//   [ProvideLanguageEditorOptionPage(typeof(ZigVS.Options.TextEditorAdvancedOptions), Parameter.c_PackageNameStrig, "Advanced","Abc","",0)]
+	[ProvideLanguageEditorOptionPage(typeof(DialogPageProvider.TextEditorAdvanced), Parameter.c_PackageNameString, "Advanced", "Zig options", "", 0)]
     // [Extensions] -> [ZigVS]
     [ProvideToolWindow(typeof(ZigVS.ToolchainInstallerWindow))]
     [ProvideToolWindow(typeof(ZigVS.PackageInstallerWindow))]
@@ -120,7 +120,7 @@ namespace ZigVS
 
         public override string ProductUserContext
         {
-            get { return Parameter.c_PackageNameStrig; }
+            get { return Parameter.c_PackageNameString; }
         }
     }
 #pragma warning restore CS8603  

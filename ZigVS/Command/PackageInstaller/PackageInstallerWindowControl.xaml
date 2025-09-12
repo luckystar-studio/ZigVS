@@ -18,7 +18,7 @@
                 <TextBlock x:Name="Text" Width="200" Margin="5" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left">Package Repository</TextBlock>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
                     <Button Margin="5" Content="←" Width="30"  Name="Back" FontSize="20" Click="Back_Click"/>
-                    <Button Margin="5" Content="→" Click="Forword_Click" Width="30"  Name="Forword" FontSize="20" HorizontalAlignment="Right"/>
+                    <Button Margin="5" Content="→" Click="Forward_Click" Width="30"  Name="Forward" FontSize="20" HorizontalAlignment="Right"/>
                     <Button Margin="5" Content="🏠" Width="30"  Name="Home" FontSize="20" Click="Home_Click"/>
                 </StackPanel>
                 <TextBlock x:Name="m_URL_TextBlock"  Margin="5" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>

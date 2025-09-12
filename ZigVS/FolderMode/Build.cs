@@ -47,6 +47,7 @@ a particular purpose and non-infringement.
 
 namespace ZigVS
 {
+    using Microsoft.VisualStudio.Shell;
     using System.Collections.Generic;
     using System.IO;
 
@@ -62,14 +63,17 @@ namespace ZigVS
         {
             List<System.String> r_ConfigurationList = new List<System.String>();
 
-            var l_FolderModelOption = FolderModeOptions.GetLiveInstanceAsync().Result;
-            if (l_FolderModelOption != null)
+            var l_FolderModeOptions = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await FolderModeOptions.GetLiveInstanceAsync();
+            });
+
+            if (l_FolderModeOptions != null)
             {
                 try
                 {
-                    string[] l_ArchitectureArray = l_FolderModelOption.ArchitectureList.Split(c_spacer);
-                    string[] l_OSArray = l_FolderModelOption.OSList.Split(c_spacer);
-                    string[] l_OptimizeArray = l_FolderModelOption.OptimizeList.Split(c_spacer);
+                    string[] l_ArchitectureArray = l_FolderModeOptions.ArchitectureList.Split(c_spacer);
+                    string[] l_OSArray = l_FolderModeOptions.OSList.Split(c_spacer);
+                    string[] l_OptimizeArray = l_FolderModeOptions.OptimizeList.Split(c_spacer);
 
                     foreach (var l_Architecture in l_ArchitectureArray)
                     {
@@ -112,33 +116,33 @@ namespace ZigVS
                     @"--verbose " +
                     @"-Dtarget=" + l_architectureString + " " +
                     @"-Doptimize=" + l_modeString + " " +
-                    @"--cache-dir " + GetIntermeditatePath(i_workingDirectoryString, i_ConfigurationString) + " " +
+                    @"--cache-dir " + GetIntermediatePath(i_workingDirectoryString, i_ConfigurationString) + " " +
                     @"--prefix-exe-dir " + GetOutputPath(i_workingDirectoryString, i_ConfigurationString);
         }
 
-        public static string GetIntermeditatePath(string i_workingDirectoryString, System.String? i_ConfigurationString)
+        public static string GetIntermediatePath(string i_workingDirectoryString, System.String? i_ConfigurationString)
         {
-            string r_IntermeditatePath = "";
-            var l_FolderModelOption = FolderModeOptions.GetLiveInstanceAsync().Result;
-            if (l_FolderModelOption != null)
+            string r_IntermediatePath = "";
+            var l_FolderModeOptions = FolderModeOptions.GetLiveInstanceAsync().Result;
+            if (l_FolderModeOptions != null)
             {
-                r_IntermeditatePath = Path.Combine(
+                r_IntermediatePath = Path.Combine(
                     i_workingDirectoryString,
-                    l_FolderModelOption.IntermediateDirectoryName,
+                    l_FolderModeOptions.IntermediateDirectoryName,
                     ConvertConfigurationToDirectoryName(i_ConfigurationString));
             }
-            return r_IntermeditatePath;
+            return r_IntermediatePath;
         }
 
         public static string GetOutputPath(string i_workingDirectoryString, System.String? i_ConfigurationString)
         {
             string r_OutputPath = "";
-            var l_FolderModelOption = FolderModeOptions.GetLiveInstanceAsync().Result;
-            if (l_FolderModelOption != null)
+            var l_FolderModeOptions = FolderModeOptions.GetLiveInstanceAsync().Result;
+            if (l_FolderModeOptions != null)
             {
                 r_OutputPath = Path.Combine(
                     i_workingDirectoryString,
-                    l_FolderModelOption.OutputDirectoryName,
+                    l_FolderModeOptions.OutputDirectoryName,
                     ConvertConfigurationToDirectoryName(i_ConfigurationString));
             }
             return r_OutputPath;

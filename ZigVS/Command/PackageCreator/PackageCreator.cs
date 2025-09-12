@@ -47,6 +47,7 @@ a particular purpose and non-infringement.
 
 namespace ZigVS
 {
+    using Microsoft.VisualStudio.Shell;
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -103,9 +104,15 @@ namespace ZigVS
                     {
                         IfCanceledThrowException();
 
+                        var l_GeneralOptions = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                            return await GeneralOptions.GetLiveInstanceAsync();
+                        });
+
+                        //if (l_GeneralOptions != null) -- TODO: handle no general options or general options failure situation
+
                         ProcessStartInfo l_ProcessStartInfo = new ProcessStartInfo();
                         l_ProcessStartInfo.WorkingDirectory = l_pathString;
-                        l_ProcessStartInfo.FileName = Parameter.c_compilerFileName;
+                        l_ProcessStartInfo.FileName = l_GeneralOptions.ToolPathExpanded;
                         l_ProcessStartInfo.Arguments = "init";
                         l_ProcessStartInfo.RedirectStandardInput = false;
                         l_ProcessStartInfo.RedirectStandardOutput = true;

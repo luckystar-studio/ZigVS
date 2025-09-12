@@ -71,7 +71,7 @@ namespace ZigVS
 
         private string buildOption = "";
 
-        private string useBuildDotZig = "";
+        private bool useBuildDotZig = false;
         private string rootSourceName = "";
 
         private string includeDirs = "";
@@ -84,8 +84,8 @@ namespace ZigVS
         private string intDirName = "";
         private string outDirName = "";
 
-        private string generateBuildDotZig = "";
-        private string generateBuildDotZigDotZon = "";
+        private bool generateBuildDotZig = false;
+        private bool generateBuildDotZigDotZon = false;
 
 
         static ProjectNode GetCurrentProject()
@@ -145,7 +145,7 @@ namespace ZigVS
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Build)]
         [LocDisplayName(PropertyPageUIText.UseBuildDotZig)]
         [ResourcesDescriptionAttribute(PropertyPageUIText.UseBuildDotZigDescription)]
-        public string UseBuildDotZig
+        public bool UseBuildDotZig
         {
             get { return this.useBuildDotZig!; }
             set { this.useBuildDotZig = value; this.IsDirty = true; }
@@ -257,7 +257,7 @@ namespace ZigVS
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Generation)]
         [LocDisplayName(PropertyPageUIText.GenerateBuildDotZig)]
         [ResourcesDescriptionAttribute(PropertyPageUIText.GenerateBuildDotZigDescription)]
-        public string GenerateBuildDotZig
+        public bool GenerateBuildDotZig
         {
             get { return this.generateBuildDotZig!; }
             set { this.generateBuildDotZig = value; this.IsDirty = true; }
@@ -266,7 +266,7 @@ namespace ZigVS
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Generation)]
         [LocDisplayName(PropertyPageUIText.GenerateBuildDotZigDotZon)]
         [ResourcesDescriptionAttribute(PropertyPageUIText.GenerateBuildDotZigDotZonDescription)]
-        public string GenerateBuildDotZigDotZon
+        public bool GenerateBuildDotZigDotZon
         {
             get { return this.generateBuildDotZigDotZon!; }
             set { this.generateBuildDotZigDotZon = value; this.IsDirty = true; }
@@ -290,33 +290,29 @@ namespace ZigVS
                 return;
             }
 
-            this.assemblyName = this.ProjectManager.GetProjectProperty("AssemblyName", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.assemblyVersion = this.ProjectManager.GetProjectProperty("AssemblyVersion", _PersistStorageType.PST_PROJECT_FILE, false);
-            string l_osType = this.ProjectManager.GetProjectProperty("OSType", _PersistStorageType.PST_PROJECT_FILE, false);
-            string l_configurationType = this.ProjectManager.GetProjectProperty("ConfigurationType", _PersistStorageType.PST_PROJECT_FILE, false);
+            this.assemblyName = this.ProjectManager.GetProjectPropertyUnevaluated("AssemblyName", _PersistStorageType.PST_PROJECT_FILE);
+            this.assemblyVersion = this.ProjectManager.GetProjectPropertyUnevaluated("AssemblyVersion", _PersistStorageType.PST_PROJECT_FILE);
+            string l_osType = this.ProjectManager.GetProjectPropertyUnevaluated("OSType", _PersistStorageType.PST_PROJECT_FILE);
+            string l_configurationType = this.ProjectManager.GetProjectPropertyUnevaluated("ConfigurationType", _PersistStorageType.PST_PROJECT_FILE);
             this.outputFile = this.ProjectManager.GetProjectProperty("OutputName", _PersistStorageType.PST_PROJECT_FILE, true);
 
-            this.buildOption = this.ProjectManager.GetProjectProperty("BuildOption", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.useBuildDotZig = this.ProjectManager.GetProjectProperty("UseBuildDotZig", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.rootSourceName = this.ProjectManager.GetProjectProperty("RootSourceName", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.includeDirs = this.ProjectManager.GetProjectProperty("IncludeDirs", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.libraryDirs = this.ProjectManager.GetProjectProperty("LibraryDirs", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.libraries = this.ProjectManager.GetProjectProperty("Libraries", _PersistStorageType.PST_PROJECT_FILE, false);
-            var l_tempDependenciesArray = this.ProjectManager.GetProjectProperty("Dependencies", _PersistStorageType.PST_PROJECT_FILE, false);
+            this.buildOption = this.ProjectManager.GetProjectPropertyUnevaluated("BuildOption", _PersistStorageType.PST_PROJECT_FILE);
+            string l_useBuildDotZig = this.ProjectManager.GetProjectPropertyUnevaluated("UseBuildDotZig", _PersistStorageType.PST_PROJECT_FILE);
+            this.rootSourceName = this.ProjectManager.GetProjectPropertyUnevaluated("RootSourceName", _PersistStorageType.PST_PROJECT_FILE);
+            this.includeDirs = this.ProjectManager.GetProjectPropertyUnevaluated("IncludeDirs", _PersistStorageType.PST_PROJECT_FILE);
+            this.libraryDirs = this.ProjectManager.GetProjectPropertyUnevaluated("LibraryDirs", _PersistStorageType.PST_PROJECT_FILE);
+            this.libraries = this.ProjectManager.GetProjectPropertyUnevaluated("Libraries", _PersistStorageType.PST_PROJECT_FILE);
+            var l_tempDependenciesArray = this.ProjectManager.GetProjectPropertyUnevaluated("Dependencies", _PersistStorageType.PST_PROJECT_FILE);
             this.dependencies = l_tempDependenciesArray.Split(';');
-            var l_tempModluesArray = this.ProjectManager.GetProjectProperty("Modules", _PersistStorageType.PST_PROJECT_FILE, false);
+            var l_tempModluesArray = this.ProjectManager.GetProjectPropertyUnevaluated("Modules", _PersistStorageType.PST_PROJECT_FILE);
             this.modules = l_tempModluesArray.Split(';');
-            this.intDirName = this.ProjectManager.GetProjectProperty("IntDirName", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.outDirName = this.ProjectManager.GetProjectProperty("outDirName", _PersistStorageType.PST_PROJECT_FILE, false);
+            this.intDirName = this.ProjectManager.GetProjectPropertyUnevaluated("IntDirName", _PersistStorageType.PST_PROJECT_FILE);
+            this.outDirName = this.ProjectManager.GetProjectPropertyUnevaluated("OutDirName", _PersistStorageType.PST_PROJECT_FILE);
 
-            this.generateBuildDotZig = this.ProjectManager.GetProjectProperty("GenerateBuildDotZig", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.generateBuildDotZigDotZon = this.ProjectManager.GetProjectProperty("GenerateBuildDotZigDotZon", _PersistStorageType.PST_PROJECT_FILE, false);
+            string l_generateBuildDotZig = this.ProjectManager.GetProjectPropertyUnevaluated("GenerateBuildDotZig", _PersistStorageType.PST_PROJECT_FILE);
+            string l_generateBuildDotZigDotZon = this.ProjectManager.GetProjectPropertyUnevaluated("GenerateBuildDotZigDotZon", _PersistStorageType.PST_PROJECT_FILE);
 
-            //       this.defaultNamespace = this.ProjectManager.GetProjectProperty("RootNamespace", _PersistStorageType.PST_PROJECT_FILE, false);
-
-            //         this.rootSourceName = this.ProjectManager.GetProjectProperty("BuildCommand_pre", _PersistStorageType.PST_PROJECT_FILE, false);
-
-            if (l_osType != null && l_osType.Length > 0)
+            if (!string.IsNullOrEmpty(l_osType))
             {
                 try
                 {
@@ -327,7 +323,7 @@ namespace ZigVS
                 }
             }
 
-            if (l_configurationType != null && l_configurationType.Length > 0)
+            if (!string.IsNullOrEmpty(l_configurationType))
             {
                 try
                 {
@@ -338,6 +334,38 @@ namespace ZigVS
                 }
             }
 
+            if( !string.IsNullOrEmpty(l_useBuildDotZig))
+            {
+                try
+                {
+                    this.useBuildDotZig = bool.Parse(l_useBuildDotZig);
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
+
+            if ( !string.IsNullOrEmpty(l_generateBuildDotZig))
+            {
+                try
+                {
+                    this.generateBuildDotZig = bool.Parse(l_generateBuildDotZig);
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
+
+            if(!string.IsNullOrEmpty(l_generateBuildDotZigDotZon))
+            {
+                try
+                {
+                    this.generateBuildDotZigDotZon = bool.Parse(l_generateBuildDotZigDotZon);
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
         }
 
         protected override int ApplyChanges()
@@ -349,10 +377,9 @@ namespace ZigVS
 
             ThreadHelper.ThrowIfNotOnUIThread();
             IVsPropertyPageFrame? l_IVsPropertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
-            //		bool reloadRequired = this.ProjectManager.TargetFrameworkMoniker != this.targetFrameworkMoniker;
 
             this.ProjectManager.SetProjectProperty("BuildOption", _PersistStorageType.PST_PROJECT_FILE, this.buildOption);
-            this.ProjectManager.SetProjectProperty("UseBuildDotZig", _PersistStorageType.PST_PROJECT_FILE, this.useBuildDotZig);
+            this.ProjectManager.SetProjectProperty("UseBuildDotZig", _PersistStorageType.PST_PROJECT_FILE, this.useBuildDotZig.ToString());
             this.ProjectManager.SetProjectProperty("RootSourceName", _PersistStorageType.PST_PROJECT_FILE, this.rootSourceName);
 
             this.ProjectManager.SetProjectProperty("IncludeDirs", _PersistStorageType.PST_PROJECT_FILE, this.includeDirs.TrimEnd(';'));
@@ -371,19 +398,9 @@ namespace ZigVS
             this.ProjectManager.SetProjectProperty("AssemblyVersion", _PersistStorageType.PST_PROJECT_FILE, this.assemblyVersion);
             this.ProjectManager.SetProjectProperty("OSType", _PersistStorageType.PST_PROJECT_FILE, this.osType.ToString());
             this.ProjectManager.SetProjectProperty("ConfigurationType", _PersistStorageType.PST_PROJECT_FILE, this.configurationType.ToString());
-            //       this.ProjectManager.SetProjectProperty("RootNamespace", _PersistStorageType.PST_PROJECT_FILE, this.defaultNamespace);
 
-            this.ProjectManager.SetProjectProperty("GenerateBuildDotZig", _PersistStorageType.PST_PROJECT_FILE, this.generateBuildDotZig);
-            this.ProjectManager.SetProjectProperty("GenerateBuildDotZigDotZon", _PersistStorageType.PST_PROJECT_FILE, this.generateBuildDotZigDotZon);
-
-            this.IsDirty = false;
-
-            	if (true)
-                {
-                    // This prevents the property page from displaying bad data from the zombied (unloaded) project
-                    l_IVsPropertyPageFrame?.HideFrame();
-                    l_IVsPropertyPageFrame?.ShowFrame(this.GetType().GUID);
-                }
+            this.ProjectManager.SetProjectProperty("GenerateBuildDotZig", _PersistStorageType.PST_PROJECT_FILE, this.generateBuildDotZig.ToString());
+            this.ProjectManager.SetProjectProperty("GenerateBuildDotZigDotZon", _PersistStorageType.PST_PROJECT_FILE, this.generateBuildDotZigDotZon.ToString());
 
             return VSConstants.S_OK;
         }

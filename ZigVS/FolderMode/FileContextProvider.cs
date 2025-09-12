@@ -71,12 +71,13 @@ namespace ZigVS
         {
             var l_fileContextList = new List<FileContext>();
 
-            var l_FolderModelOption = await FolderModeOptions.GetLiveInstanceAsync();
-            if (l_FolderModelOption != null)
+            var l_GeneralOptions = await GeneralOptions.GetLiveInstanceAsync();
+            var l_FolderModeOptions = await FolderModeOptions.GetLiveInstanceAsync();
+
+            if (l_GeneralOptions != null && l_FolderModeOptions != null)
             {
                 if (Path.GetFileName(i_filePath).Equals(Parameter.c_buildFileName))
                 {
-                    var l_toolPathString = Utilities.GetToolPathFromEnvironmentValue();
 
                     foreach (var l_configuration in Build.ConfigurationList())
                     {
@@ -84,9 +85,9 @@ namespace ZigVS
                             string l_commandOptionString = Build.CreateBuildCommand(
                                 Path.GetDirectoryName(i_filePath),
                                 l_configuration,
-                                l_FolderModelOption.BuildCommand_build);
+                                l_FolderModeOptions.BuildCommand_build);
                             var l_LaunchCommand = new LaunchCommand(
-                                Path.Combine(l_toolPathString, l_FolderModelOption.ToolPath),
+                                l_GeneralOptions.ToolPathExpanded,
                                 l_commandOptionString,
                                 LaunchCommandOption.None,
                                 workingDirectory: Path.GetDirectoryName(i_filePath),
@@ -107,9 +108,9 @@ namespace ZigVS
                             string l_commandOptionString = Build.CreateBuildCommand(
                                 Path.GetDirectoryName(i_filePath),
                                 l_configuration,
-                                l_FolderModelOption.BuildCommand_clean);
+                                l_FolderModeOptions.BuildCommand_clean);
                             var l_LaunchCommand = new LaunchCommand(
-                                Path.Combine(l_toolPathString, l_FolderModelOption.ToolPath),
+                                l_GeneralOptions.ToolPathExpanded,
                                 l_commandOptionString,
                                 LaunchCommandOption.None,
                                 workingDirectory: Path.GetDirectoryName(i_filePath),

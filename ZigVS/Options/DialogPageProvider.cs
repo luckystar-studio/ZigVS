@@ -54,13 +54,10 @@ namespace ZigVS
         [Guid("804F52F3-EC24-4FF7-BF08-E928852700A3")]
         public class General : BaseOptionPage<GeneralOptions> { }
 
-        [Guid("A7BFF562-BE09-452A-AA4E-99C88903535E")]
-        public class ProjectMode : BaseOptionPage<ProjectModeOptions> { }
-
         [Guid("F80B45E6-AE5D-4BF1-AE5E-B87B5B7C7388")]
         public class FolderMode : BaseOptionPage<FolderModeOptions> { }
 
-        //     [Guid("9BE877D0-D32C-4F32-A673-3FFF4129EDAD")]
-        //     public class TextEditorAdvanced : BaseOptionPage<TextEditorAdvancedOptions> { }
+        [Guid("9BE877D0-D32C-4F32-A673-3FFF4129EDAD")]
+        public class TextEditorAdvanced : BaseOptionPage<Options.TextEditorAdvancedOptions> { }
     }
 }

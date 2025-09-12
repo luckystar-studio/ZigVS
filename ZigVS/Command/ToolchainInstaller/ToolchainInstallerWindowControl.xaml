@@ -14,37 +14,78 @@
             <StackPanel Margin="5">
                 <TextBlock x:Name="Title" Margin="5" FontSize="22" VerticalAlignment="Center" HorizontalAlignment="Center" TextDecorations="Underline"> Zig Tool-chain Installer </TextBlock>
             </StackPanel>
+            <Grid Margin="5">
+                <Grid.Resources>
+                    <Style x:Key="RowNumber" TargetType="TextBlock">
+                        <Setter Property="Grid.Column" Value="0"/>
+                        <Setter Property="FontSize" Value="30"/>
+                    </Style>
+                    <Style x:Key="RowLabel" TargetType="TextBlock">
+                        <Setter Property="Grid.Column" Value="1"/>
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style x:Key="ComboStyle" TargetType="ComboBox">
+                        <Setter Property="Grid.Column" Value="2"/>
+                        <Setter Property="Grid.ColumnSpan" Value="3"/>
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="FontSize" Value="16"/>
+                    </Style>
+                    <Style x:Key="TextBoxStyle" TargetType="TextBox">
+                        <Setter Property="Grid.Column" Value="2"/>
+                        <Setter Property="Grid.ColumnSpan" Value="3"/>
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style x:Key="RadioStyle" TargetType="RadioButton">
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width ="40"/>
+                    <ColumnDefinition Width ="210"/>
+                    <ColumnDefinition Width ="*"/> <ColumnDefinition Width ="*"/> <ColumnDefinition Width ="*"/> <!-- for radio buttons / comboBox -->
+                    <ColumnDefinition Width ="40"/>
+                    <ColumnDefinition Width ="40"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Zig Tool-chain Version -->      <RowDefinition Height="5"/> <!-- Spacer row -->
+                    <RowDefinition Height="Auto"/> <!-- ZLS Version -->                 <RowDefinition Height="5"/> <!-- Spacer row -->
+                    <RowDefinition Height="Auto"/> <!-- CPU Architecture -->            <RowDefinition Height="5"/> <!-- Spacer row -->
+                    <RowDefinition Height="Auto"/> <!-- Environment Variable radios --> <RowDefinition Height="5"/> <!-- Spacer row -->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Style="{StaticResource RowNumber}" x:Name="m_Zig_TextBlock">❶</TextBlock>
+                <TextBlock Grid.Row="0" Style="{StaticResource RowLabel}">Zig Tool-chain Version</TextBlock>
+                <ComboBox Grid.Row="0" Style="{StaticResource ComboStyle}" x:Name="m_ZigVersion_ComboBox" SelectionChanged="ZigVersion_SelectionChanged"/>
+
+                <TextBlock Grid.Row="2" Style="{StaticResource RowNumber}" x:Name="m_LS_TextBlock">❷</TextBlock>
+                <TextBlock Grid.Row="2" Style="{StaticResource RowLabel}">ZLS Version</TextBlock>
+                <ComboBox Grid.Row="2" Style="{StaticResource ComboStyle}" x:Name="m_ZLSVersion_ComboBox" SelectionChanged="ZLSVersion_SelectionChanged"/>
+
+                <TextBlock Grid.Row="4" Style="{StaticResource RowNumber}" x:Name="m_CPU_TextBlock">❸</TextBlock>
+                <TextBlock Grid.Row="4" Style="{StaticResource RowLabel}">CPU Architecture</TextBlock>
+                <ComboBox Grid.Row="4" Style="{StaticResource ComboStyle}" x:Name="m_CPU_ComboBox" SelectionChanged="CPU_SelectionChanged"/>
+
+                <TextBlock Grid.Row="6" Style="{StaticResource RowNumber}" x:Name="m_Directory_TextBlock">❹</TextBlock>
+                <TextBlock Grid.Row="6" Style="{StaticResource RowLabel}">Install Directory</TextBlock>
+                <TextBox Grid.Row="6" Style="{StaticResource TextBoxStyle}" x:Name="m_DirecotryPath_TextBox" Text="" TextChanged="DirectoryPath_TextChanged"/>
+                <Button Grid.Row="6" Grid.Column="5" Margin="5" Content="..." Click="directory_button_Click" Name="button1" FontSize="20"/>
+
+                <TextBlock Grid.Row="8" Style="{StaticResource RowNumber}" x:Name="m_Env_TextBlock">❺</TextBlock>
+                <TextBlock Grid.Row="8" Style="{StaticResource RowLabel}">Environment Variable</TextBlock>
+                <RadioButton Grid.Row="8" Grid.Column="2" Style="{StaticResource RadioStyle}" x:Name="m_DoSet_Path_Radio_Button" Content="Modify 'PATH'" Click="DoSet_Path_Click" />
+                <RadioButton Grid.Row="8" Grid.Column="3" Style="{StaticResource RadioStyle}" x:Name="m_DoSet_ZIG_HOME_Radio_Button" Content="Set 'ZIG__HOME'" Click="DoSet_ZIG_HOME_Click" />
+                <RadioButton Grid.Row="8" Grid.Column="4" Style="{StaticResource RadioStyle}" x:Name="m_DoNotSet_Radio_Button" Content="Do not set" Click="DoNotSet_Click"/>
+            </Grid>
             <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock x:Name="m_Zig_TextBlock" Width="40" FontSize="30">❶</TextBlock>
-                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Zig Tool-chain Version</TextBlock>
-                <ComboBox x:Name="m_ZigVersion_ComboBox" Width="450" Margin="5"  FontSize="16" SelectionChanged="ZigVersion_SelectionChanged"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock x:Name="m_LS_TextBlock" Width="40" FontSize="30">❷</TextBlock>
-                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">ZLS Version</TextBlock>
-                <ComboBox x:Name="m_ZLSVersion_ComboBox" Width="450" Margin="5"  FontSize="16" SelectionChanged="ZLSVersion_SelectionChanged"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock x:Name="m_CPU_TextBlock" Width="40" FontSize="30">❸</TextBlock>
-                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">CPU Architectures</TextBlock>
-                <ComboBox x:Name="m_CPU_ComboBox" Width="450" Margin="5"  FontSize="16" SelectionChanged="CPU_SelectionChanged"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock x:Name="m_Directory_TextBlock" Width="40" FontSize="30">❹</TextBlock>
-                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Install Directory</TextBlock>
-                <TextBox x:Name="m_DirecotryPath_TextBox"  Height="30" Width="450" Margin="5" FontSize="16" VerticalAlignment="Center" Text="" TextChanged="DirectoryPath_TextChanged"/>
-                <Button Margin="5" Content="..." Click="directory_button_Click" Width="30"  Name="button1" FontSize="20"/>
-             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock x:Name="m_Env_TextBlock" Width="40" FontSize="30">❺</TextBlock>
-                <TextBlock Width="200" Margin="5" FontSize="16" VerticalAlignment="Center">Environment Value</TextBlock>
-                <RadioButton x:Name="m_DoNotSet_Radio_Button" Content="Do not set    " FontSize="16" VerticalAlignment="Center" Click="DoNotSet_Click" Foreground="White" />
-                <RadioButton x:Name="m_DoSet_Path_Radio_Button" Content="Set Environment Value 'PATH'" FontSize="16" VerticalAlignment="Center" Click="DoSet_Path_Click" />
-                <!--RadioButton x:Name="m_DoSet_Radio_Button" Content="Set Environment Value 'ZIG__TOOL__PATH'" FontSize="16" VerticalAlignment="Center" Click="DoSet_Click" /-->
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <TextBlock Width="40" FontSize="30">　</TextBlock>
-                <TextBlock Width="650" Margin="5" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Width="700" FontSize="30" VerticalAlignment="Center"></TextBlock>
                 <Button Content="{Binding InstallButtonTextString}" Width="120" Height="30" FontSize="18" IsEnabled="{Binding InstallButtonEnabled}" Click="install_button_Click"/>
             </StackPanel>
         </StackPanel>

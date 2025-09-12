@@ -44,7 +44,7 @@
     <script src="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/jquery.sticky-kit.js"></script>
     <meta name="generator" content="pandoc" />
   <meta name="author" content="LuckyStar Studio LLC" />
-  <meta name="date" content="2025-02-22" />
+  <meta name="date" content="2025-09-10" />
   <title>ZigVS User’s Manual</title>
   <style type="text/css">code{white-space: pre;}</style>
 </head>
@@ -58,7 +58,7 @@
         <ul class="nav pull-right doc-info">
                     <li><p class="navbar-text">LuckyStar Studio
 LLC</p></li>
-                              <li><p class="navbar-text">February 22,
+                              <li><p class="navbar-text">September 10,
 2025</p></li>
                   </ul>
       </div>
@@ -73,17 +73,29 @@ LLC</p></li>
         <li><a href="#list-of-supported-features"
         id="toc-list-of-supported-features">List of Supported
         Features</a></li>
-        <li><a href="#how-to-set-up-with-zig-tool-chain-installer"
-        id="toc-how-to-set-up-with-zig-tool-chain-installer">How to Set
-        Up with Zig Tool chain Installer</a></li>
-        <li><a href="#how-to-set-up-manually"
-        id="toc-how-to-set-up-manually">How to Set Up Manually</a></li>
-        <li><a href="#how-to-use" id="toc-how-to-use">How to
-        use</a></li>
-        <li><a href="#open-folder-mode" id="toc-open-folder-mode">Open
-        Folder Mode:</a></li>
-        <li><a href="#project-file-mode"
-        id="toc-project-file-mode">Project File Mode</a></li>
+        <li><a href="#how-to-install-zigvs"
+        id="toc-how-to-install-zigvs">How to Install ZigVS</a></li>
+        <li><a
+        href="#how-to-set-up-zig-compiler-and-zls-language-server"
+        id="toc-how-to-set-up-zig-compiler-and-zls-language-server">How
+        to Set up Zig compiler and ZLS language server</a></li>
+        <li><a
+        href="#how-to-set-up-zig-and-zls-with-tool-chain-installer"
+        id="toc-how-to-set-up-zig-and-zls-with-tool-chain-installer">How
+        to Set up Zig and ZLS with Tool-chain installer</a></li>
+        <li><a href="#folder-mode-and-project-mode"
+        id="toc-folder-mode-and-project-mode">Folder Mode and Project
+        Mode</a></li>
+        <li><a href="#how-to-create-a-new-zig-project"
+        id="toc-how-to-create-a-new-zig-project">How to create a new Zig
+        Project</a></li>
+        <li><a href="#cross-platform-build-debugging"
+        id="toc-cross-platform-build-debugging">Cross-Platform Build
+        &amp; Debugging</a></li>
+        <li><a href="#editor-setting" id="toc-editor-setting">Editor
+        Setting</a></li>
+        <li><a href="#package-installer"
+        id="toc-package-installer">Package Installer</a></li>
         <li><a href="#cross-platform-build"
         id="toc-cross-platform-build">Cross-platform Build</a></li>
         <li><a href="#cross-platform-debugging"
@@ -104,23 +116,7 @@ LLC</p></li>
         <li><a href="#cross-platform-debugging-serial-port-debugger"
         id="toc-cross-platform-debugging-serial-port-debugger">Cross-platform
         Debugging (Serial Port Debugger)</a></li>
-        <li><a href="#testing" id="toc-testing">Testing</a></li>
-        <li><a href="#profiler" id="toc-profiler">Profiler</a></li>
-        <li><a href="#package-installer"
-        id="toc-package-installer">Package Installer</a></li>
-        <li><a href="#formatting"
-        id="toc-formatting">Formatting</a></li>
-        <li><a href="#editor-setting" id="toc-editor-setting">Editor
-        Setting</a></li>
-        <li><a href="#syntax-highlighting"
-        id="toc-syntax-highlighting">Syntax Highlighting</a></li>
-        <li><a href="#snippets" id="toc-snippets">Snippets</a></li>
-        <li><a href="#formatting-1"
-        id="toc-formatting-1">Formatting</a></li>
         <li><a href="#help" id="toc-help">Help</a></li>
-        <li><a href="#questions-requests-etc."
-        id="toc-questions-requests-etc.">Questions, Requests,
-        etc.</a></li>
         <li><a href="#license" id="toc-license">License</a></li>
         <li><a href="#extension-name" id="toc-extension-name">Extension
         Name</a></li>
@@ -155,6 +151,7 @@ Features</h1>
         Semantic token highlighting         [  ]  
     Automatically inserts a closing Bracket [✔]
     Document Formatting using &#39;zig fmt&#39;     [✔]
+    Copy Json/Xml and Paset as Zig code     [　]
 
 Navigation  
     Object Browser                          [  ]
@@ -168,24 +165,24 @@ Build
     GUI configuration                       [✔]  
     C/C++ integration                       [✔]  
     Embedding resources                     [✔]
-    Build.zig generation                    [✔]  (Project file mode) 
-    Build.zig.zon generation                [✔]  (Project file mode) 
-    ZigPackage                              [✔]  (Open folder mode) 
+    Build.zig generation                    [✔]  (Project mode) 
+    Build.zig.zon generation                [✔]  (Project mode) 
+    ZigPackage                              [✔]  (Folder mode) 
 
 Debug
     Step execution                          [✔]  
     Set breakpoints                         [✔]  
     Variable inspection                     [✔]  
-    Cross-platform Debugging                [✔]     [new!!]
+    Cross-platform Debugging                [✔] 
         WebAssembly                         [  ]
     Hot Reload                              [  ]
 
 Profiling
-    CPU Usage, Memory Usage, Events, File IO    [✔]  
+    CPU Usage, Memory Usage, Events, File IO [✔]  
 
 Testing
     Run code tests using Test Explorer      [✔]  
-    Unit Test Debugging                     [✔]     [new!!]
+    Unit Test Debugging                     [✔] 
 
 Templates
     Package, Project, file                  [✔]
@@ -194,46 +191,133 @@ Project file mode                           [✔]
 Open folder mode                            [✔]  
 
 Zig Tool-chain Installer                    [✔] 
-Zig Package Installer                       [✔]     [new!!]
+Zig Package Installer                       [✔] 
 Help                                        [✔]  </code></pre>
 <hr />
-<h1 id="how-to-set-up-with-zig-tool-chain-installer">How to Set Up with
-Zig Tool chain Installer</h1>
+<h1 id="how-to-install-zigvs">How to Install ZigVS</h1>
 <ol type="1">
-<li><p>Install ZigVS from [Extensions] → [Manage Extension] or from <a
+<li><p><strong>Update Visual Studio</strong><br />
+<em>If your version of Visual Studio is older than the required version
+for ZigVS, a version error will appear during
+installation.</em></p></li>
+<li><ol type="a">
+<li><p>Install ZigVS from <strong>[Extension] → [Manage Extensions…] →
+[Browse]</strong> <img src="Images/ExtensionManager.png"
+alt="Extension Manager" /></p></li>
+<li><p>Install ZigVS from <a
 href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS">Visual
-Studio Marketplace</a></p></li>
-<li><p>[Extensions] → [ZigVS] → [Zig Tool chain Installer]</p></li>
+Studio Marketplace</a> <img src="Images/ZigVS_marketplace.png"
+alt="MarketPlace" /></p></li>
+</ol></li>
+</ol>
+<hr />
+<h1 id="how-to-set-up-zig-compiler-and-zls-language-server">How to Set
+up Zig compiler and ZLS language server</h1>
+<ol start="2" type="1">
+<li><p>Install Zig Compiler:<br />
+Download <a href="https://ziglang.org">Zig</a> and extract it to your
+desired location.<br />
+ZigVS ver 0.15.1.0 has been tested with <a
+href="https://ziglang.org/download/0.14.0/zig-windows-x86_64-0.15.1.zip">Zig
+ver 0.15.1</a>.</p></li>
+<li><p>Install ZLS Language Server:<br />
+Download <a href="https://github.com/zigtools/zls">Zig Language Server
+(zls)</a> and place it in the same directory as the Zig
+Compiler.</p></li>
+<li><p>Set the <strong>path</strong> to a directory with Zig compiler
+and ZLS binaries</p></li>
+</ol>
+<ol type="a">
+<li><p>Set the <strong>PATH</strong> environment variable to a directory
+with Zig compiler and ZLS binaries</p></li>
+<li><p>In ZigVS, enter the absolute path to zig.exe directly in [Tools]
+→ [Options] or in the Project’s Properties.</p></li>
 </ol>
 <figure>
-<img src="Images/Extensions_ZigVS_ToolChainInstaller.png"
-alt="Extensions_ZigVS_ToolChainInstaller" />
-<figcaption
-aria-hidden="true">Extensions_ZigVS_ToolChainInstaller</figcaption>
+<img src="Images/Tool_Option_Zig_General_BuiltTool_AbsolutePath.png"
+alt="Tool Option Zig General Built Tool" />
+<figcaption aria-hidden="true">Tool Option Zig General Built
+Tool</figcaption>
 </figure>
-<p>3.ToolChainInstaller window will be opened</p>
-<ol type="a">
+<figure>
+<img src="Images/ProjectPropety_General_AbsolutePath.png"
+alt="Project Propety General" />
+<figcaption aria-hidden="true">Project Propety General</figcaption>
+</figure>
+<ol start="3" type="a">
+<li>Add the directory that contains zig.exe to an environment variable
+(e.g., ZIG_HOME). Then, in [Tools] → [Options] or the Project’s
+Properties, set the path to zig.exe using that environment variable,
+e.g., $(ZIG_HOME).exe. (The path specified for ZIG_HOME needs to end
+with a backslash ’' )</li>
+</ol>
+<figure>
+<img src="Images/Tool_Option_Zig_General_BuiltTool_ZIG_HOME.png"
+alt="Tool Option Zig General Built Tool" />
+<figcaption aria-hidden="true">Tool Option Zig General Built
+Tool</figcaption>
+</figure>
+<figure>
+<img src="Images/ProjectPropety_General_ZIG_HOME.png"
+alt="Project Propety General" />
+<figcaption aria-hidden="true">Project Propety General</figcaption>
+</figure>
+<hr />
+<h1 id="how-to-set-up-zig-and-zls-with-tool-chain-installer">How to Set
+up Zig and ZLS with Tool-chain installer</h1>
+<ol type="1">
+<li><p>[Extensions] → [ZigVS] → [Zig Tool chain Installer]</p></li>
+<li><p>ToolChainInstaller window will be opened<br />
+<br><br> <img src="Images/ToolChainInstaller.png"
+alt="Extensions_ZigVS_ToolChainInstaller" /><br />
+</p></li>
 <li><p>Select Zig Tool chain Version</p></li>
 <li><p>Select ZLS Version</p></li>
+<li><p>Select CPU Architecture</p></li>
 <li><p>Set Install Directory<br />
 If you specify a folder without write permissions, the Install button
 will not be activated. Please restart Visual Studio with Administrator
 privileges</p></li>
-<li><p>Select if you set Environment Value ‘PATH’</p></li>
+<li><p>Select Environment Variable to set the path to zig.exe and
+zls.exe</p></li>
 </ol>
-<ol start="4" type="1">
-<li>Once everything is set up, the Install button will become active, so
-press the Install button</li>
+<ol type="a">
+<li><p>if you want to set the path to zig.ext and zls.exe in the
+environment Variable ‘PATH’, select “Set Environment Variable
+‘PATH’”</p></li>
+<li><p>if you donot want to set the path in environment ‘PATH’, select
+“Do Not Set” and set the path to zig.exe in [Tools] → [Options] and in
+the Project’s Properties</p></li>
 </ol>
 <figure>
-<img src="Images/ToolChainInstaller.png"
-alt="Extensions_ZigVS_ToolChainInstaller" />
-<figcaption
-aria-hidden="true">Extensions_ZigVS_ToolChainInstaller</figcaption>
+<img src="Images/Tool_Option_Zig_General_BuiltTool_AbsolutePath.png"
+alt="Tool Option Zig General Built Tool" />
+<figcaption aria-hidden="true">Tool Option Zig General Built
+Tool</figcaption>
 </figure>
-<ol start="5" type="1">
-<li>The progress and results of the installation will be displayed in
-the output window</li>
+<figure>
+<img src="Images/ProjectPropety_General_AbsolutePath.png"
+alt="Project Propety General" />
+<figcaption aria-hidden="true">Project Propety General</figcaption>
+</figure>
+<p><br><br> c. if you want to use other environment variable insted of
+‘PATH’, select “Set Other Environment Variable ‘ZIG_HOME’” and add
+$(ZIG_HOME) in the [tool path] propery in [Tools] → [Options] and in the
+Project’s Properties</p>
+<figure>
+<img src="Images/Tool_Option_Zig_General_BuiltTool_ZIG_HOME.png"
+alt="Tool Option Zig General Built Tool" />
+<figcaption aria-hidden="true">Tool Option Zig General Built
+Tool</figcaption>
+</figure>
+<p><img src="Images/ProjectPropety_General_ZIG_HOME.png"
+alt="Project Propety General" /> <br><br></p>
+<ol start="8" type="1">
+<li><p>Once everything is set up, the Install button will become active,
+so press the Install button</p></li>
+<li><p>The progress and results of the installation will be displayed in
+the <strong>[output window]</strong><br />
+<br></p></li>
 </ol>
 <figure>
 <img src="Images/ToolChainInstaller_output.png"
@@ -241,116 +325,274 @@ alt="Extensions_ZigVS_ToolChainInstaller" />
 <figcaption
 aria-hidden="true">Extensions_ZigVS_ToolChainInstaller</figcaption>
 </figure>
-<ol start="6" type="1">
-<li>You might need restart your Visual Studio</li>
-</ol>
-<p>Note: If you see “Access to the path ‘….’ is denied”, the following
-scenarios might be considered<br />
+<p><strong>Note</strong>: If you see “Access to the path ‘….’ is
+denied”, the following scenarios might be considered<br />
 * File in use: Please close the application that is opening the
 file<br />
 * Directory without write permission: Please restart Visual Studio as
-Administrator</p>
-<hr />
-<h1 id="how-to-set-up-manually">How to Set Up Manually</h1>
+Administrator <br><br> ___</p>
+<h1 id="folder-mode-and-project-mode">Folder Mode and Project Mode</h1>
+<p><strong>Visual Studio has two modes: Project File mode and Folder
+mode.</strong></p>
+<ul>
+<li><p><strong>Project Mode</strong> is used when developing in C++, C#,
+F#, and similar languages. You open project files such as .cppproj,
+.csproj, and .fsproj, and the file tree shows only the items that have
+been added to the project. Builds are not performed directly by Visual
+Studio but by a build tool called MSBuild. Project files can be built
+without Visual Studio. A “project” corresponds to what Zig calls a
+package. Although you can edit project files in a text editor, you can
+also configure them via Visual Studio’s Project Properties GUI. A
+solution file can contain multiple project files, allowing you to
+coordinate several projects to create a larger application.</p></li>
+<li><p><strong>Folder mode</strong> supports languages that aren’t built
+via project files. As in Visual Studio Code, you open a folder, and the
+file tree shows all files under that folder. Builds are performed by
+each language’s own build system.</p></li>
+</ul>
+<p><br></p>
+<p><strong>ZigVS supports both Folder mode and Project File
+mode.</strong></p>
+<ul>
+<li><p>In Zig’s Folder mode, you use build.zig. As in Visual Studio
+Code, you open a folder that contains build.zig and set build.zig as the
+build file. To change the build, you need to edit build.zig, but you can
+still create new packages, build, debug, perform performance profiling,
+and run tests via the GUI just like with other projects.</p></li>
+<li><p>In Zig’s Project mode, you use a project file called .zigproj. To
+start a project, create a .zigproj; to open the project, open the
+.zigproj. When you build the project (even from Visual Studio’s GUI),
+MSBuild reads the .zigproj and builds using zig.exe as the compiler and
+linker.</p>
+<ul>
+<li>The benefits of Zig’s Project mode are:
+<ol type="a">
+<li>It makes integration with other projects easy. If you already have
+C++ or C# projects, using a Zig project file makes it easier to
+incorporate Zig code into existing codebases. For example, most
+commercially released games today are made with Visual Studio, and this
+approach is useful when you want to use some Zig code within such
+existing projects.</li>
+<li>You can change build settings via the Visual Studio GUI.</li>
+<li>Developers who have worked on Microsoft’s platform only need to
+learn the Zig language itself; they can continue to create new Zig
+projects, debug, profile performance, and run tests via the GUI as
+before—without having to learn Zig’s command-line tools or how to write
+build.zig.</li>
+</ol></li>
+<li>You can also generate a build.zig from a .zigproj. Because a project
+file is a structured data file with a fixed schema, conversion is
+possible. By contrast, build.zig is a program rather than a
+schema-defined data file, so understanding its contents requires
+compilation; this is a drawback.</li>
+</ul></li>
+</ul>
+<p><br><br> ___ # How to open an existing Zig package</p>
 <ol type="1">
-<li><p>Install ZigVS from [Extensions] → [Manage Extension] or from <a
-href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS">Visual
-Studio Marketplace</a></p></li>
-<li><p>Zig Compiler:<br />
-Download <a href="https://ziglang.org">Zig</a> and extract it to your
-desired location.<br />
-ZigVS has been tested with <a
-href="https://ziglang.org/download/0.13.0/zig-windows-x86_64-0.13.0.zip">Zig
-ver 0.13.0</a>.</p></li>
-<li><p>ZLS Language Server:<br />
-Download <a href="https://github.com/zigtools/zls">Zig Language Server
-(zls)</a> and place it in the same directory as the Zig
-Compiler.</p></li>
+<li>Select [File] → [Open] → [Folder]<br />
+</li>
+<li>When the dialog appears, choose the folder that contains
+build.zig.<br />
+</li>
+<li>In Solution Explorer, folders and files will be displayed.<br />
+</li>
+<li>Simply opening a folder does not allow you to build or debug.</li>
 </ol>
-<p>Note: The <a
-href="https://github.com/microsoft/language-server-protocol/issues/1847">compatibility</a>
-issue that previously existed between Visual Studio 2022 and ZLS has
-been resolved as both Visual Studio 2022 and ZLS have been fixed. It can
-now be used in Visual Studio 2022 without any modifications to ZLS.</p>
-<ol start="4" type="1">
-<li>Set the <strong>ZIG_TOOL_PATH</strong> environment variable to a
-directory with Zig compiler and ZLS binaries (The path specified for
-ZIG_TOOL_PATH needs to end with a backslash ’' )</li>
+<p><img src="Images/Set_as_Startup_Item_1.png" /></p>
+<ol start="5" type="1">
+<li>Select build.zig with the mouse, <strong>right-click</strong> it,
+and choose <strong>[Set as Startup Item]</strong> from the context
+menu.</li>
 </ol>
-<hr />
-<h1 id="how-to-use">How to use</h1>
-<p>ZigVS supports <strong>Open folder mode</strong> and <strong>Project
-file mode</strong></p>
-<ul>
-<li>Open folder mode<br />
-Open a folder with an existing zig project.<br />
-Uses the zig build system with a build.zig file.</li>
-</ul>
-<pre><code>    Build Tool：zig.exe  
-    Compiler：zig.exe  
-    Build File：Build.zig   
-    Source Code：.zig .cpp .c 
-    GUI/Editor：Visual Studio 2022  </code></pre>
-<ul>
-<li><p>Project file mode<br />
-Create and manage zig projects (.zigproj) using the VS2022 IDE.<br />
-Use the zig compiler along with MSBuild and VS2022 project
-management.<br />
-Link C/C++ libraries and zig libraries in a VS2022 solution file.</p>
-<p>Installing the Desktop Development with C++ module via Visual Studio
-Installer is necessary.</p></li>
-</ul>
-<pre><code>    Build Tool：MSBuild.exe  
-    Compiler：zig.exe  
-    Build File：Zig Project file (extension .zigproj) or Zig Project file create the build.zig
-    Source Code：.zig .cpp .c 
-    GUI/Editor：Visual Studio 2022  </code></pre>
-<hr />
-<h1 id="open-folder-mode">Open Folder Mode:</h1>
-<p>To start Open Folder Mode, do one of the following in Visual
-Studio:</p>
-<pre><code>A. If creating a new Zig package:
-
-A-1. Select [File] → [New] → [Zig Package (zig.exe init)].</code></pre>
+<figure>
+<img src="Images/Set_as_Startup_Item_2.png"
+alt="Set As Startup Item_2" />
+<figcaption aria-hidden="true">Set As Startup Item_2</figcaption>
+</figure>
+<ol start="6" type="1">
+<li>The Build menu will appear, the Debug button will be enabled, and
+you will be able to perform builds and debugging.</li>
+</ol>
+<figure>
+<img src="Images/Set_as_Startup_Item_3.png"
+alt="Set As Startup Item_3" />
+<figcaption aria-hidden="true">Set As Startup Item_3</figcaption>
+</figure>
+<p><br><br> ___ # How to create a new zig package</p>
+<ol type="1">
+<li>Select [File] → [New] → [Zig Package (zig.exe init)]</li>
+</ol>
 <p><img src="Images/New_ZigPackage.png" /></p>
-<pre><code>A-2. Select the directory and package name, choose whether to open the folder, and then press the create button.</code></pre>
-<p><img src="Images/PackageCreater.png" /></p>
-<pre><code>B. If selecting a template
-
-B-1. Use the wizard and select [Create a new project].
-     The project template supports both project mode and open folder mode.</code></pre>
-<p><img src="Images/006.png" /></p>
-<pre><code>C. If opening an existing Zig Package:
-
-C-1. Use the wizard and select [Open a local folder], then choose the folder containing Build.zig.</code></pre>
-<p><img src="Images/002.png" /></p>
-<pre><code>D. Select [File] → [Open] → [Folder] and choose the folder containing Build.zig.  
-
-
-
-
-To select the Build.zig to use, right-click on it and choose [Set as Startup Item].</code></pre>
-<p><img src="Images/003.png" /></p>
-<pre><code>[Build], [Debug], [Start] button, and [Configuration] drop down will become active for you to start your work.</code></pre>
-<p><img src="Images/004.png" /></p>
-<pre><code>If you want to change settings, select [Tools] → [Options] and make changes in the Options window under [ZigVS].</code></pre>
-<p><img src="Images/005.png" /></p>
+<ol start="2" type="1">
+<li>The Package Creator dialog will appear.</li>
+<li>Set Install Directory<br />
+</li>
+<li>Set the package name</li>
+<li>Choose whether to compare folders or not.</li>
+<li>The Create button will become enabled, so press the button.</li>
+</ol>
+<p><img src="Images/PackageCreator.png" /></p>
+<ol start="7" type="1">
+<li><p>The result will be displayed in the Output window.</p></li>
+<li><p>Simply opening a folder does not allow you to build or
+debug.</p></li>
+</ol>
+<p><img src="Images/Set_as_Startup_Item_1.png" /></p>
+<ol start="9" type="1">
+<li>Select build.zig with the mouse, <strong>right-click</strong> it,
+and choose <strong>[Set as Startup Item]</strong> from the context
+menu.</li>
+</ol>
+<figure>
+<img src="Images/Set_as_Startup_Item_2.png"
+alt="Set As Startup Item_2" />
+<figcaption aria-hidden="true">Set As Startup Item_2</figcaption>
+</figure>
+<ol start="10" type="1">
+<li>The Build menu will appear, the Debug button will be enabled, and
+you will be able to perform builds and debugging.</li>
+</ol>
+<figure>
+<img src="Images/Set_as_Startup_Item_3.png"
+alt="Set As Startup Item_3" />
+<figcaption aria-hidden="true">Set As Startup Item_3</figcaption>
+</figure>
+<p><br><br> ___</p>
+<h1 id="how-to-create-a-new-zig-project">How to create a new Zig
+Project</h1>
+<ol type="1">
+<li><p>Select [File] → [New] → [Project]</p></li>
+<li><p>The New Project wizard will appear.</p></li>
+<li><p>Select Zig in the language filter.</p></li>
+<li><p>Select a Zig template and use the Wizard to create the
+project.</p></li>
+</ol>
+<p><img src="Images/New_ZigProject.png" /></p>
+<ol start="5" type="1">
+<li>The [Build] menu, [Debug] menu, [Start] button, and [Configuration]
+selection pull-down are enabled and you can start working.</li>
+</ol>
+<p><img src="Images/ProjectModeBuildDebug.png" /></p>
+<ol start="6" type="1">
+<li><strong>To change settings</strong>, open the project Property
+Pages.</li>
+</ol>
+<figure>
+<img src="Images/ProjectPropery_Build.png"
+alt="Project Propery Build" />
+<figcaption aria-hidden="true">Project Propery Build</figcaption>
+</figure>
 <hr />
-<h1 id="project-file-mode">Project File Mode</h1>
-<p>To start Project File Mode, do one of the following in Visual
-Studio:</p>
-<p><em>Note Installing the Desktop Development with C++ module via
-Visual Studio Installer is necessary.</em></p>
-<pre><code>A. If creating a new project:
-
-a-1. Use the wizard and select [Create a new project] or [File] → [New].</code></pre>
-<p><img src="Images/006.png" /></p>
-<pre><code>B. If opening an existing project:
-
-b-1. Select [Open a project or solution] or [File] → [Open] → [Project/Solution].
-
-If you want to change settings, right-click on [ZigProject file] in [Solution Explorer], select [Property], and [Project Property Page] will appear.</code></pre>
-<p><img src="Images/008.png" /></p>
+<h1 id="cross-platform-build-debugging">Cross-Platform Build &amp;
+Debugging</h1>
+<p><a href="https://luckystar-studio.github.io/ZigVS-Web/">See User
+Manual Page</a> ___ # Profiler</p>
+<ol type="1">
+<li><p>[Debug] &gt; [Start Debugging] (or Start on the toolbar, or
+F5).</p>
+<p>When the app finishes loading, the Summary view of the Diagnostics
+Tools appears. If you need to open the window, click Debug &gt; Windows
+&gt; Show Diagnostic Tools.</p></li>
+<li><p>When you choose Record CPU Profile, Visual Studio will begin
+recording your functions and how much time they take to execute. You can
+only view this collected data when your application is halted at a
+breakpoint.</p></li>
+</ol>
+<p><img src="Images/Profiler.png" /></p>
+<ol start="3" type="1">
+<li>Read <a
+href="https://learn.microsoft.com/en-us/visualstudio/profiling/?view=vs-2022">Visual
+Studio Profiler Tools</a></li>
+</ol>
+<p><br><br> ___ # Testing To perform tests, select [Test] → [Test
+Explorer] to open the Test Explorer window. If .zig source code includes
+unit tests, their filenames will be listed.</p>
+<p><img src="Images/TestExplorer.png" /></p>
+<p><br><br> ___ # Syntax Highlighting</p>
+<p>Example of changing Literals and Operators</p>
+<p><img src="Images/TextHighLight.png" /></p>
+<p>You can change the colors and fonts of the Syntax Highlighting. It is
+possible to create a more color-coded and visually appealing screen than
+the default settings of Visual Studio. The following Display Items can
+be modified.</p>
+<ul>
+<li>Plain Text</li>
+<li>Comment</li>
+<li>Keyword</li>
+<li>Literal</li>
+<li>Operator</li>
+<li>String</li>
+<li>Type</li>
+<li>Inlay Hints - Parameters</li>
+<li>Inlay Hints - Types</li>
+</ul>
+<p>[Tool]→[Environment]→[Fonts and Colors]→[Display items]</p>
+<p><img src="Images/Tool_Option_Environment_FontsAndColors.png" /></p>
+<hr />
+<h1 id="editor-setting">Editor Setting</h1>
+<p>[Tools]→[Options]→[Text Editor]→[Zig]</p>
+<p><img src="Images/Tool_Option_TextEditor_Zig.png" /> <img
+src="Images/Tool_Option_TextEditor_Zig_General.png"
+alt="Tool Option Text Editor Zig General" /></p>
+<figure>
+<img src="Images/Tool_Option_TextEditor_Zig._ScrollBar.png"
+alt="Tool Option Text Editor Zig. Scroll Bar" />
+<figcaption aria-hidden="true">Tool Option Text Editor Zig. Scroll
+Bar</figcaption>
+</figure>
+<figure>
+<img src="Images/Tool_Option_TextEditor_Zig_Tabs.png"
+alt="Tool Option Text Editor Zig Tabs" />
+<figcaption aria-hidden="true">Tool Option Text Editor Zig
+Tabs</figcaption>
+</figure>
+<figure>
+<img src="Images/Tool_Option_TextEditor_Zig_Advanced.png"
+alt="Tool Option Text Editor Zig Advanced" />
+<figcaption aria-hidden="true">Tool Option Text Editor Zig
+Advanced</figcaption>
+</figure>
+<p><br><br> ___ # Inlay hints</p>
+<ul>
+<li>There is a switch for changing the display method under [Tools] →
+[Options] → [Text Editor] → [Inlay Hints].</li>
+</ul>
+<figure>
+<img src="Images/Tool_Option_TextEditor_Inlay%20Hints.png"
+alt="Tool Option Text Editor Inlay Hints" />
+<figcaption aria-hidden="true">Tool Option Text Editor Inlay
+Hints</figcaption>
+</figure>
+<p><br><br> ___ # Formatting Right-click in the solution explorer and
+select ‘zig fmt’</p>
+<p><img src="Images/zig_fmt.png" /></p>
+<p><br><br> ___ # Snippets</p>
+<ul>
+<li>Open Snippet manager<br />
+[Tool] → [Code Snippets Manager] → [Zig]</li>
+</ul>
+<p><img src="Images/CodeSnippetsManager.png" /></p>
+<ul>
+<li>Insert Snippets<br />
+Right-click in the code editor → [Snippets] → [Insert Snippet]</li>
+</ul>
+<p><img src="Images/SnippetsContextMenu.png" /></p>
+<p>Note: <a
+href="https://learn.microsoft.com/en-us/visualstudio/ide/code-snippets?view=vs-2022">Code
+snippets: what they are and how to add one</a></p>
+<p><br><br></p>
+<hr />
+<h1 id="package-installer">Package Installer</h1>
+<p>1, [Extensions] → [ZigVS] → [Zig Package Installer]</p>
+<p><img src="Images/Extensions_ZigVS_PackageInstaller.png" /></p>
+<p>2, Browse to the repository and branch that you want to install in
+the WebView.<br />
+3, Select a Installation Method from the drop down.<br />
+Currently, zig fetch, git and unzip are working correctly.<br />
+4. Once everything is set up, the Install button will become active, so
+press the Install button</p>
+<p><img src="Images/PackageInstaller.png" /></p>
+<p><br><br></p>
 <hr />
 <h1 id="cross-platform-build">Cross-platform Build</h1>
 <ul>
@@ -568,97 +810,32 @@ directory.</li>
 &lt;SerialPortLaunchOptions xmlns=&quot;http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014&quot;
     Port=&quot;COM1&quot; TargetArchitecture=&quot;arm&quot;/&gt;</code></pre>
 <hr />
-<h1 id="testing">Testing</h1>
-<p>To perform tests, select [Test] → [Test Explorer] to open the Test
-Explorer window. If .zig source code includes unit tests, their
-filenames will be listed.</p>
-<p><img src="Images/TestExplorer.png" />　　</p>
-<hr />
-<h1 id="profiler">Profiler</h1>
-<ol type="1">
-<li>[Debug] &gt; [Start Debugging] (or Start on the toolbar, or
-F5).</li>
-</ol>
-<p>When the app finishes loading, the Summary view of the Diagnostics
-Tools appears. If you need to open the window, click Debug &gt; Windows
-&gt; Show Diagnostic Tools.</p>
-<ol start="2" type="1">
-<li>When you choose Record CPU Profile, Visual Studio will begin
-recording your functions and how much time they take to execute. You can
-only view this collected data when your application is halted at a
-breakpoint.</li>
-</ol>
-<p><img src="Images/Profiler.png" /></p>
-<hr />
-<h1 id="package-installer">Package Installer</h1>
-<p>1, [Extensions] → [ZigVS] → [Zig Package Installer]</p>
-<p><img src="Images/Extensions_ZigVS_PackageInstaller.png" /></p>
-<p>2, Browse to the repository and branch that you want to install in
-the WebView.<br />
-3, Select a Installation Method from the drop-down.<br />
-Currently, git and unzip are working correctly.<br />
-4. Once everything is set up, the Install button will become active, so
-press the Install button</p>
-<p><img src="Images/PackageInstaller.png" /></p>
-<hr />
-<h1 id="formatting">Formatting</h1>
-<ul>
-<li>Right-click in the solution explorer and select ‘zig fmt’</li>
-</ul>
-<p><img src="Images/zig_fmt.png" /></p>
-<hr />
-<h1 id="editor-setting">Editor Setting</h1>
-<ul>
-<li>[Tools]→[Options]→[Text Editor]→[Zig]</li>
-</ul>
-<p><img src="Images/Tool_Option_TextEditor_Zig.png" /></p>
-<hr />
-<h1 id="syntax-highlighting">Syntax Highlighting</h1>
-<p>Example of changing Literals and Operators</p>
-<p><img src="Images/TextHighLight.png" /></p>
-<p>You can change the colors and fonts of the Syntax Highlighting. It is
-possible to create a more color-coded and visually appealing screen than
-the default settings of Visual Studio. The following Display Items can
-be modified.</p>
-<ul>
-<li>Plain Text</li>
-<li>Comment</li>
-<li>Keyword</li>
-<li>Literal</li>
-<li>Operator</li>
-<li>String</li>
-<li>Type</li>
-</ul>
-<p>[Tool]→[Environment]→[Fonts and Colors]→[Display items]</p>
-<p><img src="Images/Tool_Option_Environment_FontsAndColors.png" /></p>
-<hr />
-<h1 id="snippets">Snippets</h1>
-<ul>
-<li>Open Snippet manager<br />
-[Tool] → [Code Snippets Manager] → [Zig]</li>
-</ul>
-<p><img src="Images/CodeSnippetsManager.png" /></p>
-<ul>
-<li>Insert Snippets<br />
-Right-click in the code editor → <a href="#snippets">Snippets</a> →
-[Insert Snippet]</li>
-</ul>
-<p><img src="Images/SnippetsContextMenu.png" /></p>
-<p>Note: <a
-href="https://learn.microsoft.com/en-us/visualstudio/ide/code-snippets?view=vs-2022">Code
-snippets: what they are and how to add one</a></p>
-<hr />
-<h1 id="formatting-1">Formatting</h1>
-<p>Right-click in the solution explorer and select ‘zig fmt’</p>
-<p><img src="Images/zig_fmt.png" /></p>
-<hr />
 <h1 id="help">Help</h1>
+<p>See <a href="https://luckystar-studio.github.io/ZigVS-Web/">User
+Manual Page</a></p>
+<p>or</p>
 <p>[Extensions] → [ZigVS] → [User Manual Page]<br />
 <img src="Images/Extensions_ZigVS_UserManualPage.png" /></p>
-<hr />
-<h1 id="questions-requests-etc.">Questions, Requests, etc.</h1>
-<p>Please use the Q&amp;A page on Visual Studio Marketplace. Support is
-available in both English and Japanese.</p>
+<p><br><br> ___ # Questions, Requests, etc.</p>
+<ul>
+<li><a
+href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS">ZigVS
+Visual Studio Macketplace</a>
+<ul>
+<li><a
+href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS&amp;ssr=false#qna">Q&amp;A
+Page</a><br />
+</li>
+<li><a
+href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS&amp;ssr=false#review-details">Rating
+&amp; Review Page</a></li>
+</ul></li>
+<li><a href="https://github.com/luckystar-studio/ZigVS">Github</a>
+<ul>
+<li><a href="https://github.com/luckystar-studio/ZigVS/issues">Issues
+Page</a></li>
+</ul></li>
+</ul>
 <hr />
 <h1 id="license">License</h1>
 <p>Refer to the LICENSE.txt file for licensing information.</p>
@@ -668,9 +845,40 @@ available in both English and Japanese.</p>
 <hr />
 <h1 id="publisher">Publisher</h1>
 <p>LuckyStar Studio LLC</p>
-<hr />
 <h1 id="version-history">Version History</h1>
-<pre><code>    Version 0.14.1.0 (2025/06/09):
+<pre><code>    Version 0.15.1.0 (2025/09/10):
+        Added support for Zig 0.15.1 and ZLS 0.15.0
+            It is no longer mandatory to add the directory containing Zig.exe to the PATH environment variable. (See the documentation for details.)
+        ZLS
+            ZLS settings under [Tools] → [Options] now take effect immediately.
+            Due to issues in both ZLS and Visual Studio, Inlay Hints sometimes did not work; we’ve implemented fixes/workarounds to address this as much as possible.
+            The Inlay Hints toggle is now Alt + F1, the same as C#.
+            Inlay Hints settings are now more granular and configurable.
+        Fixes
+            Fixed cases where the Toolchain Installer and Package Creator were hard to see under certain themes.
+            Fixed an issue where Debug settings on the project property page were not applied.
+            Fixed an issue where the project property page did not resize with the window.
+            You can now use environment variables and Visual Studio macro paths in [Tools] → [Options] and in project properties.
+            Fixed an issue where the Toolchain Installer created unnecessary duplicate entries in the user’s PATH.
+        Improvements
+            Added [Tools] → [Options] → [Text Editor] → [Zig] → [Advanced].
+
+        Compatibility:
+            Visual Studio 2022 17.14.13
+            Zig Tool chain: zig-windows-x86_64-0.15.1.zip
+            ZLS Language Server: zls-windows-x86_64-0.15.0.zip
+   
+   Version 0.14.1.1 (2025/06/16):
+        Fixed a bug where incomplete support for the Zig 0.14 spec changes meant the output file name wasn’t correctly retrieved from Build.zig, preventing debugging from starting.
+        Added 14 code snippets.
+        You can now open the ZigVS GitHub page from the menu.
+
+        Compatibility:
+        Visual Studio 2022 17.14.3
+        Zig Tool chain: zig-windows-x86_64-0.14.1.zip
+        ZLS Language Server: zls-windows-x86_64-0.14.0.zip
+
+    Version 0.14.1.0 (2025/06/16):
         Supported Zig 0.14.1.
         Modifications to the file and folder layout to prepare the ZigVS source code for public release. https://github.com/luckystar-studio/ZigVS
 

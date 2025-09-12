@@ -51,7 +51,7 @@ namespace ZigVS
 
     public class Parameter
     {
-        public const string c_PackageNameStrig = "ZigVS";
+        public const string c_PackageNameString = "ZigVS";
         //   public const string c_PackageGuidString = "3fd9286d-949f-4d6e-a11a-1493feb6f915";
 
         public const string c_languageName = "zig";
@@ -59,18 +59,20 @@ namespace ZigVS
         public const string c_compilerFileName = "zig.exe";
         public const string c_buildFileName = "build.zig";
 
+        public const string c_languageServerFileName = "zls.exe";
+
+        public const string c_gitToolFileName = "git.exe";
+
         public const string c_LanguageGuid = "024D2A59-EEE2-4F2A-85C0-0560D7996063";
 
         public const string c_ProjectFactoryGuidString = "98E5F03A-0B5F-41B0-A3FA-DF2B47B954C1";
         public static readonly Guid s_ProjectFactoryGuid = new Guid(c_ProjectFactoryGuidString);
 
      //   public const string c_CompanyName = "LuckyStar Studio LLC";
-        public const string c_PATH_EvnironmentVariable_NameString = "PATH";
-        public const string c_ToolPath_EvnironmentVariable_NameString = "ZIG_TOOL_PATH";
+        public const string c_PATH_EnvironmentVariable_NameString = "PATH";
 
-        public const string c_TestExecutorUriString = "executor://" + c_PackageNameStrig;
+        public const string c_TestExecutorUriString = "executor://" + c_PackageNameString;
         public static Uri c_TestExecutorUri = new Uri(c_TestExecutorUriString);
-
 
         public const string c_windowsExecutableFileExtension = ".exe";
         public const string c_linuxExecutableFileExtension = ".bin";

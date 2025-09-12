@@ -59,6 +59,7 @@ namespace ZigVS
     using MSXML;
     using System;
     using System.Runtime.InteropServices;
+    using ZigVS.Options;
 
 
     // See https://learn.microsoft.com/en-us/visualstudio/extensibility/walkthrough-implementing-code-snippets?view=vs-2022&tabs=csharp#add-the-insert-snippet-command-to-the-shortcut-menu
@@ -131,24 +132,6 @@ namespace ZigVS
             uint commandID = nCmdID;
             char typedChar = char.MinValue;
             //make sure the input is a char before getting it
-
-            if (pguidCmdGroup == new Guid("{875694cf-4e47-4e92-a15e-c6f296281c12}") && commandID == 0x5000)
-            {
-                LanguageClient.ToggleInlyHints();
-
-                var l_ITextView = m_ITextView as IWpfTextView;
-                if (l_ITextView != null)
-                {
-                    var l_dummyTextEdit = l_ITextView.TextBuffer.CreateEdit();
-                    l_dummyTextEdit.Insert(0, " ");
-                    l_dummyTextEdit.Apply();
-                    var l_dummy2TextEdit = l_ITextView.TextBuffer.CreateEdit();
-                    l_dummy2TextEdit.Delete(0, 1);
-                    l_dummy2TextEdit.Apply();
-
-                    return VSConstants.S_OK;
-                }
-            }
 
             //code previously written for Exec
             if (pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.TYPECHAR)
@@ -247,12 +230,15 @@ namespace ZigVS
             //pass along the command so the char is added to the buffer
             int r_resultInt = m_nextIOleCommandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
 
-            var l_GeneralOptions = ThreadHelper.JoinableTaskFactory.Run(() => GeneralOptions.GetLiveInstanceAsync());
-            if (l_GeneralOptions != null)
+            var l_TextEditorAdvancedOption = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await TextEditorAdvancedOptions.GetLiveInstanceAsync();
+            });
+
+            if (l_TextEditorAdvancedOption != null)
             {
-                BracketAssist(typedChar, '(', ')', l_GeneralOptions.AutoInsertParenthesesSwitch == Switch.on);
-                BracketAssist(typedChar, '{', '}', l_GeneralOptions.AutoInsertBracesSwitch == Switch.on);
-                BracketAssist(typedChar, '[', ']', l_GeneralOptions.AutoInsertBrackets == Switch.on);
+                BracketAssist(typedChar, '(', ')', l_TextEditorAdvancedOption.AutoInsertParenthesesSwitch == Switch.on);
+                BracketAssist(typedChar, '{', '}', l_TextEditorAdvancedOption.AutoInsertBracesSwitch == Switch.on);
+                BracketAssist(typedChar, '[', ']', l_TextEditorAdvancedOption.AutoInsertBracketsSwitch == Switch.on);
             }
 
             if (!typedChar.Equals(char.MinValue) && char.IsLetterOrDigit(typedChar))

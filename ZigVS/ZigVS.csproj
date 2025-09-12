@@ -56,6 +56,7 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>1603</NoWarn>
     <CopyVsixExtensionFiles>False</CopyVsixExtensionFiles>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -99,6 +100,7 @@
     <Compile Include="Common\Statusbar.cs" />
     <Compile Include="Common\Test.cs" />
     <Compile Include="Editor\CompletionCommandHandler.cs" />
+    <Compile Include="Editor\InlayHintKeyProcessor.cs" />
     <Compile Include="Editor\LanguageClient.cs" />
     <Compile Include="Editor\LanguageClientMiddleLayer.cs" />
     <Compile Include="Editor\TextViewCreationListener.cs" />
@@ -119,7 +121,6 @@
     <Compile Include="Options\DialogPageProvider.cs" />
     <Compile Include="Options\FolderModeOptions.cs" />
     <Compile Include="Options\GeneralOptions.cs" />
-    <Compile Include="Options\ProjectModeOptions.cs" />
     <Compile Include="Command\PackageInstaller\PackageInstallerWindowControl.xaml.cs">
       <DependentUpon>PackageInstallerWindowControl.xaml</DependentUpon>
     </Compile>
@@ -147,6 +148,7 @@
     <Compile Include="Test\TestDiscoverer.cs" />
     <Compile Include="Test\TestExecutor.cs" />
     <Compile Include="Common\Utilities.cs" />
+    <Compile Include="Test\TestRunSettingsProvider.cs" />
     <Compile Include="ZigVSPackage.cs" />
     <Compile Include="ProjectMode\ZigVSProjectAutomation.cs" />
   </ItemGroup>
@@ -155,10 +157,6 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="LICENSE.txt">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="README.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Editor\language-configuration.json">
@@ -206,6 +204,8 @@
     <Content Include="Editor\Snippets\while.snippet">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <None Include="public_manifest.json" />
+    <None Include="Publish.ps1" />
     <None Include="Test\HowToIntegrateUnitTestWithTestExplorer.pdf" />
     <Resource Include="Resources\file_icon.16.16.png" />
     <Content Include="Resources\ziglang_logo_icon.png">
@@ -228,7 +228,6 @@
     <Content Include="Editor\Intellisense\snippets.json">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <None Include="Editor\InitializeMethod.json" />
     <Content Include="Editor\Snippets\else.snippet">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

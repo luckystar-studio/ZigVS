@@ -189,15 +189,15 @@ namespace ZigVS
                 return;
             }
 
-            this.preDebugCommmand = this.ProjectManager.GetProjectProperty("PreDebugCommand", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.preDebugCommmandArguments = this.ProjectManager.GetProjectProperty("PreDebugCommandArguments", _PersistStorageType.PST_PROJECT_FILE, false);
+            this.preDebugCommmand = this.ProjectManager.GetProjectPropertyUnevaluated("PreDebugCommand", _PersistStorageType.PST_PROJECT_FILE);
+            this.preDebugCommmandArguments = this.ProjectManager.GetProjectPropertyUnevaluated("PreDebugCommandArguments", _PersistStorageType.PST_PROJECT_FILE);
 
-            this.workingDirectory = this.ProjectManager.GetProjectProperty("WorkingDirectory", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.startProgram = this.ProjectManager.GetProjectProperty("StartProgram", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.commandLineArguments = this.ProjectManager.GetProjectProperty("CmdArgs", _PersistStorageType.PST_PROJECT_FILE, false);
-            string l_debugEngineString = this.ProjectManager.GetProjectProperty("DebugEngine", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.miEngineLaunchOptions = this.ProjectManager.GetProjectProperty("MIEngineLaunchOptions", _PersistStorageType.PST_PROJECT_FILE, false);
-            this.remoteDebugMachine = this.ProjectManager.GetProjectProperty("RemoteDebugMachine", _PersistStorageType.PST_PROJECT_FILE, false);
+            this.workingDirectory = this.ProjectManager.GetProjectPropertyUnevaluated("WorkingDirectory", _PersistStorageType.PST_PROJECT_FILE);
+            this.startProgram = this.ProjectManager.GetProjectPropertyUnevaluated("StartProgram", _PersistStorageType.PST_PROJECT_FILE);
+            this.commandLineArguments = this.ProjectManager.GetProjectPropertyUnevaluated("CmdArgs", _PersistStorageType.PST_PROJECT_FILE);
+            string l_debugEngineString = this.ProjectManager.GetProjectPropertyUnevaluated("DebugEngine", _PersistStorageType.PST_PROJECT_FILE);
+            this.miEngineLaunchOptions = this.ProjectManager.GetProjectPropertyUnevaluated("MIEngineLaunchOptions", _PersistStorageType.PST_PROJECT_FILE);
+            this.remoteDebugMachine = this.ProjectManager.GetProjectPropertyUnevaluated("RemoteDebugMachine", _PersistStorageType.PST_PROJECT_FILE);
  
             if (!string.IsNullOrEmpty(l_debugEngineString))
             {
@@ -210,6 +210,7 @@ namespace ZigVS
                 }
             }
         }
+
         protected override int ApplyChanges()
         {
             if (this.ProjectManager == null)
@@ -222,22 +223,12 @@ namespace ZigVS
             this.ProjectManager.SetProjectProperty("PreDebugCommand", _PersistStorageType.PST_PROJECT_FILE, this.preDebugCommmand);
             this.ProjectManager.SetProjectProperty("PreDebugCommandArguments", _PersistStorageType.PST_PROJECT_FILE, this.preDebugCommmandArguments);
 
-            this.ProjectManager.SetProjectProperty("WorkingDirectory", _PersistStorageType.PST_PROJECT_FILE, this.workingDirectory.ToString());
-            this.ProjectManager.SetProjectProperty("StartProgram", _PersistStorageType.PST_PROJECT_FILE, this.startProgram.ToString());
+            this.ProjectManager.SetProjectProperty("WorkingDirectory", _PersistStorageType.PST_PROJECT_FILE, this.workingDirectory);
+            this.ProjectManager.SetProjectProperty("StartProgram", _PersistStorageType.PST_PROJECT_FILE, this.startProgram);
             this.ProjectManager.SetProjectProperty("CmdArgs", _PersistStorageType.PST_PROJECT_FILE, this.commandLineArguments);
             this.ProjectManager.SetProjectProperty("DebugEngine", _PersistStorageType.PST_PROJECT_FILE, this.debugEngine.ToString());
-            this.ProjectManager.SetProjectProperty("MIEngineLaunchOptions", _PersistStorageType.PST_PROJECT_FILE, this.miEngineLaunchOptions.ToString());
+            this.ProjectManager.SetProjectProperty("MIEngineLaunchOptions", _PersistStorageType.PST_PROJECT_FILE, this.miEngineLaunchOptions);
             this.ProjectManager.SetProjectProperty("RemoteDebugMachine", _PersistStorageType.PST_PROJECT_FILE, this.remoteDebugMachine);
-
-            this.IsDirty = false;
-
-            if (IsDirty)
-            {
-                IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
-                    // This prevents the property page from displaying bad data from the zombied (unloaded) project
-                propertyPageFrame?.HideFrame();
-                propertyPageFrame?.ShowFrame(this.GetType().GUID);
-            }
 
             return VSConstants.S_OK;
         }
