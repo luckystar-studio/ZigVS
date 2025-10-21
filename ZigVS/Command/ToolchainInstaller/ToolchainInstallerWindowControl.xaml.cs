@@ -36,6 +36,7 @@
 
             m_ToolchainInstallerWindowControl = this;
 
+            m_ZigVersion_ComboBox.Items.Add("0.15.2");
             m_ZigVersion_ComboBox.Items.Add("0.15.1");
             m_ZigVersion_ComboBox.Items.Add("master");
 

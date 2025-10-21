@@ -86,6 +86,7 @@
     <Compile Include="Command\PackageInstallerCommand.cs" />
     <Compile Include="Command\PackageInstaller\PackageInstallerWindow.cs" />
     <Compile Include="Command\PackageInstaller\PackageInstaller.cs" />
+    <Compile Include="Command\PasteJSONAsStructCommand.cs" />
     <Compile Include="Command\QAndACommand.cs" />
     <Compile Include="Command\RatingAndReviewCommand.cs" />
     <Compile Include="Command\ToolchainInstaller\ToolchainInstaller.cs" />
@@ -332,7 +333,7 @@
       <NoWarn>NU1603</NoWarn>
     </PackageReference>
     <PackageReference Include="System.Text.Json">
-      <Version>9.0.5</Version>
+      <Version>4.7.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

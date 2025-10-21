@@ -138,6 +138,13 @@
 				</Strings>
 			</Button>
 
+			<Button guid="guidZigVSPackageCmdSet" id="PasteJSONAsStructId" priority="0x1000" type="Button">
+				<!--Parent guid="VSEditor" id="Edit.PasteGroup.Special" /-->
+				<Parent guid="VSMainMenu" id="Edit.CutCopyGroup" />
+				<Strings>
+					<ButtonText>Paste JSON as Zig Struct</ButtonText>
+				</Strings>
+			</Button>
 		</Buttons>
 		<!--Combos>
 			<Combo guid="guidZigVSPackageCmdSet" id="DebuggerDropDownComboId" priority="0x0300" type="DropDownCombo" defaultWidth="150" idCommandList="DebuggerDropDownComboListCommandId">
@@ -169,6 +176,7 @@
 			<IDSymbol name="GithubId" value="0x8000" />
 			<IDSymbol name="PachageCreatorId" value="0x4000" />
 			<IDSymbol name="FormattingCommandId" value="0x0300" />
+			<IDSymbol name="PasteJSONAsStructId" value="0x9000" />
 			
 			<IDSymbol name="ToolbarId" value="0x0350" />
 			<IDSymbol name="ToolbarGroupid" value="0x0400" />

@@ -113,8 +113,8 @@
 		<ProjectGuid>$guid1$</ProjectGuid>
 	</PropertyGroup>
 
-	<PropertyGroup> <!-- These properties will be overrided by the project property page-->
-		<ToolName>zig.exe</ToolName>
+	<PropertyGroup> <!-- These properties will be overridden by the project property page-->
+		<ToolPath>zig.exe</ToolPath>
 
 		<RootSourceName>src/main.zig</RootSourceName>
 		<AssemblyName>$(ProjectName)</AssemblyName>
@@ -279,7 +279,7 @@ pub fn build(b: *std.Build) void {
 			<NativeProjectReferencePaths>@(_ResolvedNativeProjectReferencePaths)</NativeProjectReferencePaths>
 			<AllCFilesFlat>@(AllCFiles)</AllCFilesFlat>
 			<AllRCFilesFlat>@(ResourceCompile)</AllRCFilesFlat>
-			<BuildCommand>"$(ZIG_TOOL_PATH)$(ToolName)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin=$(OutDir)$(OutputName) --cache-dir $(IntDir) $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(DependenciesOption) $(ModulesOption) $(BuildOption) $(RootSourceName) $(AllCFilesFlat.Replace(';', ' ')) $(NativeProjectReferencePaths.Replace(';', ' ')) $(AllRCFilesFlat.Replace(';', ' '))</BuildCommand>
+			<BuildCommand>"$(ToolPath)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin=$(OutDir)$(OutputName) --cache-dir $(IntDir) $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(DependenciesOption) $(ModulesOption) $(BuildOption) $(RootSourceName) $(AllCFilesFlat.Replace(';', ' ')) $(NativeProjectReferencePaths.Replace(';', ' ')) $(AllRCFilesFlat.Replace(';', ' '))</BuildCommand>
 		</PropertyGroup>
 	  	<MakeDir Directories="$(OutDir)"/>
 		<Message Text="Building: $(BuildCommand)" Importance="high"/>
@@ -291,7 +291,7 @@ pub fn build(b: *std.Build) void {
 			<OutputTypeName Condition=" '$(ConfigurationType)' == 'Application' ">exe</OutputTypeName>
 			<OutputTypeName Condition=" '$(ConfigurationType)' != 'Application' ">lib</OutputTypeName>
 
-			<BuildCommand>"$(ZIG_TOOL_PATH)$(ToolName)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir $(IntDir) --prefix-$(OutputTypeName)-dir $(OutDir)</BuildCommand>
+			<BuildCommand>"$(ToolPath)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir $(IntDir) --prefix-$(OutputTypeName)-dir $(OutDir)</BuildCommand>
 		</PropertyGroup>
 		<Message Text="Building: $(BuildCommand)" Importance="high"/>
 		<Exec WorkingDirectory="$(ProjectDir)" Command="$(BuildCommand)" />

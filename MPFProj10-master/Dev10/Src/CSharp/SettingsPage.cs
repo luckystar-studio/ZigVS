@@ -383,10 +383,10 @@ namespace Microsoft.VisualStudio.Project
 				}
 				else if(punk[0] is NodeProperties)
 				{
-                    if (this.ProjectManager == null || (this.ProjectManager != (punk[0] as NodeProperties).Node.ProjectManager))
-					{
-                        throw new InvalidOperationException();
-					}
+                    // Reusing pages for a different project?
+                    var localNode = ((NodeProperties)punk[0]).Node;
+                    //var newId = localNode.GetGuidProperty(;
+                    this.ProjectManager = ((NodeProperties)punk[0]).Node.ProjectManager;
 
 					System.Collections.Generic.Dictionary<string, ProjectConfig> configsMap = new System.Collections.Generic.Dictionary<string, ProjectConfig>();
 

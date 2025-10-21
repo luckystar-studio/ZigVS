@@ -497,9 +497,9 @@ namespace Microsoft.VisualStudio.Project
 
             try
             {
-                VsDebugTargetInfo info = new VsDebugTargetInfo();
-                info.cbSize = (uint)Marshal.SizeOf(info);
-                info.dlo = Microsoft.VisualStudio.Shell.Interop.DEBUG_LAUNCH_OPERATION.DLO_CreateProcess;
+                VsDebugTargetInfo4 info = new VsDebugTargetInfo4();
+
+                info.dlo = (uint)Microsoft.VisualStudio.Shell.Interop.DEBUG_LAUNCH_OPERATION.DLO_CreateProcess;
 
                 // On first call, reset the cache, following calls will use the cached values
                 string property = GetConfigurationProperty("StartProgram", _PersistStorageType.PST_PROJECT_FILE, true);
@@ -514,14 +514,14 @@ namespace Microsoft.VisualStudio.Project
                 {
                     info.bstrExe = property;
                 }
-                var l_currentDirecotryString = GetConfigurationProperty("WorkingDirectory", _PersistStorageType.PST_PROJECT_FILE, false);
-                 if (string.IsNullOrEmpty(l_currentDirecotryString))
+                var l_currentDirectoryString = GetConfigurationProperty("WorkingDirectory", _PersistStorageType.PST_PROJECT_FILE, false);
+                if (string.IsNullOrEmpty(l_currentDirectoryString))
                 {
                     info.bstrCurDir = Path.GetDirectoryName(info.bstrExe);
                 }
                 else
                 {
-                    info.bstrCurDir = l_currentDirecotryString;
+                    info.bstrCurDir = l_currentDirectoryString;
                 }
 
                 property = GetConfigurationProperty("CmdArgs", _PersistStorageType.PST_PROJECT_FILE, false);
@@ -543,18 +543,28 @@ namespace Microsoft.VisualStudio.Project
     </CustomLaunchSetupCommands>
     <LaunchCompleteCommand>exec-continue</LaunchCompleteCommand>
   </PipeLaunchOptions>";*/
-                info.fSendStdoutToOutputWindow = 1;
+                info.fSendToOutputWindow = false;
+                property = GetConfigurationProperty("RedirectStdoutToOutput", _PersistStorageType.PST_PROJECT_FILE, false);
+                if(property != null && property.Length > 0)
+                {
+                    bool l_redirectToOutputWindow = false;
+                    bool parseResult = bool.TryParse(property, out l_redirectToOutputWindow);
+
+                    if (parseResult) {
+                        info.fSendToOutputWindow = l_redirectToOutputWindow;
+                    }
+                }
 
                 property = GetConfigurationProperty("DebugEngine", _PersistStorageType.PST_PROJECT_FILE, false);
                 if(!string.IsNullOrEmpty(property) && property==DebugEngineType.WindowsNative.ToString())
                 {
-                    info.clsidCustom = VSConstants.DebugEnginesGuids.NativeOnly_guid;
+                    info.guidLaunchDebugEngine = VSConstants.DebugEnginesGuids.NativeOnly_guid;
                 }
                 else
                 {
                     var l_IVsOutputWindowPane = Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SVsGeneralOutputWindowPane)) as IVsOutputWindowPane;
 
-                    info.clsidCustom = GetMIEngineGuid();
+                    info.guidLaunchDebugEngine = GetMIEngineGuid();
 
                     var l_MIEngineLaunchOptionsString = GetConfigurationProperty("MIEngineLaunchOptions", _PersistStorageType.PST_PROJECT_FILE, false);
                     if(string.IsNullOrWhiteSpace(l_MIEngineLaunchOptionsString))
@@ -582,10 +592,49 @@ namespace Microsoft.VisualStudio.Project
                     // https://github.com/Microsoft/MIEngine/
                 }
 
+                property = GetConfigurationProperty("TargetEnvironmentExclusive", _PersistStorageType.PST_PROJECT_FILE, false);
+                bool targetEnvExclusive = false;
+                if (property != null) {
+                    bool.TryParse(property, out targetEnvExclusive);
+                }
+
+                property = GetConfigurationProperty("TargetEnvironment", _PersistStorageType.PST_PROJECT_FILE, false);
+
+                string envVarFinal = null;
+
+                if (property != null) {
+                    envVarFinal = String.Empty;
+
+                    var envEnum = property.Split(';').GetEnumerator();
+
+                    while (envEnum.MoveNext()) {
+                        envVarFinal += envEnum.Current;
+                        envVarFinal += "\0";
+                    }
+
+                    // Double null ending
+                    envVarFinal += "\0";
+                }
+
+                info.bstrEnv = envVarFinal;
+
                 ExecutePreDebugCommand(info.bstrCurDir);
 
-                info.grfLaunch = (grfLaunch | (uint)( __VSDBGLAUNCHFLAGS.DBGLAUNCH_Silent | __VSDBGLAUNCHFLAGS.DBGLAUNCH_StopDebuggingOnEnd ));
-                VsShellUtilities.LaunchDebugger(this._project.Site, info);
+                info.LaunchFlags = (grfLaunch | (uint)( __VSDBGLAUNCHFLAGS.DBGLAUNCH_Silent | __VSDBGLAUNCHFLAGS.DBGLAUNCH_StopDebuggingOnEnd ));
+                if (!targetEnvExclusive) {
+                    info.LaunchFlags |= (uint)__VSDBGLAUNCHFLAGS2.DBGLAUNCH_MergeEnv;
+                }
+
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    var svc = await AsyncServiceProvider.GlobalProvider.GetServiceAsync(typeof(SVsShellDebugger));
+                    Assumes.Present(svc);
+                    var dbg = (IVsDebugger4)svc;
+
+                    var results = new VsDebugTargetProcessInfo[1];
+                    dbg.LaunchDebugTargets4(1, new[] {info}, null);
+                });
             }
             catch(Exception e)
             {

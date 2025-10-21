@@ -109,19 +109,13 @@ namespace ZigVS
             this.assemblyName = (ProjectManager as ZigVSProjectNode)!.GetName();
         }
 
-        public PropertyPage_Build(ProjectNode projectManager)
-            : base(projectManager)
-        {
-            this.Name = ZigVS.Resources.Resource.BuildCaption;
-        }
-
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Directory)]
         [LocDisplayName(PropertyPageUIText.IntDirName)]
         [ResourcesDescriptionAttribute(PropertyPageUIText.IntDirNameCaption)]
         public string IntDirName
         {
             get { return this.intDirName!; }
-            set { this.intDirName = value; this.IsDirty = true; }
+            set { if (String.Compare(this.intDirName, value) != 0) this.IsDirty = true; this.intDirName = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Directory)]
@@ -130,7 +124,7 @@ namespace ZigVS
         public string OutDirName
         {
             get { return this.outDirName!; }
-            set { this.outDirName = value; this.IsDirty = true; }
+            set { if (String.Compare(this.outDirName, value) != 0) this.IsDirty = true; this.outDirName = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Build)]
@@ -139,7 +133,7 @@ namespace ZigVS
         public string BuildOption
         {
             get { return this.buildOption!; }
-            set { this.buildOption = value; this.IsDirty = true; }
+            set { if (String.Compare(this.buildOption, value) != 0) this.IsDirty = true; this.buildOption = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Build)]
@@ -148,7 +142,7 @@ namespace ZigVS
         public bool UseBuildDotZig
         {
             get { return this.useBuildDotZig!; }
-            set { this.useBuildDotZig = value; this.IsDirty = true; }
+            set { if(this.useBuildDotZig != value) this.IsDirty = true; this.useBuildDotZig = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Build)]
@@ -157,7 +151,7 @@ namespace ZigVS
         public string IncludeDirs
         {
             get { return this.includeDirs!; }
-            set { this.includeDirs = value; this.IsDirty = true; }
+            set { if (String.Compare(this.includeDirs, value) != 0) this.IsDirty = true; this.includeDirs = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Build)]
@@ -166,7 +160,7 @@ namespace ZigVS
         public string LibraryDirs
         {
             get { return this.libraryDirs!; }
-            set { this.libraryDirs = value; this.IsDirty = true; }
+            set { if (String.Compare(this.libraryDirs, value) != 0) this.IsDirty = true; this.libraryDirs = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Build)]
@@ -175,7 +169,7 @@ namespace ZigVS
         public string Libraries
         {
             get { return this.libraries!; }
-            set { this.libraries = value; this.IsDirty = true; }
+            set { if (String.Compare(this.libraries, value) != 0) this.IsDirty = true; this.libraries = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Build)]
@@ -184,7 +178,7 @@ namespace ZigVS
         public string RootSourceName
         {
             get { return this.rootSourceName!; }
-            set { this.rootSourceName = value; this.IsDirty = true; }
+            set { if (String.Compare(this.rootSourceName, value) != 0) this.IsDirty = true; this.rootSourceName = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Assembly)]
@@ -193,7 +187,7 @@ namespace ZigVS
         public OSType OSType
         {
             get { return this.osType; }
-            set { this.osType = value; this.IsDirty = true; }
+            set { if (this.osType != value) this.IsDirty = true; this.osType = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Assembly)]
@@ -202,7 +196,7 @@ namespace ZigVS
         public string AssemblyName
         {
             get { return this.assemblyName!; }
-            set { this.assemblyName = value; this.IsDirty = true; }
+            set { if (String.Compare(this.assemblyName, value) != 0) this.IsDirty = true; this.assemblyName = value;  }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Assembly)]
@@ -211,7 +205,7 @@ namespace ZigVS
         public string AssemblyVersion
         {
             get { return this.assemblyVersion!; }
-            set { this.assemblyVersion = value; this.IsDirty = true; }
+            set { if (String.Compare(this.assemblyVersion, value) != 0) this.IsDirty = true; this.assemblyVersion = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Assembly)]
@@ -220,7 +214,7 @@ namespace ZigVS
         public OutputType ConfigurationType
         {
             get { return this.configurationType; }
-            set { this.configurationType = value; this.IsDirty = true; }
+            set { if (this.configurationType != value) this.IsDirty = true; this.configurationType = value; }
         }
 
         /// <summary>
@@ -241,7 +235,7 @@ namespace ZigVS
         public string[] Modules
         {
             get { return this.modules!; }
-            set { this.modules = value; this.IsDirty = true; }
+            set { if (string.Compare(string.Join(";", this.modules), string.Join(";", value)) != 0) this.IsDirty = true; this.modules = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Dependency)]
@@ -250,9 +244,8 @@ namespace ZigVS
         public string[] Dependencies
         {
             get { return this.dependencies!; }
-            set { this.dependencies = value; this.IsDirty = true; }
+            set { if (string.Compare(string.Join(";", this.dependencies), string.Join(";", value)) != 0) this.IsDirty = true; this.dependencies = value; }
         }
-
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Generation)]
         [LocDisplayName(PropertyPageUIText.GenerateBuildDotZig)]
@@ -260,7 +253,7 @@ namespace ZigVS
         public bool GenerateBuildDotZig
         {
             get { return this.generateBuildDotZig!; }
-            set { this.generateBuildDotZig = value; this.IsDirty = true; }
+            set { if (this.generateBuildDotZig != value) this.IsDirty = true; this.generateBuildDotZig = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Generation)]
@@ -269,7 +262,7 @@ namespace ZigVS
         public bool GenerateBuildDotZigDotZon
         {
             get { return this.generateBuildDotZigDotZon!; }
-            set { this.generateBuildDotZigDotZon = value; this.IsDirty = true; }
+            set { if (this.generateBuildDotZigDotZon != value) this.IsDirty = true; this.generateBuildDotZigDotZon = value; }
         }
 
         /// <summary>
@@ -366,6 +359,8 @@ namespace ZigVS
                 {
                 }
             }
+
+            IsDirty = false;
         }
 
         protected override int ApplyChanges()
@@ -401,6 +396,8 @@ namespace ZigVS
 
             this.ProjectManager.SetProjectProperty("GenerateBuildDotZig", _PersistStorageType.PST_PROJECT_FILE, this.generateBuildDotZig.ToString());
             this.ProjectManager.SetProjectProperty("GenerateBuildDotZigDotZon", _PersistStorageType.PST_PROJECT_FILE, this.generateBuildDotZigDotZon.ToString());
+
+            IsDirty = false;
 
             return VSConstants.S_OK;
         }

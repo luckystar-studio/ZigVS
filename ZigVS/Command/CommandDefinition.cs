@@ -64,6 +64,7 @@ namespace ZigVS.Command
             QAndA = 0x6000,
             RatingAndReview = 0x7000,
             OpenRepository = 0x8000,
+            PasteJSONAsStruct = 0x9000,
         }
     }
 }

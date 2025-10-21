@@ -111,6 +111,7 @@ namespace ZigVS
             _ = Command.QAndACommand.InitializeAsync();
             _ = Command.RatingAndReviewCommand.InitializeAsync();
             _ = Command.OpenRepositoryCommand.InitializeAsync();
+            _ = Command.PasteJSONAsStructCommand.InitializeAsync();
             //      _ = Command.DebugEngineSelectorCommand.InitializeAsync(this);
 
             // Initialize Project

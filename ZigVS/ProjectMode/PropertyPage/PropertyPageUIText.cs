@@ -108,6 +108,14 @@ namespace ZigVS
         internal const string MIEngineLaunchOptionsDescription = "See https://github.com/Microsoft/MIEngine";    
         internal const string RemoteDebugMachine = "Remote Debug Machine";
         internal const string RemoteDebugMachineDescription = "Remote Debug Machine (IP Address)";
+        internal const string RedirectStdoutToOutput = "Redirect stdout to Output Window";
+        internal const string RedirectStdoutToOutputDescription = "Redirect stdout to Output Window";
+
+        internal const string Category_DebugEnvironment = "3) Debug Environment";
+        internal const string EnvironmentVariables = "Environment variables";
+        internal const string EnvironmentVariablesDescription = "Semi-colon separated list of environment variables to inject during debugging. Default is <empty>.";
+        internal const string EnvironmentVariableExclusive = "Use environment variables as exclusive";
+        internal const string EnvironmentVariableExclusiveDescription = "If false, apply environment variable string on top of host process environment. If true, use environment variable string but do not merge with host process environment.  Default is false";
 
         internal const string Category_Directory = "Directory";
         internal const string IntDirName = "Intermediate Directory Name";

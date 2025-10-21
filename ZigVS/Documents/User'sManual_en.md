@@ -600,30 +600,36 @@ ___
 <SerialPortLaunchOptions xmlns="http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014"
     Port="COM1" TargetArchitecture="arm"/>
 ```
+# Setting
+
+[Tools]→[Options]→[Zig]
+
+![](Images/Tool_Option_Zig_General.png)
+
+![](Images/Tool_Option_Zig_FolderMode.png)
 
 
 
 ___
-# Help  
+# Help
 
-See [User Manual Page](https://luckystar-studio.github.io/ZigVS-Web/)
+a. See [User Manual Page](https://luckystar-studio.github.io/ZigVS-Web/)
 
 or 
 
-[Extensions] → [ZigVS] → [User Manual Page]  
+b. [Extensions] → [ZigVS] → [User Manual Page]  
 ![](Images/Extensions_ZigVS_UserManualPage.png)
 
 <br><br>
 ___
 # Questions, Requests, etc.
 
-* [ZigVS Visual Studio Macketplace](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS)  
+* [ZigVS Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS)  
   * [Q&A Page](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS&ssr=false#qna)  
   * [Rating & Review Page](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS&ssr=false#review-details)
 
-* [Github](https://github.com/luckystar-studio/ZigVS)  
+* [ZigVS Github](https://github.com/luckystar-studio/ZigVS)  
   * [Issues Page](https://github.com/luckystar-studio/ZigVS/issues)
-
 
 ___
 # License
@@ -644,25 +650,26 @@ LuckyStar Studio LLC
             It is no longer mandatory to add the directory containing Zig.exe to the PATH environment variable. (See the documentation for details.)
         ZLS
             ZLS settings under [Tools] → [Options] now take effect immediately.
-            Due to issues in both ZLS and Visual Studio, Inlay Hints sometimes did not work; we’ve implemented fixes/workarounds to address this as much as possible.
+            Due to issues in both ZLS and Visual Studio, Inlay Hints sometimes did not work; we've implemented fixes/workarounds to address this as much as possible.
             The Inlay Hints toggle is now Alt + F1, the same as C#.
             Inlay Hints settings are now more granular and configurable.
         Fixes
             Fixed cases where the Toolchain Installer and Package Creator were hard to see under certain themes.
             Fixed an issue where Debug settings on the project property page were not applied.
             Fixed an issue where the project property page did not resize with the window.
-            You can now use environment variables and Visual Studio macro paths in [Tools] → [Options] and in project properties.
-            Fixed an issue where the Toolchain Installer created unnecessary duplicate entries in the user’s PATH.
+            Fixed an issue where the Toolchain Installer created unnecessary duplicate entries in the user's PATH.
         Improvements
-            Added [Tools] → [Options] → [Text Editor] → [Zig] → [Advanced].
+            You can now use environment variables and Visual Studio macros in [Tools] → [Options] and in project properties.
+            Added [Tools] → [Options] → [Text Editor] → [Zig] → [Advanced] to hold editor option settings.
 
         Compatibility:
-            Visual Studio 2022 17.14.13
+            Visual Studio 2022 17.14.14
             Zig Tool chain: zig-windows-x86_64-0.15.1.zip
             ZLS Language Server: zls-windows-x86_64-0.15.0.zip
-   
+            (tested briefly in Visual Studio 2026 and appears to work ok)
+
    Version 0.14.1.1 (2025/06/16):
-        Fixed a bug where incomplete support for the Zig 0.14 spec changes meant the output file name wasn’t correctly retrieved from Build.zig, preventing debugging from starting.
+        Fixed a bug where incomplete support for the Zig 0.14 spec changes meant the output file name wasn't correctly retrieved from Build.zig, preventing debugging from starting.
         Added 14 code snippets.
         You can now open the ZigVS GitHub page from the menu.
 
@@ -730,7 +737,7 @@ LuckyStar Studio LLC
         ZLS Language Server: 0.13.0.VisualStudioCompatible
 
     Version 0.13.0.9 (2024/07/08):
-        In Open Folder mode
+        In Folder mode
             The debugger and tests now function correctly even when you open a folder higher than the one containing build.zig.
             We have accelerated the startup of the debugger from the second time onward.
 

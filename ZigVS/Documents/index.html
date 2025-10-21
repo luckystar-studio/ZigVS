@@ -116,6 +116,7 @@ LLC</p></li>
         <li><a href="#cross-platform-debugging-serial-port-debugger"
         id="toc-cross-platform-debugging-serial-port-debugger">Cross-platform
         Debugging (Serial Port Debugger)</a></li>
+        <li><a href="#setting" id="toc-setting">Setting</a></li>
         <li><a href="#help" id="toc-help">Help</a></li>
         <li><a href="#license" id="toc-license">License</a></li>
         <li><a href="#extension-name" id="toc-extension-name">Extension
@@ -809,18 +810,26 @@ directory.</li>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
 &lt;SerialPortLaunchOptions xmlns=&quot;http://schemas.microsoft.com/vstudio/MDDDebuggerOptions/2014&quot;
     Port=&quot;COM1&quot; TargetArchitecture=&quot;arm&quot;/&gt;</code></pre>
+<h1 id="setting">Setting</h1>
+<p>[Tools]→[Options]→[Zig]</p>
+<p><img src="Images/Tool_Option_Zig_General.png" /></p>
+<p><img src="Images/Tool_Option_Zig_FolderMode.png" /></p>
 <hr />
 <h1 id="help">Help</h1>
-<p>See <a href="https://luckystar-studio.github.io/ZigVS-Web/">User
-Manual Page</a></p>
+<ol type="a">
+<li>See <a href="https://luckystar-studio.github.io/ZigVS-Web/">User
+Manual Page</a></li>
+</ol>
 <p>or</p>
-<p>[Extensions] → [ZigVS] → [User Manual Page]<br />
-<img src="Images/Extensions_ZigVS_UserManualPage.png" /></p>
+<ol start="2" type="a">
+<li>[Extensions] → [ZigVS] → [User Manual Page]<br />
+<img src="Images/Extensions_ZigVS_UserManualPage.png" /></li>
+</ol>
 <p><br><br> ___ # Questions, Requests, etc.</p>
 <ul>
 <li><a
 href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS">ZigVS
-Visual Studio Macketplace</a>
+Visual Studio Marketplace</a>
 <ul>
 <li><a
 href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS&amp;ssr=false#qna">Q&amp;A
@@ -830,7 +839,7 @@ Page</a><br />
 href="https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS&amp;ssr=false#review-details">Rating
 &amp; Review Page</a></li>
 </ul></li>
-<li><a href="https://github.com/luckystar-studio/ZigVS">Github</a>
+<li><a href="https://github.com/luckystar-studio/ZigVS">ZigVS Github</a>
 <ul>
 <li><a href="https://github.com/luckystar-studio/ZigVS/issues">Issues
 Page</a></li>
@@ -851,25 +860,26 @@ Page</a></li>
             It is no longer mandatory to add the directory containing Zig.exe to the PATH environment variable. (See the documentation for details.)
         ZLS
             ZLS settings under [Tools] → [Options] now take effect immediately.
-            Due to issues in both ZLS and Visual Studio, Inlay Hints sometimes did not work; we’ve implemented fixes/workarounds to address this as much as possible.
+            Due to issues in both ZLS and Visual Studio, Inlay Hints sometimes did not work; we&#39;ve implemented fixes/workarounds to address this as much as possible.
             The Inlay Hints toggle is now Alt + F1, the same as C#.
             Inlay Hints settings are now more granular and configurable.
         Fixes
             Fixed cases where the Toolchain Installer and Package Creator were hard to see under certain themes.
             Fixed an issue where Debug settings on the project property page were not applied.
             Fixed an issue where the project property page did not resize with the window.
-            You can now use environment variables and Visual Studio macro paths in [Tools] → [Options] and in project properties.
-            Fixed an issue where the Toolchain Installer created unnecessary duplicate entries in the user’s PATH.
+            Fixed an issue where the Toolchain Installer created unnecessary duplicate entries in the user&#39;s PATH.
         Improvements
-            Added [Tools] → [Options] → [Text Editor] → [Zig] → [Advanced].
+            You can now use environment variables and Visual Studio macros in [Tools] → [Options] and in project properties.
+            Added [Tools] → [Options] → [Text Editor] → [Zig] → [Advanced] to hold editor option settings.
 
         Compatibility:
-            Visual Studio 2022 17.14.13
+            Visual Studio 2022 17.14.14
             Zig Tool chain: zig-windows-x86_64-0.15.1.zip
             ZLS Language Server: zls-windows-x86_64-0.15.0.zip
-   
+            (tested briefly in Visual Studio 2026 and appears to work ok)
+
    Version 0.14.1.1 (2025/06/16):
-        Fixed a bug where incomplete support for the Zig 0.14 spec changes meant the output file name wasn’t correctly retrieved from Build.zig, preventing debugging from starting.
+        Fixed a bug where incomplete support for the Zig 0.14 spec changes meant the output file name wasn&#39;t correctly retrieved from Build.zig, preventing debugging from starting.
         Added 14 code snippets.
         You can now open the ZigVS GitHub page from the menu.
 
@@ -937,7 +947,7 @@ Page</a></li>
         ZLS Language Server: 0.13.0.VisualStudioCompatible
 
     Version 0.13.0.9 (2024/07/08):
-        In Open Folder mode
+        In Folder mode
             The debugger and tests now function correctly even when you open a folder higher than the one containing build.zig.
             We have accelerated the startup of the debugger from the second time onward.
 

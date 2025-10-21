@@ -59,7 +59,7 @@ namespace Microsoft.VisualStudio.Project
 	[ComVisible(true)]
 	public class LocalizableProperties : ICustomTypeDescriptor
 	{
-		private readonly ProjectNode _projectManager;
+		private ProjectNode _projectManager;
 
 		public LocalizableProperties(ProjectNode projectManager)
 		{
@@ -77,6 +77,10 @@ namespace Microsoft.VisualStudio.Project
 			{
 				//Contract.Ensures(Contract.Result<ProjectNode>() != null);
 				return _projectManager;
+			}
+			set
+			{
+				_projectManager = value;
 			}
 		}
 

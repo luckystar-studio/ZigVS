@@ -13,6 +13,7 @@ ___
     * Snippets
     * Zig Document Formatting 
     * Auto-Insert Parentheses/Bracket/Braces
+    * Copy Json Text and Paste as Zig Structs
 * Folder mode
     * Create a new Zig package from the Visual Studio GUI
     * Build from Visual Studio using build.zig
@@ -37,10 +38,10 @@ ___
 1. **Update Visual Studio**  
 *If your version of Visual Studio is older than the required version for ZigVS, a version error will appear during installation.*
 
-2. Two ways to get the extension
+2. Two ways to get the extension  
    a.  Install ZigVS within Visual Studio from **[Extension] → [Manage Extensions…] → [Browse]**
    ![ExtensionManager](ZigVS/Documents/Images/ExtensionManager.png)  
-   **OR**
+   **OR**  
    b. Install ZigVS from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS)
 ![MarketPlace](ZigVS/Documents/Images/ZigVS_marketplace.png)
 
@@ -56,7 +57,7 @@ Download [Zig Language Server (zls)](https://github.com/zigtools/zls) and extrac
 
 3. Do either:  
     a. Add the directories with the Zig compiler and ZLS binaries to the system **PATH** environment variable.  
-**OR**
+**OR**  
     b. In Visual Studio enter the paths to zig.exe and zls.exe in the [Tools] → [Options] -> [ZigVS] properties editor (and in the Project's Properties dialog box if using Project Mode).  
 
 ![Tool Option Zig General Built Tool](ZigVS/Documents/Images/Tool_Option_Zig_General_BuiltTool_AbsolutePath.png)
@@ -127,9 +128,9 @@ ___
 * In ZigVS's Project mode, you use a project file type called .zigproj. To start a project, create a .zigproj; to open the project, open the .zigproj. When you build the project (even from Visual Studio's GUI), MSBuild reads the .zigproj and builds using zig.exe as the compiler and linker.
 
   * The benefits of Zig's Project mode are:
-    a) It makes integration with other projects easy. If you already have C++ or C# projects, using a Zig project file makes it easier to incorporate Zig code into existing codebases. For example, most commercially released games today are made with Visual Studio and this approach is useful when you want to use some Zig code within such existing projects.
-    b) You can change build settings via the Visual Studio GUI.
-    c) Developers who have worked on Microsoft's platform only need to learn the Zig language itself; they can continue to create new Zig projects, debug, profile performance, and run tests via the GUI as before—without having to learn Zig's command-line tools or how to write build.zig.
+    a) It makes integration with other projects easy. If you already have C++ or C# projects, using a Zig project file makes it easier to incorporate Zig code into existing codebases. For example, most commercially released games today are made with Visual Studio and this approach is useful when you want to use some Zig code within such existing projects.  
+    b) You can change build settings via the Visual Studio GUI.  
+    c) Developers who have worked on Microsoft's platform only need to learn the Zig language itself; they can continue to create new Zig projects, debug, profile performance, and run tests via the GUI as before—without having to learn Zig's command-line tools or how to write build.zig.  
 
   * You can also generate a build.zig from a .zigproj. Because a project file is a structured data file with a fixed schema, conversion is possible. By contrast, build.zig is a program rather than a schema-defined data file, so understanding its contents requires compilation.
 
@@ -312,6 +313,19 @@ Note: [Code snippets: what they are and how to add one](https://learn.microsoft.
 <br><br>
 
 ___
+# Copy Json Text and Paste as Zig Structs
+
+1. Copy Json text to clipboard
+![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct1.png)
+
+2. In Zig code editor, right-click and select [Editor] → [Paste Json as Zig Structs]
+
+![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct2.png)
+
+3. The Json text in the clipboard will be converted to Zig Structs and pasted into the editor at the cursor position.
+
+![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct3.png)
+___
 # Package Installer
 
 1, [Extensions] → [ZigVS] → [Zig Package Installer]  
@@ -326,6 +340,18 @@ ___
 ![](ZigVS/Documents/Images/PackageInstaller.png)
 
 <br><br>
+
+___
+# Setting
+
+[Tools]→[Options]→[Zig]
+
+![](ZigVS/Documents/Images/Tool_Option_Zig_General.png)
+
+![](ZigVS/Documents/Images/Tool_Option_Zig_FolderMode.png)
+
+
+
 ___
 # Help
 
@@ -340,7 +366,7 @@ b. [Extensions] → [ZigVS] → [User Manual Page]
 ___
 # Questions, Requests, etc.
 
-* [ZigVS Visual Studio Macketplace](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS)  
+* [ZigVS Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS)  
   * [Q&A Page](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS&ssr=false#qna)  
   * [Rating & Review Page](https://marketplace.visualstudio.com/items?itemName=LuckystarStudio.ZigVS&ssr=false#review-details)
 
@@ -362,6 +388,16 @@ LuckyStar Studio LLC
 ___
 # Version History
 ```
+    Version 0.15.2.0 (2025/10/16):
+        Added support for Zig 0.15.2, Zig 0.15.1 and ZLS 0.15.0
+        Improvements
+            Add Copy Json Text and Paste as Zig Structs feature.
+        Compatibility:
+            Visual Studio 2022 17.14.14
+            Zig Tool chain: zig-windows-x86_64-0.15.2.zip
+            ZLS Language Server: zls-windows-x86_64-0.15.0.zip
+            (tested briefly in Visual Studio 2026 and appears to work ok)
+
     Version 0.15.1.0 (2025/09/10):
         Added support for Zig 0.15.1 and ZLS 0.15.0
             It is no longer mandatory to add the directory containing Zig.exe to the PATH environment variable. (See the documentation for details.)

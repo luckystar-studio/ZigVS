@@ -84,19 +84,13 @@ namespace ZigVS
             this.Name = ZigVS.Resources.Resource.GeneralCaption;
          }
 
-        public PropertyPage_General(ProjectNode projectManager)
-            : base(projectManager)
-        {
-            this.Name = ZigVS.Resources.Resource.GeneralCaption;
-        }
- 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Tool)]
         [LocDisplayName(PropertyPageUIText.ToolPath)]
         [ResourcesDescriptionAttribute(PropertyPageUIText.ToolPathCaption)]
         public string ToolPath
         {
-            get { return this.toolPath!; }
-            set { this.toolPath = value; this.IsDirty = true; }
+            get { return this.toolPath; }
+            set { if (String.Compare(this.toolPath, value) != 0) this.IsDirty = true; this.toolPath = value; }
         }
 
         public override string GetClassName()
@@ -113,13 +107,7 @@ namespace ZigVS
 
             this.toolPath = this.ProjectManager.GetProjectPropertyUnevaluated( "ToolPath", _PersistStorageType.PST_PROJECT_FILE);
 
-     /*       try
-            {
-				this.targetFrameworkMoniker = this.ProjectManager.TargetFrameworkMoniker;
-            }
-            catch (ArgumentException)
-            {
-            }*/
+            IsDirty = false;
         }
 
         protected override int ApplyChanges()
@@ -131,8 +119,11 @@ namespace ZigVS
 
             ThreadHelper.ThrowIfNotOnUIThread();
 
-			IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
+            IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
+
             this.ProjectManager.SetProjectProperty("ToolPath", _PersistStorageType.PST_PROJECT_FILE, this.toolPath);
+
+            IsDirty = false;
 
             return VSConstants.S_OK;
         }

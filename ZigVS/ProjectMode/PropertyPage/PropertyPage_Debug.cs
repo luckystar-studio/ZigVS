@@ -73,6 +73,11 @@ namespace ZigVS
         private string miEngineLaunchOptions = "LaunchOptions.xml";
         private string remoteDebugMachine = "";
 
+        private bool redirectStdoutToOutput = false;
+
+        private string targetEnvironment = "";
+        private bool targetEnvironmentExclusive = false;
+
         static ProjectNode GetCurrentProject()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -93,19 +98,13 @@ namespace ZigVS
             this.Name = ZigVS.Resources.Resource.DebugCaption;
         }
 
-        public PropertyPage_Debug(ProjectNode projectManager)
-            : base(projectManager)
-        {
-            this.Name = ZigVS.Resources.Resource.DebugCaption;
-        }
-
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_PreDebug)]
         [LocDisplayName(PropertyPageUIText.PreDebugCommand)]
         [ResourcesDescriptionAttribute(PropertyPageUIText.PreDebugCommandDescription)]
         public string PreDebugCommand
         {
             get { return this.preDebugCommmand!; }
-            set { this.preDebugCommmand = value; this.IsDirty = true; }
+            set { if (String.Compare(this.preDebugCommmand, value) != 0) this.IsDirty = true; this.preDebugCommmand = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_PreDebug)]
@@ -114,7 +113,7 @@ namespace ZigVS
         public string PreDebugCommandArguments
         {
             get { return this.preDebugCommmandArguments!; }
-            set { this.preDebugCommmandArguments = value; this.IsDirty = true; }
+            set { if (String.Compare(this.preDebugCommmandArguments, value) != 0) this.IsDirty = true; this.preDebugCommmandArguments = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Debug)]
@@ -123,7 +122,7 @@ namespace ZigVS
         public string WorkingDirectory
         {
             get { return this.workingDirectory!; }
-            set { this.workingDirectory = value; this.IsDirty = true; }
+            set { if (String.Compare(this.workingDirectory, value) != 0) this.IsDirty = true; this.workingDirectory = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Debug)]
@@ -132,7 +131,7 @@ namespace ZigVS
         public string StartProgram
         {
             get { return this.startProgram; }
-            set { this.startProgram = value; this.IsDirty = true; }
+            set { if (String.Compare(this.startProgram, value) != 0) this.IsDirty = true; this.startProgram = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Debug)]
@@ -141,7 +140,7 @@ namespace ZigVS
         public string CommandLineArguments
         {
             get { return this.commandLineArguments!; }
-            set { this.commandLineArguments = value; this.IsDirty = true; }
+            set { if (String.Compare(this.commandLineArguments, value) != 0) this.IsDirty = true; this.commandLineArguments = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Debug)]
@@ -150,7 +149,7 @@ namespace ZigVS
         public DebugEngine DebugEngine
         {
             get { return this.debugEngine!; }
-            set { this.debugEngine = value; this.IsDirty = true; }
+            set { if (this.debugEngine != value) this.IsDirty = true; this.debugEngine = value; }
         }
 
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Debug)]
@@ -159,7 +158,7 @@ namespace ZigVS
         public string MIEngineLaunchOptions
         {
             get { return this.miEngineLaunchOptions!; }
-            set { this.miEngineLaunchOptions = value; this.IsDirty = true; }
+            set { if (String.Compare(this.miEngineLaunchOptions, value) != 0) this.IsDirty = true; this.miEngineLaunchOptions = value; }
         }
         
         [ResourcesCategoryAttribute(PropertyPageUIText.Category_Debug)]
@@ -168,7 +167,34 @@ namespace ZigVS
         public string RemoteDebugMachine
         {
             get { return this.remoteDebugMachine!; }
-            set { this.remoteDebugMachine = value; this.IsDirty = true; }
+            set { if (String.Compare(this.remoteDebugMachine, value) != 0) this.IsDirty = true; this.remoteDebugMachine = value; }
+        }
+
+        [ResourcesCategoryAttribute(PropertyPageUIText.Category_Debug)]
+        [LocDisplayName(PropertyPageUIText.RedirectStdoutToOutput)]
+        [ResourcesDescriptionAttribute(PropertyPageUIText.RedirectStdoutToOutputDescription)]
+        public bool RedirectStdoutToOutput
+        {
+            get { return this.redirectStdoutToOutput; }
+            set { if (this.redirectStdoutToOutput != value) this.IsDirty = true; this.redirectStdoutToOutput = value; }
+        }
+
+        [ResourcesCategoryAttribute(PropertyPageUIText.Category_DebugEnvironment)]
+        [LocDisplayName(PropertyPageUIText.EnvironmentVariables)]
+        [ResourcesDescriptionAttribute(PropertyPageUIText.EnvironmentVariablesDescription)]
+        public string EnvironmentVariables
+        {
+            get { return this.targetEnvironment; }
+            set { if (String.Compare(this.targetEnvironment, value) != 0) this.IsDirty = true; this.targetEnvironment = value; }
+        }
+
+        [ResourcesCategoryAttribute(PropertyPageUIText.Category_DebugEnvironment)]
+        [LocDisplayName(PropertyPageUIText.EnvironmentVariableExclusive)]
+        [ResourcesDescriptionAttribute(PropertyPageUIText.EnvironmentVariableExclusiveDescription)]
+        public bool EnvironmentVariablesExclusive
+        {
+            get { return this.targetEnvironmentExclusive; }
+            set { if (this.targetEnvironmentExclusive != value) this.IsDirty = true; this.targetEnvironmentExclusive = value; }
         }
 
         /// <summary>
@@ -198,6 +224,11 @@ namespace ZigVS
             string l_debugEngineString = this.ProjectManager.GetProjectPropertyUnevaluated("DebugEngine", _PersistStorageType.PST_PROJECT_FILE);
             this.miEngineLaunchOptions = this.ProjectManager.GetProjectPropertyUnevaluated("MIEngineLaunchOptions", _PersistStorageType.PST_PROJECT_FILE);
             this.remoteDebugMachine = this.ProjectManager.GetProjectPropertyUnevaluated("RemoteDebugMachine", _PersistStorageType.PST_PROJECT_FILE);
+
+            string l_redirectStdoutToOutput = this.ProjectManager.GetProjectPropertyUnevaluated("RedirectStdoutToOutput", _PersistStorageType.PST_PROJECT_FILE);
+
+            this.targetEnvironment = this.ProjectManager.GetProjectPropertyUnevaluated("TargetEnvironment", _PersistStorageType.PST_PROJECT_FILE);
+            string l_environmentExclusive = this.ProjectManager.GetProjectPropertyUnevaluated("TargetEnvironmentExclusive", _PersistStorageType.PST_PROJECT_FILE);
  
             if (!string.IsNullOrEmpty(l_debugEngineString))
             {
@@ -209,6 +240,30 @@ namespace ZigVS
                 {
                 }
             }
+
+            if (!string.IsNullOrEmpty(l_redirectStdoutToOutput))
+            {
+                try
+                {
+                    this.redirectStdoutToOutput = bool.Parse(l_redirectStdoutToOutput);
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
+
+            if (!string.IsNullOrEmpty(l_environmentExclusive))
+            {
+                try
+                {
+                    this.targetEnvironmentExclusive = bool.Parse(l_environmentExclusive);
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
+
+            IsDirty = false;
         }
 
         protected override int ApplyChanges()
@@ -229,6 +284,12 @@ namespace ZigVS
             this.ProjectManager.SetProjectProperty("DebugEngine", _PersistStorageType.PST_PROJECT_FILE, this.debugEngine.ToString());
             this.ProjectManager.SetProjectProperty("MIEngineLaunchOptions", _PersistStorageType.PST_PROJECT_FILE, this.miEngineLaunchOptions);
             this.ProjectManager.SetProjectProperty("RemoteDebugMachine", _PersistStorageType.PST_PROJECT_FILE, this.remoteDebugMachine);
+            this.ProjectManager.SetProjectProperty("RedirectStdoutToOutput", _PersistStorageType.PST_PROJECT_FILE, this.redirectStdoutToOutput.ToString());
+
+            this.ProjectManager.SetProjectProperty("TargetEnvironment", _PersistStorageType.PST_PROJECT_FILE, this.targetEnvironment);
+            this.ProjectManager.SetProjectProperty("TargetEnvironmentExclusive", _PersistStorageType.PST_PROJECT_FILE, this.targetEnvironmentExclusive.ToString());
+
+            IsDirty = false;
 
             return VSConstants.S_OK;
         }
