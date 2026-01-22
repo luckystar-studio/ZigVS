@@ -284,20 +284,20 @@ pub fn build(b: *std.Build) void {
 		</ItemGroup>
 		<PropertyGroup>
 			<IncludeDirsOption></IncludeDirsOption>
-			<IncludeDirsOption Condition=" '$(IncludeDirs)' != '' "> -I $(IncludeDirs.Replace(';', ' -I ')) </IncludeDirsOption>
+			<IncludeDirsOption Condition=" '$(IncludeDirs)' != '' "> -I &quot;$(IncludeDirs.Replace(';', '&quot; -I &quot;'))&quot; </IncludeDirsOption>
 			<LibraryDirsOption></LibraryDirsOption>
-			<LibraryDirsOption Condition=" '$(LibraryDirs)' != '' "> -L $(LibraryDirs.Replace(';', ' -L ')) </LibraryDirsOption>
+			<LibraryDirsOption Condition=" '$(LibraryDirs)' != '' "> -L &quot;$(LibraryDirs.Replace(';', '&quot; -L &quot;'))&quot; </LibraryDirsOption>
 			<LibrariesOption></LibrariesOption>
-			<LibrariesOption Condition=" '$(Libraries)' != '' ">-l $(Libraries.Replace(';', ' -l ')) </LibrariesOption>
+			<LibrariesOption Condition=" '$(Libraries)' != '' ">-l &quot;$(Libraries.Replace(';', '&quot; -l &quot;'))&quot; </LibrariesOption>
 			<DependenciesOption></DependenciesOption>
-			<DependenciesOption Condition=" '$(Dependencies)' != '' ">--deps $(Dependencies.Replace(';', ' --deps ')) </DependenciesOption>
+			<DependenciesOption Condition=" '$(Dependencies)' != '' ">--deps &quot;$(Dependencies.Replace(';', '&quot; --deps &quot;'))&quot; </DependenciesOption>
 			<ModulesOption></ModulesOption>
-			<ModulesOption Condition=" '$(Modules)' != '' ">--mod $(Modules.Replace(';', ' --mod ')) </ModulesOption>
+			<ModulesOption Condition=" '$(Modules)' != '' ">--mod &quot;$(Modules.Replace(';', '&quot; --mod &quot;'))&quot; </ModulesOption>
 
-			<NativeProjectReferencePaths>@(_ResolvedNativeProjectReferencePaths)</NativeProjectReferencePaths>
-			<AllCFilesFlat>@(AllCFiles)</AllCFilesFlat>
-			<AllRCFilesFlat>@(ResourceCompile)</AllRCFilesFlat>
-			<BuildCommand>"$(ToolPath)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin=$(OutDir)$(OutputName) --cache-dir $(IntDir) $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(DependenciesOption) $(ModulesOption) $(BuildOption) $(RootSourceName) $(AllCFilesFlat.Replace(';', ' ')) $(NativeProjectReferencePaths.Replace(';', ' ')) $(AllRCFilesFlat.Replace(';', ' '))</BuildCommand>
+			<NativeProjectReferencePaths>@(_ResolvedNativeProjectReferencePaths->'"%(Identity)"', ' ')</NativeProjectReferencePaths>
+			<AllCFilesFlat>@(AllCFiles->'"%(Identity)"', ' ')</AllCFilesFlat>
+			<AllRCFilesFlat>@(ResourceCompile->'"%(Identity)"', ' ')</AllRCFilesFlat>
+			<BuildCommand>"$(ToolPath)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin="$(OutDir)$(OutputName)" --cache-dir "$(IntDir)" $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(DependenciesOption) $(ModulesOption) $(BuildOption) "$(RootSourceName)" $(AllCFilesFlat) $(NativeProjectReferencePaths) $(AllRCFilesFlat)</BuildCommand>
 		</PropertyGroup>
 	  	<MakeDir Directories="$(OutDir)"/>
 		<Message Text="Building: $(BuildCommand)" Importance="high"/>
@@ -309,7 +309,7 @@ pub fn build(b: *std.Build) void {
 			<OutputTypeName Condition=" '$(ConfigurationType)' == 'Application' ">exe</OutputTypeName>
 			<OutputTypeName Condition=" '$(ConfigurationType)' != 'Application' ">lib</OutputTypeName>
 
-			<BuildCommand>"$(ToolPath)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir $(IntDir) --prefix-$(OutputTypeName)-dir $(OutDir)</BuildCommand>
+			<BuildCommand>"$(ToolPath)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir "$(IntDir)" --prefix-$(OutputTypeName)-dir "$(OutDir)"</BuildCommand>
 		</PropertyGroup>
 		<Message Text="Building: $(BuildCommand)" Importance="high"/>
 		<Exec WorkingDirectory="$(ProjectDir)" Command="$(BuildCommand)" />
