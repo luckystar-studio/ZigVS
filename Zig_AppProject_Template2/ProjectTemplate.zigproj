@@ -297,7 +297,7 @@ pub fn build(b: *std.Build) void {
 			<NativeProjectReferencePaths>@(_ResolvedNativeProjectReferencePaths->'"%(Identity)"', ' ')</NativeProjectReferencePaths>
 			<AllCFilesFlat>@(AllCFiles->'"%(Identity)"', ' ')</AllCFilesFlat>
 			<AllRCFilesFlat>@(ResourceCompile->'"%(Identity)"', ' ')</AllRCFilesFlat>
-			<BuildCommand>"$(ToolPath)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin="$(OutDir)$(OutputName)" --cache-dir "$(IntDir)" $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(DependenciesOption) $(ModulesOption) $(BuildOption) "$(RootSourceName)" $(AllCFilesFlat) $(NativeProjectReferencePaths) $(AllRCFilesFlat)</BuildCommand>
+			<BuildCommand>"$(ToolPath)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin="$(OutDir)$(OutputName)" --cache-dir "$(IntDir.TrimEnd('\'))" $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(DependenciesOption) $(ModulesOption) $(BuildOption) "$(RootSourceName)" $(AllCFilesFlat) $(NativeProjectReferencePaths) $(AllRCFilesFlat)</BuildCommand>
 		</PropertyGroup>
 	  	<MakeDir Directories="$(OutDir)"/>
 		<Message Text="Building: $(BuildCommand)" Importance="high"/>
@@ -309,7 +309,7 @@ pub fn build(b: *std.Build) void {
 			<OutputTypeName Condition=" '$(ConfigurationType)' == 'Application' ">exe</OutputTypeName>
 			<OutputTypeName Condition=" '$(ConfigurationType)' != 'Application' ">lib</OutputTypeName>
 
-			<BuildCommand>"$(ToolPath)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir "$(IntDir)" --prefix-$(OutputTypeName)-dir "$(OutDir)"</BuildCommand>
+			<BuildCommand>"$(ToolPath)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir "$(IntDir.TrimEnd('\'))" --prefix-$(OutputTypeName)-dir "$(OutDir.TrimEnd('\'))"</BuildCommand>
 		</PropertyGroup>
 		<Message Text="Building: $(BuildCommand)" Importance="high"/>
 		<Exec WorkingDirectory="$(ProjectDir)" Command="$(BuildCommand)" />
