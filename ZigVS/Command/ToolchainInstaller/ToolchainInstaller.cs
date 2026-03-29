@@ -136,7 +136,7 @@ namespace ZigVS
 
         string FindZigUrl(string i_versionNameString, string i_CPUString)
         {
-            string r_ZigToolchainUrlString = "https://ziglang.org/builds/zig-windows-" + i_CPUString + "-0.14.1.zip";
+            string r_ZigToolchainUrlString = "https://ziglang.org/builds/zig-"+ i_CPUString+ "-windows-0.16.0-dev.1859+212968c57.zip";
             try
             {
                 var l_vesionJsonMemoryStream = Download("https://ziglang.org/download/index.json");

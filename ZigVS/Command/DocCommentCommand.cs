@@ -47,34 +47,51 @@ a particular purpose and non-infringement.
 
 namespace ZigVS.Command
 {
-    using System;
-    public class CommandDefinition
+    using Microsoft.VisualStudio.Shell;
+    using System.ComponentModel.Design;
+    using Task = System.Threading.Tasks.Task;
+
+#nullable enable
+
+    public class AddDocCommentCommand : AddRemoveSeparatorCommandBase
     {
-        public static readonly Guid s_CommandSetGuid = new Guid("875694cf-4e47-4e92-a15e-c6f296281c12");
-        public enum CommandId
+        public AddDocCommentCommand(
+            string i_typeNameString,
+            Type i_Type,
+            string i_separatorString,
+            int i_commandIDInt) :
+            base(i_typeNameString, i_Type, i_separatorString, i_commandIDInt)
+        { }
+
+        public static Task InitializeAsync()
         {
-            Formatting = 0x0300,
-            //            DebuggerDropDownComboId = 0x0500,
-            //            DebuggerDropDownComboListCommandId = 0x0600,
+            s_Instance = new AddCommentCommand(
+                "Add Doc Comment",
+                Type.Add,
+                "///",
+                (int)CommandDefinition.CommandId.AddDocComment);
+            return Task.CompletedTask;
+        }
+    }
 
-            ToolchainInstaller = 0x1000,
-            PackageInstaller = 0x2000,
-            Help = 0x3000,
-            PackageCreator = 0x4000,
-            QAndA = 0x6000,
-            RatingAndReview = 0x7000,
-            OpenRepository = 0x8000,
+    public class RemoveDocCommentCommand : AddRemoveSeparatorCommandBase
+    {
+        public RemoveDocCommentCommand(
+            string i_typeNameString,
+            Type i_Type,
+            string i_separatorString,
+            int i_commandIDInt) :
+            base(i_typeNameString, i_Type, i_separatorString, i_commandIDInt)
+        { }
 
-            AddComment = 0xA000,
-            RemoveComment = 0xA800,
-            AddDocComment = 0xB000,
-            RemoveDocComment = 0xB800,
-            AddTopLevelDocComment = 0xC000,
-            RemoveTopLevelDocComment = 0xC800,
-            AddMultiLineStringCommentId = 0xD000,
-            RemoveMultiLineStringCommentId = 0xD800,
-
-            PasteJSONAsStruct = 0xE000,
+        public static Task InitializeAsync()
+        {
+            s_Instance = new RemoveDocCommentCommand(
+                "Remove Doc Comment",
+                Type.Remove,
+                "///",
+                (int)CommandDefinition.CommandId.RemoveDocComment);
+            return Task.CompletedTask;
         }
     }
 }

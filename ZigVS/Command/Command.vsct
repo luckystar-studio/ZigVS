@@ -40,6 +40,14 @@
 				</Strings>
 			</Menu>
 
+			<Menu guid="guidZigVSPackageCmdSet" id="EditTopLevelMenuId" priority="0x9000" type="Menu">
+				<Parent guid="VSMainMenu" id="Edit.ObjectsGroup" />
+				<Strings>
+					<ButtonText>Zig</ButtonText>
+				</Strings>
+			</Menu>
+			
+			
 			<!--Menu guid="guidZigVSPackageCmdSet" id="ToolbarId" type="Toolbar" >
 				<CommandFlag>DefaultDocked</CommandFlag>
 				<Strings>
@@ -58,6 +66,10 @@
 				<Parent guid="guidZigVSPackageCmdSet" id="TopLevelMenuId" />
 			</Group>
 
+			<Group guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" priority="0x0000">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditTopLevelMenuId" />
+			</Group>
+			
 			<!--Group guid="guidZigVSPackageCmdSet" id="ToolbarGroupid" priority="0x900">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_TOOL_STANDARD" />
 			</Group-->
@@ -140,9 +152,61 @@
 
 			<Button guid="guidZigVSPackageCmdSet" id="PasteJSONAsStructId" priority="0x1000" type="Button">
 				<!--Parent guid="VSEditor" id="Edit.PasteGroup.Special" /-->
-				<Parent guid="VSMainMenu" id="Edit.CutCopyGroup" />
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
 				<Strings>
 					<ButtonText>Paste JSON as Zig Struct</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidZigVSPackageCmdSet" id="AddCommentId" priority="0x1010" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+				<Strings>
+					<ButtonText>Add Comment (//)</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidZigVSPackageCmdSet" id="RemoveCommentId" priority="0x1020" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+				<Strings>
+					<ButtonText>Remove Comment (//)</ButtonText>
+				</Strings>
+			</Button>
+			
+			<Button guid="guidZigVSPackageCmdSet" id="AddDocCommentId" priority="0x1030" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+				<Strings>
+					<ButtonText>Add Doc Comment (///)</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidZigVSPackageCmdSet" id="RemoveDocCommentId" priority="0x1040" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+				<Strings>
+					<ButtonText>Remove Doc Comment (///)</ButtonText>
+				</Strings>
+			</Button>
+			
+			<Button guid="guidZigVSPackageCmdSet" id="AddTopLevelDocCommentId" priority="0x1050" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+				<Strings>
+					<ButtonText>Add Top-Level Doc Comment (//!)</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidZigVSPackageCmdSet" id="RemoveTopLevelDocCommentId" priority="0x1060" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+				<Strings>
+					<ButtonText>Remove Top-Level Doc Comment (//!)</ButtonText>
+				</Strings>
+			</Button>
+			
+			<Button guid="guidZigVSPackageCmdSet" id="AddMultiLineStringCommentId" priority="0x1070" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+				<Strings>
+					<ButtonText>Add Multiline String (\\)</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidZigVSPackageCmdSet" id="RemoveMultiLineStringCommentId" priority="0x1080" type="Button">
+				<Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+				<Strings>
+					<ButtonText>Remove Multiline String (\\)</ButtonText>
 				</Strings>
 			</Button>
 		</Buttons>
@@ -176,7 +240,21 @@
 			<IDSymbol name="GithubId" value="0x8000" />
 			<IDSymbol name="PachageCreatorId" value="0x4000" />
 			<IDSymbol name="FormattingCommandId" value="0x0300" />
-			<IDSymbol name="PasteJSONAsStructId" value="0x9000" />
+
+			<IDSymbol name="EditTopLevelMenuId" value="0x9000" />
+			<IDSymbol name="EditSubMenuGroupId" value="0x9800" />
+
+			<IDSymbol name="AddCommentId" value="0xA000" />
+			<IDSymbol name="RemoveCommentId" value="0xA800" />
+			<IDSymbol name="AddDocCommentId" value="0xB000" />
+			<IDSymbol name="RemoveDocCommentId" value="0xB800" />
+			<IDSymbol name="AddTopLevelDocCommentId" value="0xC000" />
+			<IDSymbol name="RemoveTopLevelDocCommentId" value="0xC800" />
+			<IDSymbol name="AddMultiLineStringCommentId" value="0xD000" />
+			<IDSymbol name="RemoveMultiLineStringCommentId" value="0xD800" />
+
+			<IDSymbol name="PasteJSONAsStructId" value="0xE000" />
+
 			
 			<IDSymbol name="ToolbarId" value="0x0350" />
 			<IDSymbol name="ToolbarGroupid" value="0x0400" />

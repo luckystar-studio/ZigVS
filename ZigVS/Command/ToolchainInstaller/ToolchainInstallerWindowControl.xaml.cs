@@ -40,6 +40,7 @@
             m_ZigVersion_ComboBox.Items.Add("0.15.1");
             m_ZigVersion_ComboBox.Items.Add("master");
 
+            m_ZLSVersion_ComboBox.Items.Add("0.15.1");
             m_ZLSVersion_ComboBox.Items.Add("0.15.0");
 
             m_CPU_ComboBox.Items.Add("x86_64");

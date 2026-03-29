@@ -112,6 +112,14 @@ namespace ZigVS
             _ = Command.RatingAndReviewCommand.InitializeAsync();
             _ = Command.OpenRepositoryCommand.InitializeAsync();
             _ = Command.PasteJSONAsStructCommand.InitializeAsync();
+            _ = Command.AddCommentCommand.InitializeAsync();
+            _ = Command.RemoveCommentCommand.InitializeAsync();
+            _ = Command.AddDocCommentCommand.InitializeAsync();
+            _ = Command.RemoveDocCommentCommand.InitializeAsync();
+            _ = Command.AddTopLevelDocCommentCommand.InitializeAsync();
+            _ = Command.RemoveTopLevelDocCommentCommand.InitializeAsync();
+            _ = Command.MultilineStringCommand.InitializeAsync();
+            _ = Command.RemoveMultilineStringCommand.InitializeAsync();
             //      _ = Command.DebugEngineSelectorCommand.InitializeAsync(this);
 
             // Initialize Project

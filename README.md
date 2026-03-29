@@ -14,6 +14,9 @@ ___
     * Zig Document Formatting 
     * Auto-Insert Parentheses/Bracket/Braces
     * Copy Json Text and Paste as Zig Structs
+    * Comment and uncomment zig style comments  
+        line comments (//), doc comments (///), top-level doc comments (//!)
+    * Multiline string marking (\\\\)
 * Folder mode
     * Create a new Zig package from the Visual Studio GUI
     * Build from Visual Studio using build.zig
@@ -318,13 +321,28 @@ ___
 1. Copy Json text to clipboard
 ![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct1.png)
 
-2. In Zig code editor, right-click and select [Editor] → [Paste Json as Zig Structs]
+2. In Zig code editor, right-click and select [Editor] → [Zig] → [Paste Json as Zig Structs]
 
 ![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct2.png)
 
 3. The Json text in the clipboard will be converted to Zig Structs and pasted into the editor at the cursor position.
 
 ![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct3.png)
+
+<br><br>
+___
+# Comment and uncomment
+
+1, [Edit] → [Zig] → 
+
+2, The selected lines will be commented or uncommented in zig style comments.  
+   line comments (//), doc comments (///), top-level doc comments (//!)
+
+![](ZigVS/Documents/Images/Edit_Zig.png)
+
+3, You can also add [shortcuts](https://learn.microsoft.com/en-us/visualstudio/ide/identifying-and-customizing-keyboard-shortcuts-in-visual-studio?view=vs-2022) to these commands.
+
+
 ___
 # Package Installer
 
@@ -388,6 +406,23 @@ LuckyStar Studio LLC
 ___
 # Version History
 ```
+    Version 0.15.2.2 (2025/12/31):
+        Added support for ZLS 0.15.1
+        Compatibility:
+            Visual Studio 2026 18.1.1
+            Zig Tool chain: zig-windows-x86_64-0.15.2.zip
+            ZLS Language Server: zls-windows-x86_64-0.15.1.zip
+
+    Version 0.15.2.1 (2025/10/29):
+        Improvements
+            Comment and uncomment zig style comments
+line comments (//), doc comments (///), top-level doc comments (//!)
+            Multiline string marking (\\)
+        Compatibility:
+            Visual Studio 2022 17.14.14
+            Zig Tool chain: zig-windows-x86_64-0.15.2.zip
+            ZLS Language Server: zls-windows-x86_64-0.15.0.zip
+
     Version 0.15.2.0 (2025/10/16):
         Added support for Zig 0.15.2, Zig 0.15.1 and ZLS 0.15.0
         Improvements
