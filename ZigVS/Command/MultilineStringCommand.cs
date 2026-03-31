@@ -63,7 +63,7 @@ namespace ZigVS.Command
             base(i_typeNameString, i_Type,i_separatorString, i_commandIDInt)
         {}
 
-        public static Task InitializeAsync()
+        public new static Task InitializeAsync()
         {
             s_Instance = new MultilineStringCommand(
                 "Add Multiline String",
@@ -84,7 +84,7 @@ namespace ZigVS.Command
             base(i_typeNameString, i_Type, i_separatorString, i_commandIDInt)
         { }
 
-        public static Task InitializeAsync()
+        public new static Task InitializeAsync()
         {
             s_Instance = new RemoveMultilineStringCommand(
                 "Remove Multiline String",

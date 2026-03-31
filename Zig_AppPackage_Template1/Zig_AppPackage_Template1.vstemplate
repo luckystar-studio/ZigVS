@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+    <TemplateData>
+        <Name>Zig Application (build.zig / Folder Mode)</Name>
+        <Description>A Zig application that opens in Folder Mode and builds with build.zig.</Description>
+        <Icon>Zig_AppPackage_Template1.ico</Icon>
+        <ProjectType>Zig</ProjectType>
+        <LanguageTag>Zig</LanguageTag>
+        <SortOrder>1001</SortOrder>
+        <TemplateID>d9c47fda-43b9-4a4f-80fd-5e4b3c8c4db1</TemplateID>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZigApp</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <PlatformTag>Windows</PlatformTag>
+        <PlatformTag>Linux</PlatformTag>
+        <PlatformTag>Android</PlatformTag>
+        <PlatformTag>macOS</PlatformTag>
+        <PlatformTag>iOS</PlatformTag>
+        <PlatformTag>WASI</PlatformTag>
+        <ProjectTypeTag>console</ProjectTypeTag>
+    </TemplateData>
+    <TemplateContent>
+        <Project File="ProjectTemplate.zigproj" ReplaceParameters="true">
+            <ProjectItem ReplaceParameters="true" TargetFileName="readme.txt" OpenInEditor="true" >readme.txt</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="src\main.zig">main.zig</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="build.zig">build.zig</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="build.zig.zon" >build.zig.zon</ProjectItem>
+        </Project>
+    </TemplateContent>
+    <WizardExtension>
+        <Assembly>ZigVS, Version=0.15.2.3, Culture=neutral, PublicKeyToken=17a782ac45ca14b9</Assembly>
+        <FullClassName>ZigVS.TemplateWizard.ZigProjectTemplateWizard</FullClassName>
+    </WizardExtension>
+</VSTemplate>

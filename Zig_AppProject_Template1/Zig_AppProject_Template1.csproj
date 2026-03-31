@@ -57,8 +57,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="build.zig" />
-    <None Include="build.zig.zon" />
     <None Include="main.zig" />
     <None Include="ProjectTemplate.zigproj" />
     <None Include="Zig_AppProject_Template1.ico" />

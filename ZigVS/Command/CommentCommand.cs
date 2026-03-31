@@ -63,7 +63,7 @@ namespace ZigVS.Command
             base(i_typeNameString, i_typeEnum, i_separatorString, i_commandIDInt)
         {}
 
-        public static Task InitializeAsync()
+        public new static Task InitializeAsync()
         {
             s_Instance = new AddCommentCommand(
                 "Add Comment",
@@ -84,7 +84,7 @@ namespace ZigVS.Command
             base(i_typeNameString, i_typeEnum, i_separatorString, i_commandIDInt)
         { }
 
-        public static Task InitializeAsync()
+        public new static Task InitializeAsync()
         {
             s_Instance = new RemoveCommentCommand(
                 "Remove Comment",

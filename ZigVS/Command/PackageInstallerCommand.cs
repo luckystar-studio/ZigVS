@@ -77,7 +77,10 @@ namespace ZigVS.Command
 
         private void Execute(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            _ = Utilities.GetSelectedZigVSProjectNode();
             Utilities.ShowToolWindow(typeof(PackageInstallerWindow));
+            PackageInstallerWindowControl.GetInstance()?.Reset();
         }
     }
 }

@@ -59,8 +59,10 @@ namespace ZigVS.Command
 
             ToolchainInstaller = 0x1000,
             PackageInstaller = 0x2000,
+            AddProjectDependency = 0x2100,
             Help = 0x3000,
             PackageCreator = 0x4000,
+            ValidateEnvironment = 0x5000,
             QAndA = 0x6000,
             RatingAndReview = 0x7000,
             OpenRepository = 0x8000,

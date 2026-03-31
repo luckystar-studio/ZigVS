@@ -52,6 +52,7 @@ namespace ZigVS
     using Microsoft.VisualStudio.Project;
     using Microsoft.VisualStudio.Project.Automation;
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using VSLangProj;
@@ -60,11 +61,13 @@ namespace ZigVS
     {
         private ZigVSPackage m_ZigVSPackage;
         private VSLangProj.VSProject? m_VSProject;
+        private DependenciesRootNode? m_DependenciesRootNode;
 
         public ZigVSProjectNode(ZigVSPackage i_ZigVSPackage) : base(i_ZigVSPackage)
         {
             m_ZigVSPackage = i_ZigVSPackage;
             AddCatIdMapping(typeof(FileNodeProperties), typeof(FileNodeProperties).GUID);
+            AddCatIdMapping(typeof(DependencyNodeProperties), typeof(DependencyNodeProperties).GUID);
         }
 
         protected internal VSLangProj.VSProject VSProject
@@ -90,6 +93,12 @@ namespace ZigVS
             get { return "ZigProjectType"; }
         }
 
+        public string GetGitPath()
+        {
+            string gitPath = this.GetProjectPropertyUnevaluated("GitPath", Microsoft.VisualStudio.Shell.Interop._PersistStorageType.PST_PROJECT_FILE);
+            return String.IsNullOrWhiteSpace(gitPath) ? Parameter.c_gitToolFileName : EnvExpander.Expand(gitPath);
+        }
+
         public string? GetName()
         {
             return null;
@@ -111,6 +120,37 @@ namespace ZigVS
             return true;
         }
 
+        public void RefreshDependencyNodes()
+        {
+            EnsureDependencyRootNode();
+
+            string gitPath = GetGitPath();
+            ProjectDependencyService dependencyService = ProjectDependencyService.Instance;
+            IReadOnlyList<ProjectDependencySpec> dependencies = dependencyService.LoadDependencies(this);
+            List<DependencyNode> dependencyNodes = new List<DependencyNode>();
+
+            foreach (ProjectDependencySpec dependency in dependencies)
+            {
+                ProjectDependencyStatusInfo status;
+                try
+                {
+                    status = dependencyService.GetStatus(this.ProjectFolder, gitPath, dependency);
+                }
+                catch (Exception ex)
+                {
+                    status = new ProjectDependencyStatusInfo
+                    {
+                        Status = ProjectDependencyStatus.Unresolved,
+                        Description = ex.Message
+                    };
+                }
+
+                dependencyNodes.Add(new DependencyNode(this, dependency, status));
+            }
+
+            m_DependenciesRootNode!.RebuildChildren(dependencyNodes);
+        }
+
         /// <summary>
         /// Generate new Guid value and update it with GeneralPropertyPage GUID.
         /// </summary>
@@ -121,6 +161,14 @@ namespace ZigVS
             r_GuidArray[0] = typeof(PropertyPage_General).GUID;
             r_GuidArray[1] = typeof(PropertyPage_Build).GUID;
             r_GuidArray[2] = typeof(PropertyPage_Debug).GUID;
+            return r_GuidArray;
+        }
+
+        protected override Guid[] GetConfigurationDependentPropertyPages()
+        {
+            Guid[] r_GuidArray = new Guid[2];
+            r_GuidArray[0] = typeof(PropertyPage_Build).GUID;
+            r_GuidArray[1] = typeof(PropertyPage_Debug).GUID;
             return r_GuidArray;
         }
 
@@ -164,6 +212,12 @@ namespace ZigVS
             FileTemplateProcessor.Reset();
         }
 
+        public override void LoadNonBuildInformation()
+        {
+            base.LoadNonBuildInformation();
+            RefreshDependencyNodes();
+        }
+
         private object CreateServices(Type i_serviceType)
         {
             object? r_serviceObject = null;
@@ -176,6 +230,17 @@ namespace ZigVS
                 r_serviceObject = GetAutomationObject();
             }
             return r_serviceObject!;
+        }
+
+        private void EnsureDependencyRootNode()
+        {
+            if (m_DependenciesRootNode != null)
+            {
+                return;
+            }
+
+            m_DependenciesRootNode = new DependenciesRootNode(this);
+            this.AddChild(m_DependenciesRootNode);
         }
     }
 }

@@ -67,7 +67,7 @@ namespace ZigVS
             }
         }
 
-        public static string GetExeName(string? i_buildFilePath, string? i_intDirectory)
+        public static string GetExeName(string? i_buildFilePath, string? i_intDirectory, string? i_resolvedZigExePath)
         {
             try
             {
@@ -97,14 +97,14 @@ namespace ZigVS
 
                 if (s_BuildInfoString == "")
                 {
-                    var l_GeneralOptions = Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => {
-                        return await GeneralOptions.GetLiveInstanceAsync();
-                    });
                     var l_FolderModeOptions = Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => {
                         return await FolderModeOptions.GetLiveInstanceAsync();
                     });
 
-                    if (File.Exists(i_buildFilePath) && (l_GeneralOptions != null) && (l_FolderModeOptions != null))
+                    if (File.Exists(i_buildFilePath) &&
+                        !string.IsNullOrWhiteSpace(i_resolvedZigExePath) &&
+                        File.Exists(i_resolvedZigExePath) &&
+                        (l_FolderModeOptions != null))
                     {
                         string l_BuildFile = File.ReadAllText(i_buildFilePath) + l_FolderModeOptions.BuildInfoCapturer;
 
@@ -120,7 +120,7 @@ namespace ZigVS
                             {
                                 StartInfo = new ProcessStartInfo
                                 {
-                                    FileName = l_GeneralOptions.ToolPathExpanded,
+                                    FileName = i_resolvedZigExePath,
                                     WorkingDirectory = i_intDirectory,
                                     Arguments = l_FolderModeOptions.BuildCommand_buildexe + " " + l_BuildInfoPathString,
                                     UseShellExecute = false,

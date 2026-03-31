@@ -47,6 +47,7 @@ a particular purpose and non-infringement.
 
 namespace ZigVS.Common
 {
+    using ZigVS.CoreCompatibility;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Microsoft.VisualStudio.Shell.Interop;
     using System;
@@ -92,9 +93,13 @@ namespace ZigVS.Common
 #pragma warning restore VSTHRD010
         }
 
-        public static List<string> BuildUnitTestAndFindExeFile(string i_sourceCodePathString, string i_testNameString)
+        public static List<string> BuildUnitTestAndFindExeFile(string i_zigExePathString, string i_sourceCodePathString, string i_testNameString)
         {
             List<string> r_createdFileList = new List<string>();
+            if (string.IsNullOrWhiteSpace(i_zigExePathString))
+            {
+                return r_createdFileList;
+            }
 
             var l_zigFolderString = System.Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             using (FileSystemWatcher watcher = new FileSystemWatcher(Path.Combine(l_zigFolderString, "AppData\\Local\\zig\\o")))
@@ -112,12 +117,7 @@ namespace ZigVS.Common
                 };
                 watcher.EnableRaisingEvents = true;
                 var l_argString = "test --test-no-exec --test-filter \"" + i_testNameString + "\" " + i_sourceCodePathString;
-
-                var l_GeneralOptions = Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => {
-                    return await GeneralOptions.GetLiveInstanceAsync();
-                });
-
-                RunProcess(l_GeneralOptions.ToolPathExpanded, l_argString);
+                RunProcess(i_zigExePathString, l_argString);
                 watcher.EnableRaisingEvents = false;
             }
             return r_createdFileList;
@@ -128,6 +128,12 @@ namespace ZigVS.Common
             ResultSet r_ResultSet = new ResultSet();
             try
             {
+                if (string.IsNullOrWhiteSpace(i_exeString))
+                {
+                    r_ResultSet.m_ErrorMessage = "Failed to start the test. Please check PATH to Zig Tool-chain.";
+                    return r_ResultSet;
+                }
+
                 if (!string.IsNullOrEmpty(i_argumentsString))
                 {
                     var l_testProcess = new System.Diagnostics.Process();
@@ -135,10 +141,21 @@ namespace ZigVS.Common
                     l_testProcess.StartInfo.Arguments = i_argumentsString;
                     l_testProcess.StartInfo.UseShellExecute = false;
                     l_testProcess.StartInfo.RedirectStandardError = true;
-                    l_testProcess.StartInfo.RedirectStandardOutput = false;
+                    l_testProcess.StartInfo.RedirectStandardOutput = true;
                     l_testProcess.Start();
 
-                    r_ResultSet = ParseTestOutput(l_testProcess.StandardError.ReadToEnd());
+                    string l_standardOutput = l_testProcess.StandardOutput.ReadToEnd();
+                    string l_standardError = l_testProcess.StandardError.ReadToEnd();
+                    l_testProcess.WaitForExit();
+
+                    ZigTestParseResult l_ParseResult = CoreServices.TestResultParser.Parse(new ZigTestProcessOutput
+                    {
+                        StandardOutput = l_standardOutput,
+                        StandardError = l_standardError,
+                        ExitCode = l_testProcess.ExitCode
+                    });
+
+                    r_ResultSet = ConvertParseResult(l_ParseResult);
                 }
             }
             catch (Exception l_Exception)
@@ -147,6 +164,33 @@ namespace ZigVS.Common
             }
 
             return r_ResultSet;
+        }
+
+        static ResultSet ConvertParseResult(ZigTestParseResult parseResult)
+        {
+            ResultSet resultSet = new ResultSet
+            {
+                m_resultString = parseResult.Output,
+                m_ErrorMessage = parseResult.DiagnosticMessage
+            };
+
+            switch (parseResult.Outcome)
+            {
+                case ZigTestOutcome.Passed:
+                    resultSet.m_TestOutcome = TestOutcome.Passed;
+                    break;
+                case ZigTestOutcome.NotFound:
+                    resultSet.m_TestOutcome = TestOutcome.NotFound;
+                    break;
+                case ZigTestOutcome.Skipped:
+                    resultSet.m_TestOutcome = TestOutcome.Skipped;
+                    break;
+                default:
+                    resultSet.m_TestOutcome = TestOutcome.Failed;
+                    break;
+            }
+
+            return resultSet;
         }
 
         public static void RunProcess(string i_exeString, string i_argumentsString)
@@ -175,52 +219,6 @@ namespace ZigVS.Common
             public TestOutcome m_TestOutcome = TestOutcome.Failed;
             public string m_resultString = "";
             public string? m_ErrorMessage = null;
-        }
-
-        public static ResultSet ParseTestOutput(string i_standardErrorString)
-        {
-            var r_ResultSet = new ResultSet();
-            r_ResultSet.m_resultString = i_standardErrorString;
-
-            if (r_ResultSet.m_resultString.ToLower().Contains("tests passed"))
-            {
-                r_ResultSet.m_TestOutcome = r_ResultSet.m_resultString.ToLower().Contains("all 0 tests passed") ? TestOutcome.NotFound : TestOutcome.Passed;
-            }
-            else
-            {
-                try
-                {
-                    var l_parts = Regex.Split(r_ResultSet.m_resultString, "(\\d+)( passed; )(\\d+)( skipped; )(\\d+)( failed)");
-                    int l_passed = Convert.ToInt32(l_parts[1]);
-                    int l_skipped = Convert.ToInt32(l_parts[3]);
-                    int l_failed = Convert.ToInt32(l_parts[5]);
-                    if (l_failed > 0)
-                    {
-                        r_ResultSet.m_TestOutcome = TestOutcome.Failed;
-                    }
-                    else if (l_skipped > 0)
-                    {
-                        r_ResultSet.m_TestOutcome = TestOutcome.Skipped;
-                    }
-                    else
-                    {
-                        r_ResultSet.m_TestOutcome = TestOutcome.Passed;
-                    }
-                }
-                catch (Exception l_Exception)
-                {
-                    if (r_ResultSet.m_resultString.ToLower().Contains("error:"))
-                    {
-                        r_ResultSet.m_TestOutcome = TestOutcome.Failed;
-                    }
-                    else
-                    {
-                        r_ResultSet.m_ErrorMessage = @"The test results could not be parsed. [" + r_ResultSet.m_resultString + "] [" + l_Exception.ToString() + "]";
-                        r_ResultSet.m_TestOutcome = TestOutcome.Skipped;
-                    }
-                }
-            }
-            return r_ResultSet;
         }
 
         [DllImport("kernel32.dll")]

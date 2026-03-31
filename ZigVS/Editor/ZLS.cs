@@ -49,6 +49,7 @@ using Microsoft.VisualStudio.Shell;
 using System;
 using System.Threading.Tasks;
 using ZigVS.Options;
+using ZigVS.CoreCompatibility;
 
 namespace ZigVS
 {
@@ -68,11 +69,7 @@ namespace ZigVS
 
             public Settings()
             {
-                var l_GeneralOptions = Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.Run(async () => {
-                    return await GeneralOptions.GetLiveInstanceAsync();
-                });
-
-                zig_exe_path = Utilities.ResolvePath(l_GeneralOptions.ToolPathExpanded);
+                zig_exe_path = string.Empty;
             }
         }
 
@@ -85,6 +82,9 @@ namespace ZigVS
             var textEditorOption = ThreadHelper.JoinableTaskFactory.Run(async () => {
                 return await TextEditorAdvancedOptions.GetLiveInstanceAsync();
             });
+            var generalOptions = ThreadHelper.JoinableTaskFactory.Run(async () => {
+                return await GeneralOptions.GetLiveInstanceAsync();
+            });
 
             r_Settings.inlay_hints_show_variable_type_hints = textEditorOption.inlay_hints_show_variable_type_hints == Switch.on;
             r_Settings.inlay_hints_show_struct_literal_field_type = textEditorOption.inlay_hints_show_struct_literal_field_type == Switch.on;
@@ -93,6 +93,18 @@ namespace ZigVS
             r_Settings.inlay_hints_exclude_single_argument = textEditorOption.inlay_hints_exclude_single_argument == Switch.on;
             r_Settings.inlay_hints_hide_redundant_param_names = textEditorOption.inlay_hints_hide_redundant_param_names == Switch.on;
             r_Settings.inlay_hints_hide_redundant_param_names_last_token = textEditorOption.inlay_hints_hide_redundant_param_names_last_token == Switch.on;
+
+            if (generalOptions != null)
+            {
+                ToolchainProbeResult zigProbe = CoreServices.ToolchainProbe.Probe(new ToolchainProbeRequest
+                {
+                    Label = "Global zig.exe",
+                    RawValue = generalOptions.ToolPath,
+                    ExpandedValue = generalOptions.ToolPathExpanded,
+                    DefaultFileName = Parameter.c_compilerFileName
+                });
+                r_Settings.zig_exe_path = zigProbe.ResolvedPath ?? string.Empty;
+            }
 
             return r_Settings;
         }

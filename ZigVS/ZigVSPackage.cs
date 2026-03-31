@@ -1,4 +1,4 @@
-﻿/********************************************************************************************
+/********************************************************************************************
 Copyright(c) 2023 LuckyStar Studio LLC
 All rights reserved.
 
@@ -106,7 +106,9 @@ namespace ZigVS
             _ = Command.FormattingCommand.InitializeAsync();
             _ = Command.ToolchainInstallerCommand.InitializeAsync();
             _ = Command.PackageInstallerCommand.InitializeAsync();
+            _ = Command.AddProjectDependencyCommand.InitializeAsync();
             _ = Command.PackageCreatorCommand.InitializeAsync();
+            _ = Command.ValidateEnvironmentCommand.InitializeAsync();
             _ = Command.HelpCommand.InitializeAsync();
             _ = Command.QAndACommand.InitializeAsync();
             _ = Command.RatingAndReviewCommand.InitializeAsync();

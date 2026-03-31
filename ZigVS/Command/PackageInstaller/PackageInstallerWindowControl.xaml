@@ -27,8 +27,8 @@
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
             <DockPanel  Margin="5">
                 <TextBlock DockPanel.Dock="Left" x:Name="m_Two_TextBlock" Width="40" FontSize="30">❷</TextBlock>
-                <TextBlock DockPanel.Dock="Left" Width="100" Margin="5" FontSize="16" VerticalAlignment="Center">Install Method</TextBlock>
-                <ComboBox DockPanel.Dock="Left" x:Name="m_Method_ComboBox" Width="100" Margin="5"  FontSize="16" SelectionChanged="Method_SelectionChanged"/>
+                <TextBlock DockPanel.Dock="Left" Width="120" Margin="5" FontSize="16" VerticalAlignment="Center">Install Method</TextBlock>
+                <ComboBox DockPanel.Dock="Left" x:Name="m_Method_ComboBox" Width="220" Margin="5" FontSize="16" SelectionChanged="Method_SelectionChanged"/>
                 <TextBlock  DockPanel.Dock="Left" Width="10" FontSize="30"></TextBlock>
                 <Button DockPanel.Dock="Right" Content="{Binding InstallButtonTextString}" IsEnabled="{Binding InstallButtonEnabled}"  Width="120" Height="30" FontSize="18" Click="Install_button_Click" HorizontalAlignment="Right"/>
                 <TextBlock DockPanel.Dock="Right" x:Name="m_Warning_TextBlock" Width="350" Margin="5" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Right" TextAlignment="Right"/>

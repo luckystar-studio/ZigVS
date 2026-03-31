@@ -63,9 +63,9 @@ namespace ZigVS.Command
             base(i_typeNameString, i_Type, i_separatorString, i_commandIDInt)
         { }
 
-        public static Task InitializeAsync()
+        public new static Task InitializeAsync()
         {
-            s_Instance = new AddCommentCommand(
+            s_Instance = new AddDocCommentCommand(
                 "Add Doc Comment",
                 Type.Add,
                 "///",
@@ -84,7 +84,7 @@ namespace ZigVS.Command
             base(i_typeNameString, i_Type, i_separatorString, i_commandIDInt)
         { }
 
-        public static Task InitializeAsync()
+        public new static Task InitializeAsync()
         {
             s_Instance = new RemoveDocCommentCommand(
                 "Remove Doc Comment",

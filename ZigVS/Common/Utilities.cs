@@ -47,18 +47,23 @@ a particular purpose and non-infringement.
 
 namespace ZigVS
 {
+    using Microsoft.VisualStudio;
     using Microsoft.VisualStudio.ComponentModelHost;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
     using Microsoft.VisualStudio.Workspace.VSIntegration.Contracts;
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Text.RegularExpressions;
 
 #nullable enable
     public class Utilities
     {
+        private static ZigVSProjectNode? s_LastActiveZigVSProjectNode;
+
         public static TInterface GetRequiredService<TService, TInterface>() where TService : class where TInterface : class
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
@@ -119,7 +124,10 @@ namespace ZigVS
 
             if (l_DTE != null && !string.IsNullOrEmpty(l_DTE.Solution.FullName))
             {
-                if (System.IO.Path.GetExtension(l_DTE.Solution.FullName) == ".sln")
+                string l_solutionExtensionString = System.IO.Path.GetExtension(l_DTE.Solution.FullName);
+                if (string.Equals(l_solutionExtensionString, ".sln", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(l_solutionExtensionString, ".slnf", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(l_solutionExtensionString, ".slnx", StringComparison.OrdinalIgnoreCase))
                 {
                     r_SolutionMode = SolutionMode.ProjectMode;
                 }
@@ -137,10 +145,18 @@ namespace ZigVS
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             string r_Path = "";
             var l_DTE = (EnvDTE.DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(EnvDTE.DTE));
-            if (l_DTE != null)
+            if (l_DTE != null && l_DTE.Solution != null && l_DTE.Solution.SolutionBuild != null)
             {
-                var l_startupProjects = (Array)l_DTE.Solution.SolutionBuild.StartupProjects;
-                var l_startUpProjectString = (String)l_startupProjects.GetValue(0);
+                if (!(l_DTE.Solution.SolutionBuild.StartupProjects is Array l_startupProjects) || l_startupProjects.Length == 0)
+                {
+                    return r_Path;
+                }
+
+                var l_startUpProjectString = l_startupProjects.GetValue(0) as string;
+                if (string.IsNullOrWhiteSpace(l_startUpProjectString))
+                {
+                    return r_Path;
+                }
 
                 foreach (EnvDTE.Project l_Project in l_DTE.Solution.Projects)
                 {
@@ -153,6 +169,328 @@ namespace ZigVS
             }
 
             return r_Path;
+        }
+
+        public static Microsoft.VisualStudio.Project.HierarchyNode? GetSelectedHierarchyNode()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            IVsMonitorSelection monitorSelection = GetRequiredService<SVsShellMonitorSelection, IVsMonitorSelection>();
+            IntPtr hierarchyPointer = IntPtr.Zero;
+            IntPtr selectionContainerPointer = IntPtr.Zero;
+
+            try
+            {
+                uint itemId;
+                IVsMultiItemSelect? multiSelect;
+                monitorSelection.GetCurrentSelection(out hierarchyPointer, out itemId, out multiSelect, out selectionContainerPointer);
+
+                if (hierarchyPointer == IntPtr.Zero || itemId == VSConstants.VSITEMID_NIL || multiSelect != null)
+                {
+                    return null;
+                }
+
+                IVsHierarchy? hierarchy = Marshal.GetObjectForIUnknown(hierarchyPointer) as IVsHierarchy;
+                if (hierarchy is Microsoft.VisualStudio.Project.ProjectNode projectNode)
+                {
+                    return projectNode.NodeFromItemId(itemId);
+                }
+
+                ZigVSProjectNode? l_zigProjectNode = TryGetZigVSProjectNode(hierarchy);
+                if (l_zigProjectNode != null)
+                {
+                    return l_zigProjectNode.NodeFromItemId(itemId);
+                }
+
+                return null;
+            }
+            finally
+            {
+                if (hierarchyPointer != IntPtr.Zero)
+                {
+                    Marshal.Release(hierarchyPointer);
+                }
+
+                if (selectionContainerPointer != IntPtr.Zero)
+                {
+                    Marshal.Release(selectionContainerPointer);
+                }
+            }
+        }
+
+        public static ZigVSProjectNode? GetSelectedZigVSProjectNode()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            var hierarchyNode = GetSelectedHierarchyNode();
+            if (hierarchyNode is ZigVSProjectNode projectNode)
+            {
+                RememberActiveZigVSProjectNode(projectNode);
+                return projectNode;
+            }
+
+            ZigVSProjectNode? l_parentProjectNode = hierarchyNode?.ProjectManager as ZigVSProjectNode;
+            if (l_parentProjectNode != null)
+            {
+                RememberActiveZigVSProjectNode(l_parentProjectNode);
+                return l_parentProjectNode;
+            }
+
+            ZigVSProjectNode? l_solutionExplorerProjectNode = TryGetSelectedZigVSProjectNodeFromSolutionExplorer();
+            if (l_solutionExplorerProjectNode != null)
+            {
+                RememberActiveZigVSProjectNode(l_solutionExplorerProjectNode);
+                return l_solutionExplorerProjectNode;
+            }
+
+            return null;
+        }
+
+        public static ZigVSProjectNode? GetActiveZigVSProjectNode()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            ZigVSProjectNode? l_selectedProjectNode = GetSelectedZigVSProjectNode();
+            if (l_selectedProjectNode != null)
+            {
+                return l_selectedProjectNode;
+            }
+
+            ZigVSProjectNode? l_startupProjectNode = GetStartupZigVSProjectNode();
+            if (l_startupProjectNode != null)
+            {
+                RememberActiveZigVSProjectNode(l_startupProjectNode);
+                return l_startupProjectNode;
+            }
+
+            if (s_LastActiveZigVSProjectNode != null && !s_LastActiveZigVSProjectNode.IsClosed)
+            {
+                return s_LastActiveZigVSProjectNode;
+            }
+
+            ZigVSProjectNode? l_singleLoadedProjectNode = GetSingleLoadedZigVSProjectNode();
+            if (l_singleLoadedProjectNode != null)
+            {
+                RememberActiveZigVSProjectNode(l_singleLoadedProjectNode);
+                return l_singleLoadedProjectNode;
+            }
+
+            return null;
+        }
+
+        public static ZigVSProjectNode? GetCachedActiveZigVSProjectNode()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (s_LastActiveZigVSProjectNode != null && !s_LastActiveZigVSProjectNode.IsClosed)
+            {
+                return s_LastActiveZigVSProjectNode;
+            }
+
+            ZigVSProjectNode? l_startupProjectNode = GetStartupZigVSProjectNode();
+            if (l_startupProjectNode != null)
+            {
+                RememberActiveZigVSProjectNode(l_startupProjectNode);
+                return l_startupProjectNode;
+            }
+
+            ZigVSProjectNode? l_singleLoadedProjectNode = GetSingleLoadedZigVSProjectNode();
+            if (l_singleLoadedProjectNode != null)
+            {
+                RememberActiveZigVSProjectNode(l_singleLoadedProjectNode);
+                return l_singleLoadedProjectNode;
+            }
+
+            return null;
+        }
+
+        private static ZigVSProjectNode? GetStartupZigVSProjectNode()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            try
+            {
+                var l_DTE = (EnvDTE.DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(EnvDTE.DTE));
+                if (l_DTE == null || l_DTE.Solution == null || l_DTE.Solution.SolutionBuild == null)
+                {
+                    return null;
+                }
+
+                if (!(l_DTE.Solution.SolutionBuild.StartupProjects is Array l_startupProjects) || l_startupProjects.Length == 0)
+                {
+                    return null;
+                }
+
+                string? l_startupProjectUniqueNameString = l_startupProjects.GetValue(0) as string;
+                IVsSolution l_solution = GetRequiredService<SVsSolution, IVsSolution>();
+                if (!string.IsNullOrWhiteSpace(l_startupProjectUniqueNameString) &&
+                    ErrorHandler.Succeeded(l_solution.GetProjectOfUniqueName(l_startupProjectUniqueNameString, out IVsHierarchy l_startupHierarchy)) &&
+                    TryGetZigVSProjectNode(l_startupHierarchy) is ZigVSProjectNode l_uniqueNameProjectNode)
+                {
+                    return l_uniqueNameProjectNode;
+                }
+
+                string l_currentProjectPathString = GetCurrentProjectPath();
+                if (string.IsNullOrWhiteSpace(l_currentProjectPathString))
+                {
+                    return null;
+                }
+
+                if (ErrorHandler.Succeeded(l_solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_ALLINSOLUTION, Guid.Empty, out IEnumHierarchies l_projectsIEnumHierarchies)))
+                {
+                    IVsHierarchy[] l_hierarchyArray = new IVsHierarchy[1];
+                    uint l_fetchedUint = 0;
+
+                    for (l_projectsIEnumHierarchies.Reset();
+                        l_projectsIEnumHierarchies.Next(1, l_hierarchyArray, out l_fetchedUint) == VSConstants.S_OK && l_fetchedUint == 1;
+                        /* nothing */)
+                    {
+                        if (TryGetZigVSProjectNode(l_hierarchyArray[0]) is ZigVSProjectNode l_projectNode &&
+                            string.Equals(
+                                Path.GetFullPath(l_projectNode.ProjectFolder).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                                Path.GetFullPath(l_currentProjectPathString).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                                StringComparison.OrdinalIgnoreCase))
+                        {
+                            return l_projectNode;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return null;
+        }
+
+        private static ZigVSProjectNode? GetSingleLoadedZigVSProjectNode()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            List<ZigVSProjectNode> l_loadedProjectNodes = GetLoadedZigVSProjectNodes()
+                .Where(projectNode => !projectNode.IsClosed)
+                .GroupBy(projectNode => Path.GetFullPath(projectNode.ProjectFolder).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), StringComparer.OrdinalIgnoreCase)
+                .Select(group => group.First())
+                .ToList();
+
+            return l_loadedProjectNodes.Count == 1 ? l_loadedProjectNodes[0] : null;
+        }
+
+        private static IEnumerable<ZigVSProjectNode> GetLoadedZigVSProjectNodes()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            IVsSolution l_solution = GetRequiredService<SVsSolution, IVsSolution>();
+            if (ErrorHandler.Failed(l_solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_ALLINSOLUTION, Guid.Empty, out IEnumHierarchies l_projectsIEnumHierarchies)))
+            {
+                yield break;
+            }
+
+            IVsHierarchy[] l_hierarchyArray = new IVsHierarchy[1];
+            uint l_fetchedUint = 0;
+            for (l_projectsIEnumHierarchies.Reset();
+                l_projectsIEnumHierarchies.Next(1, l_hierarchyArray, out l_fetchedUint) == VSConstants.S_OK && l_fetchedUint == 1;
+                /* nothing */)
+            {
+                ZigVSProjectNode? l_projectNode = TryGetZigVSProjectNode(l_hierarchyArray[0]);
+                if (l_projectNode != null)
+                {
+                    yield return l_projectNode;
+                }
+            }
+        }
+
+        private static ZigVSProjectNode? TryGetZigVSProjectNode(IVsHierarchy? i_hierarchy)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (i_hierarchy is ZigVSProjectNode l_projectNode)
+            {
+                return l_projectNode;
+            }
+
+            if (i_hierarchy is Microsoft.VisualStudio.Project.HierarchyNode l_hierarchyNode)
+            {
+                if (l_hierarchyNode is ZigVSProjectNode l_directProjectNode)
+                {
+                    return l_directProjectNode;
+                }
+
+                return l_hierarchyNode.ProjectManager as ZigVSProjectNode;
+            }
+
+            if (i_hierarchy != null &&
+                TryGetZigVSProjectNodeFromExtObject(i_hierarchy) is ZigVSProjectNode l_extObjectProjectNode)
+            {
+                return l_extObjectProjectNode;
+            }
+
+            return null;
+        }
+
+        private static ZigVSProjectNode? TryGetSelectedZigVSProjectNodeFromSolutionExplorer()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            try
+            {
+                EnvDTE80.DTE2? l_dte2 = AsyncPackage.GetGlobalService(typeof(SDTE)) as EnvDTE80.DTE2;
+                if (l_dte2 == null)
+                {
+                    return null;
+                }
+
+                if (!(l_dte2.ToolWindows.SolutionExplorer.SelectedItems is Array l_selectedItems) || l_selectedItems.Length == 0)
+                {
+                    return null;
+                }
+
+                EnvDTE.UIHierarchyItem? l_firstItem = l_selectedItems.GetValue(0) as EnvDTE.UIHierarchyItem;
+                if (l_firstItem?.Object is Microsoft.VisualStudio.Project.Automation.OAProject l_oaProject)
+                {
+                    return l_oaProject.Project as ZigVSProjectNode;
+                }
+
+                if (l_firstItem?.Object is EnvDTE.ProjectItem l_projectItem &&
+                    l_projectItem.ContainingProject is Microsoft.VisualStudio.Project.Automation.OAProject l_containingProject)
+                {
+                    return l_containingProject.Project as ZigVSProjectNode;
+                }
+            }
+            catch
+            {
+            }
+
+            return null;
+        }
+
+        private static ZigVSProjectNode? TryGetZigVSProjectNodeFromExtObject(IVsHierarchy i_hierarchy)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            try
+            {
+                if (ErrorHandler.Succeeded(i_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object l_extObject)) &&
+                    l_extObject is Microsoft.VisualStudio.Project.Automation.OAProject l_oaProject)
+                {
+                    return l_oaProject.Project as ZigVSProjectNode;
+                }
+            }
+            catch (InvalidCastException)
+            {
+            }
+            catch (COMException)
+            {
+            }
+
+            return null;
+        }
+
+        private static void RememberActiveZigVSProjectNode(ZigVSProjectNode? i_projectNode)
+        {
+            if (i_projectNode != null && !i_projectNode.IsClosed)
+            {
+                s_LastActiveZigVSProjectNode = i_projectNode;
+            }
         }
 
         public static string GetOpenFolderPath()
