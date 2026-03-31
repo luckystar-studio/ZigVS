@@ -1,0 +1,76 @@
+name: build-and-release
+
+on:
+  push:
+    tags:
+      - 'version*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Check tag matches VSIX version
+        shell: pwsh
+        run: |
+          [xml]$xml = Get-Content 'ZigVS/source.extension.vsixmanifest'
+          $ns = New-Object System.Xml.XmlNamespaceManager($xml.NameTable)
+          $ns.AddNamespace('vsix', 'http://schemas.microsoft.com/developer/vsx-schema/2011')
+          $manifestVersion = $xml.SelectSingleNode('//vsix:Metadata/vsix:Identity', $ns).Version
+          $tagVersion = "${{ github.ref_name }}".TrimStart('v')
+
+          if ($manifestVersion -ne $tagVersion) {
+            throw "Tag version [$tagVersion] != manifest version [$manifestVersion]"
+          }
+
+      - name: Build solution
+        shell: cmd
+        run: |
+          msbuild ZigVS.sln /restore /t:Rebuild /m ^
+            /p:Configuration=Release ^
+            /p:Platform="Any CPU"
+
+      - name: Find VSIX
+        id: find_vsix
+        shell: pwsh
+        run: |
+          $file = Get-ChildItem -Path . -Recurse -Filter *.vsix |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+
+          if (-not $file) {
+            throw "VSIX file was not created."
+          }
+
+          "path=$($file.FullName)" >> $env:GITHUB_OUTPUT
+          "name=$($file.Name)" >> $env:GITHUB_OUTPUT
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.find_vsix.outputs.name }}
+          path: ${{ steps.find_vsix.outputs.path }}
+          if-no-files-found: error
+
+      - name: Create or update GitHub Release
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $asset = "${{ steps.find_vsix.outputs.path }}"
+
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag $asset --clobber
+          } else {
+            gh release create $tag $asset --title "ZigVS $tag" --generate-notes
+          }
