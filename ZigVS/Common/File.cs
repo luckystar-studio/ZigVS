@@ -51,6 +51,7 @@ namespace ZigVS.Common
     using System.IO;
     using System.Security.AccessControl;
     using System.Security.Principal;
+    using System.Threading;
 
     public class File
     {
@@ -96,6 +97,55 @@ namespace ZigVS.Common
             }
 
             return r_resultBool;
+        }
+
+        public static void DeleteDirectoryRobust(string i_pathString)
+        {
+            if (String.IsNullOrWhiteSpace(i_pathString) || !Directory.Exists(i_pathString))
+            {
+                return;
+            }
+
+            Exception? l_lastException = null;
+            for (int l_attemptInt = 0; l_attemptInt < 3; l_attemptInt++)
+            {
+                try
+                {
+                    NormalizeDirectoryAttributes(i_pathString);
+                    Directory.Delete(i_pathString, true);
+                    return;
+                }
+                catch (UnauthorizedAccessException l_exception)
+                {
+                    l_lastException = l_exception;
+                }
+                catch (IOException l_exception)
+                {
+                    l_lastException = l_exception;
+                }
+
+                Thread.Sleep(150);
+            }
+
+            if (l_lastException != null)
+            {
+                throw l_lastException;
+            }
+        }
+
+        static void NormalizeDirectoryAttributes(string i_pathString)
+        {
+            foreach (string l_filePathString in Directory.GetFiles(i_pathString, "*", SearchOption.AllDirectories))
+            {
+                System.IO.File.SetAttributes(l_filePathString, FileAttributes.Normal);
+            }
+
+            foreach (string l_directoryPathString in Directory.GetDirectories(i_pathString, "*", SearchOption.AllDirectories))
+            {
+                System.IO.File.SetAttributes(l_directoryPathString, FileAttributes.Normal);
+            }
+
+            System.IO.File.SetAttributes(i_pathString, FileAttributes.Normal);
         }
     }
 }

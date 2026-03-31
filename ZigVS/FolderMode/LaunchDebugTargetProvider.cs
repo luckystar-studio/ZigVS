@@ -47,6 +47,7 @@ a particular purpose and non-infringement.
 
 namespace ZigVS
 {
+    using ZigVS.CoreCompatibility;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
     using Microsoft.VisualStudio.Workspace;
@@ -136,13 +137,57 @@ namespace ZigVS
                     string l_intPath = Build.GetIntermediatePath(l_locationPath, l_Configuration);
                     string l_outPath = Build.GetOutputPath(l_locationPath, l_Configuration);
 
-                    string l_ExeString = BuildInfo.GetExeName(l_absoluteTargetPath, l_intPath);
-                    if (string.IsNullOrEmpty(l_ExeString))
+                    var l_GeneralOptions = await GeneralOptions.GetLiveInstanceAsync();
+                    if (l_GeneralOptions == null)
                     {
-                        l_ExeString = Path.GetFileName(l_locationPath.TrimEnd(Path.DirectorySeparatorChar));
+                        Common.OutputWindowPane.OutputString("Could not load ZigVS general options." + Environment.NewLine);
+                        return "";
+                    }
+
+                    ToolchainProbeResult l_ZigProbe = CoreServices.ToolchainProbe.Probe(new ToolchainProbeRequest
+                    {
+                        Label = "Global zig.exe",
+                        RawValue = l_GeneralOptions.ToolPath,
+                        ExpandedValue = l_GeneralOptions.ToolPathExpanded,
+                        DefaultFileName = Parameter.c_compilerFileName
+                    });
+
+                    if (string.IsNullOrWhiteSpace(l_ZigProbe.ResolvedPath))
+                    {
+                        Common.OutputWindowPane.OutputString("Could not resolve zig.exe for debug launch." + Environment.NewLine);
+                        Common.OutputWindowPane.OutputString(l_ZigProbe.PathMessage + Environment.NewLine);
+                        return "";
                     }
 
                     var l_FolderModeOptions = await FolderModeOptions.GetLiveInstanceAsync();
+                    if (l_FolderModeOptions == null)
+                    {
+                        Common.OutputWindowPane.OutputString("Could not load ZigVS folder mode options." + Environment.NewLine);
+                        return "";
+                    }
+
+                    BuildArtifactResolutionResult l_ArtifactResolution = CoreServices.BuildArtifactResolver.Resolve(new BuildArtifactResolutionRequest
+                    {
+                        BuildFilePath = l_absoluteTargetPath,
+                        IntermediateDirectory = l_intPath,
+                        OutputDirectory = l_outPath,
+                        WorkingDirectory = l_locationPath,
+                        Configuration = l_Configuration,
+                        FallbackExecutableBaseName = Path.GetFileName(l_locationPath.TrimEnd(Path.DirectorySeparatorChar)),
+                        ExecutableExtension = Parameter.c_windowsExecutableFileExtension,
+                        ResolvedZigExePath = l_ZigProbe.ResolvedPath
+                    });
+
+                    if (!l_ArtifactResolution.Success || string.IsNullOrWhiteSpace(l_ArtifactResolution.ArtifactPath))
+                    {
+                        Common.OutputWindowPane.OutputString("Could not resolve the debug target executable." + Environment.NewLine);
+                        Common.OutputWindowPane.OutputString(l_ArtifactResolution.Message + Environment.NewLine);
+                        foreach (string l_AttemptedPath in l_ArtifactResolution.AttemptedPaths)
+                        {
+                            Common.OutputWindowPane.OutputString("Attempted: " + l_AttemptedPath + Environment.NewLine);
+                        }
+                        return "";
+                    }
 
                     string l_optionString = "";
                     if (l_FolderModeOptions.DebugEngine == DebugEngine.MIEngine)
@@ -161,8 +206,8 @@ namespace ZigVS
                     var l_VsDebugTargetInfo = new VsDebugTargetInfo
                     {
                         dlo = DEBUG_LAUNCH_OPERATION.DLO_CreateProcess,
-                        bstrCurDir = l_outPath,
-                        bstrExe = Path.Combine(l_outPath, l_ExeString),
+                        bstrCurDir = Path.GetDirectoryName(l_ArtifactResolution.ArtifactPath) ?? l_outPath,
+                        bstrExe = l_ArtifactResolution.ArtifactPath,
                         bstrArg = l_FolderModeOptions.Arguments,
                         bstrEnv = null,
                         /*       env.OverrideProcessEnvironment()

@@ -17,7 +17,11 @@
 				<Assembly>System</Assembly>
 			</Reference>
 		</References>
-		<ProjectItem>Build.zig</ProjectItem>
-		<ProjectItem>Build.zig.zon</ProjectItem>
+		<ProjectItem ReplaceParameters="true">Build.zig</ProjectItem>
+		<ProjectItem ReplaceParameters="true">Build.zig.zon</ProjectItem>
 	</TemplateContent>
+	<WizardExtension>
+		<Assembly>ZigVS, Version=0.15.2.3, Culture=neutral, PublicKeyToken=17a782ac45ca14b9</Assembly>
+		<FullClassName>ZigVS.TemplateWizard.ZigProjectTemplateWizard</FullClassName>
+	</WizardExtension>
 </VSTemplate>

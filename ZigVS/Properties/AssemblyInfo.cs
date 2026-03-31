@@ -1,4 +1,4 @@
-﻿/********************************************************************************************
+/********************************************************************************************
 Copyright(c) 2023 LuckyStar Studio LLC
 All rights reserved.
 
@@ -65,6 +65,7 @@ using System.Runtime.InteropServices;
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
+[assembly: InternalsVisibleTo("ZigVS.Tests, PublicKey=00240000048000009400000006020000002400005253413100040000010001007d10f551c7e986e67496fb7f0802975f57bacfc6ddcf7ec01747d73701e835c437165e9a51f8407195de99a665e4445906fdc8218661ba8dc311a50cf264de26e57f85add38ac9f58b677b3ae1671c7935417e3e6991dbc1924c02847996bca0de06379395e4068caab83d7a3e035d71a7cfcf4e2743115a9160cdde909855b7")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -76,5 +77,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("0.0.*")]
-[assembly: AssemblyVersion("0.1.*")]
-[assembly: AssemblyFileVersion("0.1")]
+[assembly: AssemblyVersion("0.15.2.3")]
+[assembly: AssemblyFileVersion("0.15.2.3")]

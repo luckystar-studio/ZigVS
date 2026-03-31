@@ -781,10 +781,9 @@ namespace Microsoft.VisualStudio.Project
 			{
 				//Get dataobject from clipboard
 				IOleDataObject dataObject = null;
-				ErrorHandler.ThrowOnFailure(UnsafeNativeMethods.OleGetClipboard(out dataObject));
-				if(dataObject == null)
+				if(!TryGetClipboardDataObject(out dataObject) || dataObject == null)
 				{
-					return VSConstants.E_UNEXPECTED;
+					return VSConstants.S_OK;
 				}
 
 				DropEffects dropEffect = DropEffects.None;
@@ -830,8 +829,7 @@ namespace Microsoft.VisualStudio.Project
 			IOleDataObject dataObject = null;
 			try
 			{
-				ErrorHandler.ThrowOnFailure(UnsafeNativeMethods.OleGetClipboard(out dataObject));
-				if(dataObject == null)
+				if(!TryGetClipboardDataObject(out dataObject) || dataObject == null)
 				{
 					return false;
 				}
@@ -1136,14 +1134,36 @@ namespace Microsoft.VisualStudio.Project
 		#endregion
 
 		#region private helper methods
+		const int ClipboardCantOpenHResult = unchecked((int)0x800401D0);
+
+		static bool TryGetClipboardDataObject(out IOleDataObject dataObject)
+		{
+			dataObject = null;
+
+			int hr = UnsafeNativeMethods.OleGetClipboard(out dataObject);
+			if(hr == VSConstants.S_OK)
+			{
+				return true;
+			}
+
+			if(hr == ClipboardCantOpenHResult)
+			{
+				Trace.WriteLine("Clipboard is temporarily unavailable.");
+				dataObject = null;
+				return false;
+			}
+
+			ErrorHandler.ThrowOnFailure(hr);
+			return dataObject != null;
+		}
+
 		/// <summary>
 		/// Empties all the data structures added to the clipboard and flushes the clipboard.
 		/// </summary>
 		protected virtual void CleanAndFlushClipboard()
 		{
 			IOleDataObject oleDataObject = null;
-			ErrorHandler.ThrowOnFailure(UnsafeNativeMethods.OleGetClipboard(out oleDataObject));
-			if(oleDataObject == null)
+			if(!TryGetClipboardDataObject(out oleDataObject) || oleDataObject == null)
 			{
 				return;
 			}

@@ -48,6 +48,8 @@ a particular purpose and non-infringement.
 namespace ZigVS.Test
 {
 #nullable enable
+    using ZigVS.CoreCompatibility;
+    using ZigVS.CoreCompatibility.Toolchain;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
     using System.Collections.Generic;
@@ -68,9 +70,7 @@ namespace ZigVS.Test
         {
             if (i_IRunContext != null && i_TestCaseEnumerable != null && i_IFrameworkHandle != null)
             {
-                var xml = i_IRunContext.RunSettings?.SettingsXml;
-                var doc = XDocument.Parse(xml);
-                var toolPath = doc.Root?.Element("ZigVs")?.Element("ToolPath")?.Value;
+                string? toolPath = GetToolPathFromRunSettings(i_IRunContext.RunSettings?.SettingsXml);
 
                 //i_IFrameworkHandle.SendMessage(Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging.TestMessageLevel.Informational, string.Format("In RunTests 1, path: {0}", toolPath));
 
@@ -84,9 +84,10 @@ namespace ZigVS.Test
                     i_IFrameworkHandle.RecordStart(i_TestCase);
 
                     var l_ResultSet = new Common.Test.ResultSet();
+                    string? l_zigToolPath = ResolveToolPathForSource(toolPath, i_TestCase.Source);
                     if (i_IRunContext.IsBeingDebugged)
                     {
-                        var l_exeList = Common.Test.BuildUnitTestAndFindExeFile(i_TestCase.Source, i_TestCase.DisplayName);
+                        var l_exeList = Common.Test.BuildUnitTestAndFindExeFile(l_zigToolPath ?? string.Empty, i_TestCase.Source, i_TestCase.DisplayName);
                         if (l_exeList.Count == 0)
                         {
                             l_ResultSet.m_TestOutcome = TestOutcome.Skipped;
@@ -105,8 +106,8 @@ namespace ZigVS.Test
                     else
                     {
                         l_ResultSet = Common.Test.RunTestProcess(
-                        toolPath,
-                        "test --test-filter \"" + i_TestCase.DisplayName + "\" " + i_TestCase.Source);
+                            l_zigToolPath ?? string.Empty,
+                            "test --test-filter \"" + i_TestCase.DisplayName + "\" " + i_TestCase.Source);
                     }
 
                     var l_TestResult = new TestResult(i_TestCase);
@@ -142,9 +143,7 @@ namespace ZigVS.Test
 
                     i_IFrameworkHandle.RecordStart(l_TestCase);
 
-                    var xml = i_IRunContext?.RunSettings?.SettingsXml;
-                    var doc = XDocument.Parse(xml);
-                    var toolPath = doc.Root?.Element("ZigVs")?.Element("ToolPath")?.Value;
+                    string? toolPath = GetToolPathFromRunSettings(i_IRunContext?.RunSettings?.SettingsXml);
 
                     //i_IFrameworkHandle.SendMessage(Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging.TestMessageLevel.Informational, string.Format("In RunTests 2, path: {0}", toolPath));
 
@@ -202,7 +201,8 @@ namespace ZigVS.Test
                                        else
                                        {
                                        }*/
-                    l_ResultSet = Common.Test.RunTestProcess(toolPath, "test " + l_sourceString);
+                    string? l_zigToolPath = ResolveToolPathForSource(toolPath, l_sourceString);
+                    l_ResultSet = Common.Test.RunTestProcess(l_zigToolPath ?? string.Empty, "test " + l_sourceString);
 
                     var l_TestResult = new TestResult(l_TestCase);
                     l_TestResult.Outcome = l_ResultSet.m_TestOutcome;
@@ -213,6 +213,61 @@ namespace ZigVS.Test
                     i_IFrameworkHandle.RecordEnd(l_TestResult.TestCase, l_TestResult.Outcome);
                 }
             }
+        }
+
+        static string? GetToolPathFromRunSettings(string? settingsXml)
+        {
+            if (string.IsNullOrWhiteSpace(settingsXml))
+            {
+                return null;
+            }
+
+            try
+            {
+                XDocument document = XDocument.Parse(settingsXml);
+                return document.Root?.Element("ZigVs")?.Element("ToolPath")?.Value;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        static string? ResolveToolPathForSource(string? fallbackToolPath, string sourcePath)
+        {
+            ProjectToolOverride? projectToolOverride = ProjectToolOverrideReader.TryReadFromSourcePath(sourcePath);
+            if (projectToolOverride != null && !string.IsNullOrWhiteSpace(projectToolOverride.RawValue))
+            {
+                ToolchainProbeResult projectProbe = CoreServices.ToolchainProbe.Probe(new ToolchainProbeRequest
+                {
+                    Label = "Project ToolPath",
+                    RawValue = projectToolOverride.RawValue,
+                    ExpandedValue = projectToolOverride.ExpandedValue,
+                    DefaultFileName = Parameter.c_compilerFileName
+                });
+
+                if (!string.IsNullOrWhiteSpace(projectProbe.ResolvedPath))
+                {
+                    return projectProbe.ResolvedPath;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(fallbackToolPath))
+            {
+                return null;
+            }
+
+            ToolchainProbeResult fallbackProbe = CoreServices.ToolchainProbe.Probe(new ToolchainProbeRequest
+            {
+                Label = "Fallback zig.exe",
+                RawValue = fallbackToolPath,
+                ExpandedValue = fallbackToolPath,
+                DefaultFileName = Parameter.c_compilerFileName
+            });
+
+            return !string.IsNullOrWhiteSpace(fallbackProbe.ResolvedPath)
+                ? fallbackProbe.ResolvedPath
+                : fallbackToolPath;
         }
     }
 }

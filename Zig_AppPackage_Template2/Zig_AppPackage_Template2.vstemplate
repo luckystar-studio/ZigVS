@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+    <TemplateData>
+        <Name>Zig Application with C/Cpp and resources (build.zig / Folder Mode)</Name>
+        <Description>A Zig application with C/Cpp and resources that opens in Folder Mode and builds with build.zig.</Description>
+        <Icon>Zig_AppPackage_Template2.ico</Icon>
+        <ProjectType>Zig</ProjectType>
+        <LanguageTag>Zig</LanguageTag>
+        <SortOrder>1001</SortOrder>
+        <TemplateID>3eb659dd-075e-4a05-94d4-7e6403e1958b</TemplateID>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZigApp</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <PlatformTag>windows</PlatformTag>
+        <ProjectTypeTag>console</ProjectTypeTag>
+    </TemplateData>
+    <TemplateContent>
+        <Project File="ProjectTemplate.zigproj" ReplaceParameters="true">
+            <ProjectItem ReplaceParameters="true" TargetFileName="readme.txt" OpenInEditor="true" >readme.txt</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="src\main.zig">main.zig</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="src\c_code.c">c_code.c</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="src\cpp_code.cpp">cpp_code.cpp</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="header\c_header.h">c_header.h</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="header\cpp_header.h">cpp_header.h</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="resource\resource.rc">resource.rc</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="build.zig">build.zig</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="build.zig.zon" >build.zig.zon</ProjectItem>
+        </Project>
+    </TemplateContent>
+    <WizardExtension>
+        <Assembly>ZigVS, Version=0.15.2.3, Culture=neutral, PublicKeyToken=17a782ac45ca14b9</Assembly>
+        <FullClassName>ZigVS.TemplateWizard.ZigProjectTemplateWizard</FullClassName>
+    </WizardExtension>
+</VSTemplate>

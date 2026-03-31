@@ -1,5 +1,6 @@
-﻿●If you want to build using .zigproj, you don't need the build.zig and build.zig.zon files, so you can delete them without any issues.
+This template starts in ZigVS project mode using the .zigproj file.
 
-●If you want to build using build.zig, first close the currently open solution and reopen the folder. After reopening,
- select build.zig from the Solution Explorer, right-click to open the context menu, and select "Set as Startup Item."
-You don't need the .sln and .zigproj files, so you can delete them without any issues.
+Build, debug, project properties, and managed dependencies are handled from the generated Visual Studio project.
+
+This project-mode template does not generate build.zig or build.zig.zon files.
+If you want a native Zig build.zig workflow, choose the Folder Mode template instead.

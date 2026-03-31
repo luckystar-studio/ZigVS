@@ -1,4 +1,4 @@
-﻿/********************************************************************************************
+/********************************************************************************************
 Copyright(c) 2023 LuckyStar Studio LLC
 All rights reserved.
 
@@ -106,12 +106,22 @@ namespace ZigVS
             _ = Command.FormattingCommand.InitializeAsync();
             _ = Command.ToolchainInstallerCommand.InitializeAsync();
             _ = Command.PackageInstallerCommand.InitializeAsync();
+            _ = Command.AddProjectDependencyCommand.InitializeAsync();
             _ = Command.PackageCreatorCommand.InitializeAsync();
+            _ = Command.ValidateEnvironmentCommand.InitializeAsync();
             _ = Command.HelpCommand.InitializeAsync();
             _ = Command.QAndACommand.InitializeAsync();
             _ = Command.RatingAndReviewCommand.InitializeAsync();
             _ = Command.OpenRepositoryCommand.InitializeAsync();
             _ = Command.PasteJSONAsStructCommand.InitializeAsync();
+            _ = Command.AddCommentCommand.InitializeAsync();
+            _ = Command.RemoveCommentCommand.InitializeAsync();
+            _ = Command.AddDocCommentCommand.InitializeAsync();
+            _ = Command.RemoveDocCommentCommand.InitializeAsync();
+            _ = Command.AddTopLevelDocCommentCommand.InitializeAsync();
+            _ = Command.RemoveTopLevelDocCommentCommand.InitializeAsync();
+            _ = Command.MultilineStringCommand.InitializeAsync();
+            _ = Command.RemoveMultilineStringCommand.InitializeAsync();
             //      _ = Command.DebugEngineSelectorCommand.InitializeAsync(this);
 
             // Initialize Project

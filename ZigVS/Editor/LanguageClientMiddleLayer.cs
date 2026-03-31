@@ -45,7 +45,6 @@ a particular purpose and non-infringement.
 
 ********************************************************************************************/
 
-#if true
 namespace ZigVS
 {
     using EnvDTE;
@@ -58,7 +57,9 @@ namespace ZigVS
     using System.Diagnostics;
     using System.Threading.Tasks;
 
+#pragma warning disable CS0618
     public class LanguageClientMiddleLayer : ILanguageClientMiddleLayer
+#pragma warning restore CS0618
     {
         public readonly static LanguageClientMiddleLayer Instance = new LanguageClientMiddleLayer();
 
@@ -127,7 +128,7 @@ namespace ZigVS
         return true;
     }
 
-    private static int SafeInt(JToken t)
+    private static int SafeInt(JToken? t)
     {
         if (t == null) return -1;
         if (t.Type == JTokenType.Integer) return (int)t;
@@ -158,7 +159,10 @@ namespace ZigVS
                 for (int i = 0; i < parts.Count; i++)
                 {
                     if (parts[i] is JObject p && p["value"] != null)
-                        p["value"] = p["value"].ToString();
+                    {
+                        JToken? value = p["value"];
+                        p["value"] = value?.ToString() ?? string.Empty;
+                    }
                 }
             }
             else if (label.Type != JTokenType.String)
@@ -177,7 +181,7 @@ namespace ZigVS
         }
         return outArr;
 
-        static JValue CoerceInt(JToken t)
+        static JValue CoerceInt(JToken? t)
         {
             if (t == null) return new JValue(0);
             if (t.Type == JTokenType.Integer) return (JValue)t;
@@ -187,10 +191,10 @@ namespace ZigVS
 // helper funcs end
 
     // ---- feature switches ----
-    private const bool ENABLE_NORMALIZE   = true;  // set false to return server's array as-is
-    private const bool ENABLE_RANGE_FILTER = true; // set false to skip start ≤ pos < end check
+    private static readonly bool ENABLE_NORMALIZE = true;   // set false to return server's array as-is
+    private static readonly bool ENABLE_RANGE_FILTER = true; // set false to skip start ≤ pos < end check
 
-    public async Task<JToken> HandleRequestAsync(string methodName, JToken i_methodParamJToken, Func<JToken, Task<JToken>> sendRequest)
+    public async Task<JToken?> HandleRequestAsync(string methodName, JToken i_methodParamJToken, Func<JToken, Task<JToken?>> sendRequest)
         {
             // capture request range (for cheap safety filter)
             int sL = -1, sC = -1, eL = -1, eC = -1;
@@ -210,7 +214,7 @@ namespace ZigVS
             }
 
             // forward unchanged
-            JToken result;
+            JToken? result;
             try
             {
                 result = await sendRequest(i_methodParamJToken).ConfigureAwait(false);
@@ -283,4 +287,3 @@ namespace ZigVS
         }*/
     }
 }
-#endif

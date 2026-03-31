@@ -57,9 +57,11 @@ namespace ZigVS
 	{
         #region Constants
   
-		internal const string Category_Tool = "Tool";
+        internal const string Category_Tool = "Tool";
         internal const string ToolPath = "Tool Path";
         internal const string ToolPathCaption = "Full path to the compiler (ex: $(ZIG_HOME)\\zig.exe). Environment variable expansion is supported.";
+        internal const string GitPath = "Git Path";
+        internal const string GitPathCaption = "Full path to git.exe used for managed ZigDependency restore. Environment variable expansion is supported.";
 
         internal const string Category_Assembly = "Assembly";
         internal const string AssemblyName = "Name";
@@ -125,9 +127,9 @@ namespace ZigVS
 
         internal const string Category_Dependency = "Dependency";
         internal const string Modules = "Modules";
-        internal const string ModulesDescription = "--mod Option. semicolon ; separator";
+        internal const string ModulesDescription = "Advanced manual module arguments. Use semicolon-separated raw entries for your Zig CLI style; managed git dependencies are listed under the Dependencies node and migrated automatically.";
         internal const string Dependencies = "Dependencies";
-        internal const string DependenciesDescription = "--deps option. semicolon ; separator";
+        internal const string DependenciesDescription = "Advanced manual dependency names. Use semicolon-separated entries; ZigVS maps them to the correct Zig CLI syntax for the detected toolchain.";
 
         internal const string Category_Generation = "Generation";
         internal const string GenerateBuildDotZig = "Build.zig";

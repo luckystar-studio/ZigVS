@@ -59,12 +59,24 @@ namespace ZigVS.Command
 
             ToolchainInstaller = 0x1000,
             PackageInstaller = 0x2000,
+            AddProjectDependency = 0x2100,
             Help = 0x3000,
             PackageCreator = 0x4000,
+            ValidateEnvironment = 0x5000,
             QAndA = 0x6000,
             RatingAndReview = 0x7000,
             OpenRepository = 0x8000,
-            PasteJSONAsStruct = 0x9000,
+
+            AddComment = 0xA000,
+            RemoveComment = 0xA800,
+            AddDocComment = 0xB000,
+            RemoveDocComment = 0xB800,
+            AddTopLevelDocComment = 0xC000,
+            RemoveTopLevelDocComment = 0xC800,
+            AddMultiLineStringCommentId = 0xD000,
+            RemoveMultiLineStringCommentId = 0xD800,
+
+            PasteJSONAsStruct = 0xE000,
         }
     }
 }

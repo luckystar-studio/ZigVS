@@ -47,6 +47,7 @@ a particular purpose and non-infringement.
 
 namespace ZigVS
 {
+    using ZigVS.CoreCompatibility;
     using Microsoft.VisualStudio.Workspace;
     using Microsoft.VisualStudio.Workspace.Build;
     using Microsoft.VisualStudio.Workspace.Extensions.Build;
@@ -78,6 +79,17 @@ namespace ZigVS
             {
                 if (Path.GetFileName(i_filePath).Equals(Parameter.c_buildFileName))
                 {
+                    ToolchainProbeResult zigProbe = CoreServices.ToolchainProbe.Probe(new ToolchainProbeRequest
+                    {
+                        Label = "Global zig.exe",
+                        RawValue = l_GeneralOptions.ToolPath,
+                        ExpandedValue = l_GeneralOptions.ToolPathExpanded,
+                        DefaultFileName = Parameter.c_compilerFileName
+                    });
+
+                    string buildToolPath = !string.IsNullOrWhiteSpace(zigProbe.ResolvedPath)
+                        ? zigProbe.ResolvedPath
+                        : l_GeneralOptions.ToolPathExpanded;
 
                     foreach (var l_configuration in Build.ConfigurationList())
                     {
@@ -87,7 +99,7 @@ namespace ZigVS
                                 l_configuration,
                                 l_FolderModeOptions.BuildCommand_build);
                             var l_LaunchCommand = new LaunchCommand(
-                                l_GeneralOptions.ToolPathExpanded,
+                                buildToolPath,
                                 l_commandOptionString,
                                 LaunchCommandOption.None,
                                 workingDirectory: Path.GetDirectoryName(i_filePath),
@@ -110,7 +122,7 @@ namespace ZigVS
                                 l_configuration,
                                 l_FolderModeOptions.BuildCommand_clean);
                             var l_LaunchCommand = new LaunchCommand(
-                                l_GeneralOptions.ToolPathExpanded,
+                                buildToolPath,
                                 l_commandOptionString,
                                 LaunchCommandOption.None,
                                 workingDirectory: Path.GetDirectoryName(i_filePath),

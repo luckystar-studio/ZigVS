@@ -63,6 +63,7 @@ namespace ZigVS
     public class PropertyPage_General : SettingsPage
     {
         private string toolPath="";
+        private string gitPath = "";
  
         static ProjectNode GetCurrentProject()
         {
@@ -93,6 +94,15 @@ namespace ZigVS
             set { if (String.Compare(this.toolPath, value) != 0) this.IsDirty = true; this.toolPath = value; }
         }
 
+        [ResourcesCategoryAttribute(PropertyPageUIText.Category_Tool)]
+        [LocDisplayName(PropertyPageUIText.GitPath)]
+        [ResourcesDescriptionAttribute(PropertyPageUIText.GitPathCaption)]
+        public string GitPath
+        {
+            get { return this.gitPath; }
+            set { if (String.Compare(this.gitPath, value) != 0) this.IsDirty = true; this.gitPath = value; }
+        }
+
         public override string GetClassName()
         {
             return this.GetType().FullName;
@@ -106,6 +116,7 @@ namespace ZigVS
             }
 
             this.toolPath = this.ProjectManager.GetProjectPropertyUnevaluated( "ToolPath", _PersistStorageType.PST_PROJECT_FILE);
+            this.gitPath = this.ProjectManager.GetProjectPropertyUnevaluated("GitPath", _PersistStorageType.PST_PROJECT_FILE);
 
             IsDirty = false;
         }
@@ -122,6 +133,7 @@ namespace ZigVS
             IVsPropertyPageFrame propertyPageFrame = (IVsPropertyPageFrame)this.ProjectManager.Site.GetService((typeof(SVsPropertyPageFrame)));
 
             this.ProjectManager.SetProjectProperty("ToolPath", _PersistStorageType.PST_PROJECT_FILE, this.toolPath);
+            this.ProjectManager.SetProjectProperty("GitPath", _PersistStorageType.PST_PROJECT_FILE, this.gitPath);
 
             IsDirty = false;
 

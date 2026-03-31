@@ -48,6 +48,7 @@ a particular purpose and non-infringement.
 using Microsoft.VisualStudio.TestWindow.Extensibility;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.VisualStudio.Utilities;
+using ZigVS.CoreCompatibility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -108,7 +109,22 @@ namespace ZigVS.Test
                     return await GeneralOptions.GetLiveInstanceAsync();
                 });
 
-                var toolPath = l_generalOptions.ToolPathExpanded;
+                if (l_generalOptions == null)
+                {
+                    return inputRunSettingDocument;
+                }
+
+                ToolchainProbeResult zigProbe = CoreServices.ToolchainProbe.Probe(new ToolchainProbeRequest
+                {
+                    Label = "Global zig.exe",
+                    RawValue = l_generalOptions.ToolPath,
+                    ExpandedValue = l_generalOptions.ToolPathExpanded,
+                    DefaultFileName = Parameter.c_compilerFileName
+                });
+
+                var toolPath = !string.IsNullOrWhiteSpace(zigProbe.ResolvedPath)
+                    ? zigProbe.ResolvedPath
+                    : l_generalOptions.ToolPathExpanded;
                 toolNode.InnerText = toolPath; // auto-escapes
 
                 log?.Log(MessageLevel.Informational, $"ZigVs injected ToolPath='{toolPath}'");

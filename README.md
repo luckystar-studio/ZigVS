@@ -2,6 +2,10 @@
 
 Add support for using the [Zig programming language](https://ziglang.org/) to [Visual Studio](https://learn.microsoft.com/en-us/visualstudio/windows/?view=vs-2022)  
 
+* Day-to-day Zig development tasks can be performed directly from the Visual Studio GUI.
+* Debugging and profiling can be used immediately without any special setup.
+* Zig code is easy to integrate into existing C++ and C# projects.
+
 *Note: Please **update Visual Studio** before installing ZigVS. If your version of Visual Studio is older than the required version for ZigVS, a version error will appear during installation.* 
 ___
   
@@ -14,6 +18,9 @@ ___
     * Zig Document Formatting 
     * Auto-Insert Parentheses/Bracket/Braces
     * Copy Json Text and Paste as Zig Structs
+    * Comment and uncomment zig style comments  
+        line comments (//), doc comments (///), top-level doc comments (//!)
+    * Multiline string marking (\\\\)
 * Folder mode
     * Create a new Zig package from the Visual Studio GUI
     * Build from Visual Studio using build.zig
@@ -26,12 +33,46 @@ ___
     * build.zig and build.zig.zon generation from project file
 * Debug Zig code with [Visual Studio Debugger](https://learn.microsoft.com/en-us/visualstudio/debugger/?view=vs-2022)  
     * Support the Windows Native Debug Engine and [MIEngine](https://github.com/microsoft/MIEngine) for cross-platform debugging (Linux, Android, MacOS, iOS) 
+    * Set breakpoints and watches from the GUI, inspect Locals / Autos / Call Stack, step through code, and use conditional breakpoints and the Immediate / Watch windows while debugging
 * Run code tests using [Visual Studio Testing Tools](https://learn.microsoft.com/en-us/visualstudio/test/?view=vs-2022)
     * Run, debug & manage unit tests from [Test Explorer](https://learn.microsoft.com/en-us/visualstudio/test/run-unit-tests-with-test-explorer?view=vs-2022)
 * Supports [Visual Studio Profiler Tools](https://learn.microsoft.com/en-us/visualstudio/profiling/?view=vs-2022)
   * CPU Usage, Memory Usage, Events, File I/O
 * Zig Tool-chain Installer
+* Validate Zig Environment command
+  * Verify zig.exe, zls.exe, version compatibility and recommended settings in the Output window
 * Zig Package Installer
+
+___
+# Table of Contents
+
+* [How to Install ZigVS](#how-to-install-zigvs)
+* [How to Set up Zig compiler and ZLS language server manually](#how-to-set-up-zig-compiler-and-zls-language-server-manually)
+* [How to Set up Zig and ZLS with the Tool-chain installer inside Visual Studio](#how-to-set-up-zig-and-zls-with-the-tool-chain-installer-inside-visual-studio)
+* [Validate Zig Environment](#validate-zig-environment)
+* [Project Mode and Folder Mode](#project-mode-and-folder-mode)
+* [How to open an existing Zig package](#how-to-open-an-existing-zig-package)
+* [How to create a new zig package](#how-to-create-a-new-zig-package)
+* [How to create a new Zig Project](#how-to-create-a-new-zig-project)
+* [How to start debugging](#how-to-start-debugging)
+* [Cross-Platform Build & Debugging](#cross-platform-build--debugging)
+* [Profiler](#profiler)
+* [Testing](#testing)
+* [Syntax Highlighting](#syntax-highlighting)
+* [Editor Setting](#editor-setting)
+* [Inlay hints](#inlay-hints)
+* [Formatting](#formatting)
+* [Snippets](#snippets)
+* [Copy Json Text and Paste as Zig Structs](#copy-json-text-and-paste-as-zig-structs)
+* [Comment and uncomment](#comment-and-uncomment)
+* [Package Installer](#package-installer)
+* [Setting](#setting)
+* [Help](#help)
+* [Questions, Requests, etc.](#questions-requests-etc)
+* [License](#license)
+* [Extension Name](#extension-name)
+* [Publisher](#publisher)
+* [Version History](#version-history)
 
 ___
 # How to Install ZigVS
@@ -113,6 +154,24 @@ If you want to use an environment variable instead of modifying 'PATH', select "
 <br><br>
 ___
 
+# Validate Zig Environment
+
+If ZigVS can not build, debug or start ZLS, you can validate the current tool configuration from the menu.
+
+1. Select [Extensions] → [ZigVS] → [Validate Zig Environment]
+2. ZigVS will open the **Output window** and validate:
+   * the configured zig.exe path
+   * the configured zls.exe path
+   * the active project's ToolPath override in Project Mode, if present
+   * the detected zig and zls versions
+   * whether zig and zls are on the same major.minor release line
+   * recommended settings such as using PATH or environment variables and keeping Language Server Debug Mode off unless needed
+3. Review the messages marked as [OK], [INFO], [WARNING] or [ERROR]
+
+Use this command after changing [Tools] → [Options] → [ZigVS], after installing a new Zig or ZLS version, or when debugging environment-related problems.
+
+___
+
 # Project Mode and Folder Mode  
 
 **Visual Studio has two modes: Project mode and Folder mode.**
@@ -126,6 +185,10 @@ ___
 **ZigVS supports both Project mode and Folder mode.**
 
 * In ZigVS's Project mode, you use a project file type called .zigproj. To start a project, create a .zigproj; to open the project, open the .zigproj. When you build the project (even from Visual Studio's GUI), MSBuild reads the .zigproj and builds using zig.exe as the compiler and linker.
+
+  * Managed git dependencies can now be stored directly in the `.zigproj` as `ZigDependency` items. In Solution Explorer they appear under a virtual `Dependencies` node, each dependency is pinned to a commit, and `msbuild` restores the checkout with `git` before a normal project-mode build.
+  * Project Properties now expose `Git Path`, and each dependency node exposes `Commit`, `Module Name`, and `Root Source` in the Properties window. Deleting a dependency node removes it from the `.zigproj`.
+  * Managed dependencies are only passed automatically to the build when `UseBuildDotZig=false`. If you use a custom `build.zig`, ZigVS keeps the dependency metadata and checkout, but it does not rewrite your custom build script.
 
   * The benefits of Zig's Project mode are:
     a) It makes integration with other projects easy. If you already have C++ or C# projects, using a Zig project file makes it easier to incorporate Zig code into existing codebases. For example, most commercially released games today are made with Visual Studio and this approach is useful when you want to use some Zig code within such existing projects.  
@@ -213,6 +276,51 @@ ___
 6. **To change settings**, open the project Property Pages.
 
 ![Project Propery Build](ZigVS/Documents/Images/ProjectPropery_Build.png)
+
+___
+# How to start debugging
+
+## Project mode (.zigproj)
+
+1. Open the `.zigproj` project or solution.
+2. Make sure the project builds successfully in the selected configuration.
+3. Set breakpoints in your Zig source code if needed.
+4. Start debugging with one of the following:
+   * [Debug] → [Start Debugging]
+   * the Start button on the toolbar
+   * `F5`
+
+## Folder mode (build.zig)
+
+1. Open the folder that contains `build.zig`.
+2. In Solution Explorer, right-click `build.zig` and choose **[Set as Startup Item]**.
+3. Make sure the folder-mode build succeeds.
+4. Start debugging with [Debug] → [Start Debugging], the Start button, or `F5`.
+
+## Useful debugger actions
+
+* `F9`: Toggle breakpoint on the current line.
+* `F5`: Continue execution until the next breakpoint.
+* `F10`: Step over the next line.
+* `F11`: Step into the next function call.
+* `Shift + F11`: Step out of the current function.
+* Hover the mouse over variables to inspect values while stopped at a breakpoint.
+* Use the **Locals**, **Autos**, **Watch**, and **Call Stack** windows from the [Debug] menu to inspect state.
+* You can edit breakpoints, add conditions, and disable or enable them from the **Breakpoints** window.
+
+## What you can do with the debugger
+
+With the Visual Studio debugger you can:
+
+* pause execution at breakpoints
+* inspect local variables and function arguments
+* evaluate expressions in Watch windows
+* step line by line through Zig code
+* inspect the current call stack
+* switch stack frames and inspect values in parent calls
+* combine debugging with the Diagnostics Tools window for CPU and memory investigation
+
+If debugging does not start, first confirm that the project or folder can be built successfully and that the active Zig toolchain path is correct. The **Validate Zig Environment** command is useful when debugging setup problems.
 
 ___
 # Cross-Platform Build & Debugging
@@ -318,13 +426,28 @@ ___
 1. Copy Json text to clipboard
 ![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct1.png)
 
-2. In Zig code editor, right-click and select [Editor] → [Paste Json as Zig Structs]
+2. In Zig code editor, right-click and select [Editor] → [Zig] → [Paste Json as Zig Structs]
 
 ![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct2.png)
 
 3. The Json text in the clipboard will be converted to Zig Structs and pasted into the editor at the cursor position.
 
 ![](ZigVS/Documents/Images/CopyJsonStringAndPastAsStruct3.png)
+
+<br><br>
+___
+# Comment and uncomment
+
+1, [Edit] → [Zig] → 
+
+2, The selected lines will be commented or uncommented in zig style comments.  
+   line comments (//), doc comments (///), top-level doc comments (//!)
+
+![](ZigVS/Documents/Images/Edit_Zig.png)
+
+3, You can also add [shortcuts](https://learn.microsoft.com/en-us/visualstudio/ide/identifying-and-customizing-keyboard-shortcuts-in-visual-studio?view=vs-2022) to these commands.
+
+
 ___
 # Package Installer
 
@@ -334,10 +457,68 @@ ___
 
 2, Browse to the repository and branch that you want to install in the WebView.  
 3, Select a Installation Method from the drop down.  
-   Currently, zig fetch, git and unzip are working correctly.  
+   In Open Folder mode, zig fetch, git and unzip are available. In Project mode, `add package` adds a managed git dependency to the current `.zigproj`.  
 4. Once everything is set up, the Install button will become active, so press the Install button  
 
 ![](ZigVS/Documents/Images/PackageInstaller.png)
+
+## Managed git dependencies in Project mode
+
+When the install method is **Project Dependencies (.zigproj)**, ZigVS stores the dependency directly in the project file as a `ZigDependency` item instead of editing `build.zig`.
+
+Each managed dependency stores:
+
+* `RepositoryUrl`
+* `Commit`
+* `ModuleName`
+* `RootSource`
+* `CheckoutDir`
+
+### How it behaves
+
+* The dependency appears under the virtual **Dependencies** node in Solution Explorer.
+* Before a normal project-mode build, `msbuild` restores the checkout with `git fetch`, `git checkout --detach`, and `git submodule update --init --recursive`.
+* The dependency node's **Properties** window lets you edit `Commit`, `Module Name`, and `Root Source`.
+* Deleting the dependency node removes the `ZigDependency` item from the `.zigproj`. You can also choose whether to delete the checked out package folder.
+
+### How ZigVS passes dependencies to zig.exe
+
+If `UseBuildDotZig=false`, ZigVS automatically injects managed dependencies into the generated `zig build-exe` / `zig build-lib` command line.
+
+* For older Zig command lines, ZigVS can use legacy `--deps` / `--mod`.
+* For Zig 0.12 and later, ZigVS uses the modern `--dep` and `-Mroot=...` / `-Mname=...` form.
+* Existing `.zigproj` files are migrated automatically to match the detected Zig toolchain version.
+* After a successful build, the project-mode target now prints `Built output: ...` and also checks that the expected output file actually exists.
+
+If `UseBuildDotZig=true`, ZigVS still stores the dependency metadata and restores the checkout, but it does **not** rewrite your custom `build.zig`. In that case you must wire the dependency into `build.zig` yourself.
+
+### Important notes
+
+* The import name in Zig source comes from **ModuleName**.  
+  Example: if `ModuleName=clap`, then use `const clap = @import("clap");`.
+* `RootSource` must point to the dependency's Zig module entry file, for example `src/main.zig` or `clap.zig`.
+* `ModuleName` does not have to match the repository name. If you want `@import("json")`, set `ModuleName` to `json`.
+* ZigVS can restore and pass the dependency correctly, but the dependency project itself must still be compatible with the Zig version you are using.
+
+### How to choose a package for Project Dependencies (.zigproj)
+
+Before adding a package, check the following:
+
+* **ModuleName** becomes the Zig import name used in your source code.  
+  If you want `@import("json")`, set `ModuleName` to `json`.
+* **RootSource** must point to the package's real root module file.  
+  Common values are `src/main.zig`, `src/root.zig`, or a top-level file such as `clap.zig`.
+* The package itself must support the Zig version you are using.  
+  Even if ZigVS restores and passes the dependency correctly, the build will still fail if the package is not compatible with your active Zig toolchain.
+* Prefer packages whose README or release notes explicitly mention the Zig version they support.
+* For a first smoke test, prefer a small pure-Zig package that can be verified with a simple `@import(...)` and one or two API calls.
+
+### Quick smoke test checklist
+
+1. Choose a package that explicitly supports your Zig version.
+2. Set `ModuleName` to the exact import name you want to use in source code.
+3. Set `RootSource` to the package's actual root module file.
+4. Build once and confirm the Output window shows both the checkout steps and `Built output: ...`.
 
 <br><br>
 
@@ -388,6 +569,37 @@ LuckyStar Studio LLC
 ___
 # Version History
 ```
+    Version 0.15.2.3 (2026/04/01):
+        Improvements
+            Added managed git dependencies for `.zigproj` Project mode.
+                Dependencies now appear under a virtual `Dependencies` node in Solution Explorer and can be added from the Zig Package Installer with `Project Dependencies (.zigproj)`.
+                Dependency Properties now expose `Commit`, `Module Name`, and `Root Source`.
+                During project-mode builds, ZigVS restores managed dependencies with `git` and automatically maps them to the correct Zig CLI syntax for the detected toolchain.
+                Existing project files are migrated between legacy `--deps` / `--mod` and modern `--dep` / `-Mroot` / `-Mname` forms as needed.
+                Project-mode builds now print `Built output: ...` and verify that the expected output file was actually produced.
+
+        Compatibility:
+            Visual Studio 2026 18.4.2
+            Zig Tool chain: zig-windows-x86_64-0.15.2.zip
+            ZLS Language Server: zls-windows-x86_64-0.15.1.zip
+
+    Version 0.15.2.2 (2025/12/31):
+        Added support for ZLS 0.15.1
+        Compatibility:
+            Visual Studio 2026 18.1.1
+            Zig Tool chain: zig-windows-x86_64-0.15.2.zip
+            ZLS Language Server: zls-windows-x86_64-0.15.1.zip
+
+    Version 0.15.2.1 (2025/10/29):
+        Improvements
+            Comment and uncomment zig style comments
+line comments (//), doc comments (///), top-level doc comments (//!)
+            Multiline string marking (\\)
+        Compatibility:
+            Visual Studio 2022 17.14.14
+            Zig Tool chain: zig-windows-x86_64-0.15.2.zip
+            ZLS Language Server: zls-windows-x86_64-0.15.0.zip
+
     Version 0.15.2.0 (2025/10/16):
         Added support for Zig 0.15.2, Zig 0.15.1 and ZLS 0.15.0
         Improvements

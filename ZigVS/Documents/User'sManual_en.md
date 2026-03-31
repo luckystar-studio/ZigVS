@@ -170,6 +170,10 @@ ___
 
 * In Zig’s Project mode, you use a project file called .zigproj. To start a project, create a .zigproj; to open the project, open the .zigproj. When you build the project (even from Visual Studio’s GUI), MSBuild reads the .zigproj and builds using zig.exe as the compiler and linker.
 
+  * Managed git dependencies can be stored directly in `.zigproj` as `ZigDependency` items. In Solution Explorer they appear under a virtual `Dependencies` node, each dependency is pinned to a commit, and `msbuild` restores the checkout with `git` before a normal Project mode build.
+  * Project Properties now expose `Git Path`, and each dependency node exposes `Commit`, `Module Name`, and `Root Source` in the Properties window. Deleting a dependency node removes it from the `.zigproj`.
+  * Managed dependencies are only passed automatically to the build when `UseBuildDotZig=false`. If you use a custom `build.zig`, ZigVS keeps the dependency metadata and checkout, but it does not rewrite your custom build script.
+
   * The benefits of Zig’s Project mode are:
     a) It makes integration with other projects easy. If you already have C++ or C# projects, using a Zig project file makes it easier to incorporate Zig code into existing codebases. For example, most commercially released games today are made with Visual Studio, and this approach is useful when you want to use some Zig code within such existing projects.
     b) You can change build settings via the Visual Studio GUI.
@@ -362,7 +366,7 @@ ___
 
 2, Browse to the repository and branch that you want to install in the WebView.  
 3, Select a Installation Method from the drop down.  
-   Currently, zig fetch, git and unzip are working correctly.  
+   In Open Folder mode, zig fetch, git and unzip are available. In Project mode, `add package` adds a managed git dependency to the selected `.zigproj`.  
 4. Once everything is set up, the Install button will become active, so press the Install button  
 
 ![](Images/PackageInstaller.png)

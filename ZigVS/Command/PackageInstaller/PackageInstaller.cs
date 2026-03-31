@@ -47,11 +47,14 @@ a particular purpose and non-infringement.
 
 namespace ZigVS
 {
+    using Microsoft.VisualStudio.Shell;
     using System;
     using System.Threading;
 
     public class PackageInstaller : InstallerBase
     {
+        private readonly ProjectDependencyService dependencyService = ProjectDependencyService.Instance;
+
         public void StartCommand(string i_DirectoryString, string i_commandString, string i_optionString)
         {
             if (m_IsRunningBool)
@@ -115,6 +118,69 @@ namespace ZigVS
 
             SetStatusFinished();
 
+            PackageInstallerWindowControl.GetInstance()?.Reset();
+        }
+
+        public void StartManagedDependencyInstall(ZigVSProjectNode projectNode, ProjectDependencyAddRequest request)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (m_IsRunningBool)
+            {
+                Common.OutputWindowPane.OutputString("Install task is still running" + Environment.NewLine);
+            }
+            else
+            {
+                string projectDirectoryPath = projectNode.ProjectFolder;
+                string gitPath = projectNode.GetGitPath();
+                var existingDependencies = dependencyService.LoadDependencies(projectNode);
+                bool useBuildDotZig = String.Equals(
+                    projectNode.GetProjectPropertyUnevaluated("UseBuildDotZig", Microsoft.VisualStudio.Shell.Interop._PersistStorageType.PST_PROJECT_FILE),
+                    "true",
+                    StringComparison.OrdinalIgnoreCase);
+
+                SetStatusInstalling();
+                m_Thread = new Thread(new ThreadStart(() => InstallManagedDependency(projectNode, request, projectDirectoryPath, gitPath, existingDependencies, useBuildDotZig)));
+                m_Thread.Start();
+            }
+        }
+
+        private void InstallManagedDependency(
+            ZigVSProjectNode projectNode,
+            ProjectDependencyAddRequest request,
+            string projectDirectoryPath,
+            string gitPath,
+            System.Collections.Generic.IReadOnlyList<ProjectDependencySpec> existingDependencies,
+            bool useBuildDotZig)
+        {
+            try
+            {
+                Common.OutputWindowPane.Show();
+                Common.OutputWindowPane.OutputString("Starting managed dependency installation --------------------" + Environment.NewLine);
+
+                ProjectDependencySpec spec = dependencyService.PrepareDependency(request, projectDirectoryPath, gitPath, existingDependencies);
+
+                ThreadHelper.JoinableTaskFactory.Run(async delegate
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    dependencyService.SaveDependency(projectNode, spec);
+                    projectNode.RefreshDependencyNodes();
+
+                    if (useBuildDotZig)
+                    {
+                        Common.OutputWindowPane.OutputString("Warning: UseBuildDotZig=true projects do not automatically pass managed dependencies to custom build.zig." + Environment.NewLine);
+                    }
+                });
+
+                Common.OutputWindowPane.OutputString($"Added dependency '{spec.Include}' @ {spec.Commit}" + Environment.NewLine);
+                Common.OutputWindowPane.OutputString("Managed dependency installation finished --------------------" + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                Common.OutputWindowPane.OutputString(ex.Message + Environment.NewLine);
+            }
+
+            SetStatusFinished();
             PackageInstallerWindowControl.GetInstance()?.Reset();
         }
     }

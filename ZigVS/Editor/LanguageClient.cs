@@ -48,6 +48,7 @@ a particular purpose and non-infringement.
 namespace ZigVS
 {
 #nullable enable
+    using ZigVS.CoreCompatibility;
     using Microsoft.Build.Framework.XamlTypes;
     using Microsoft.VisualStudio.LanguageServer.Client;
     using Microsoft.VisualStudio.Shell;
@@ -99,8 +100,22 @@ namespace ZigVS
                 var l_GeneralOptions = await GeneralOptions.GetLiveInstanceAsync();
                 if (l_GeneralOptions != null)
                 {
+                    ToolchainProbeResult zlsProbe = CoreServices.ToolchainProbe.Probe(new ToolchainProbeRequest
+                    {
+                        Label = "Global zls.exe",
+                        RawValue = l_GeneralOptions.LanguageServerPath,
+                        ExpandedValue = l_GeneralOptions.LanguageServerPathExpanded,
+                        DefaultFileName = Parameter.c_languageServerFileName
+                    });
+
+                    if (string.IsNullOrWhiteSpace(zlsProbe.ResolvedPath))
+                    {
+                        Common.OutputWindowPane.OutputString("Failed to start the language server. Please check tool path in Tools | Options | ZigVS | General." + Environment.NewLine + zlsProbe.PathMessage);
+                        return null;
+                    }
+
                     ProcessStartInfo l_ProcessStartInfo = new ProcessStartInfo();
-                    l_ProcessStartInfo.FileName = l_GeneralOptions.LanguageServerPathExpanded;
+                    l_ProcessStartInfo.FileName = zlsProbe.ResolvedPath;
                     l_ProcessStartInfo.Arguments =
                         (l_GeneralOptions.TDebugSwitch == Switch.off) ? l_GeneralOptions.Arguments : l_GeneralOptions.DebugArguments;
                     l_ProcessStartInfo.RedirectStandardInput = true;
