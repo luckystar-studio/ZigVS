@@ -67,7 +67,7 @@ jobs:
         run: |
           msbuild ZigVS\ZigVS.csproj /restore /t:Rebuild /m ^
             /p:Configuration=Release ^
-            /p:Platform="Any CPU"
+            /p:Platform=AnyCPU
 
       - name: Find VSIX
         id: find_vsix

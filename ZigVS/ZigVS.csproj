@@ -437,13 +437,6 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\Zig_LibPackage_Template1\Zig_LibPackage_Template1.csproj">
-      <Project>{7520B572-6249-4FC2-8561-9DF6F1BE16DD}</Project>
-      <Name>Zig_LibPackage_Template1</Name>
-      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Command\PackageCreator\PackageCreatorWindowControl.xaml">
