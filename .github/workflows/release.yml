@@ -62,10 +62,10 @@ jobs:
             throw "Tag version [$tagVersion] != manifest version [$manifestVersion]"
           }
 
-      - name: Build solution
+      - name: Build VSIX project
         shell: cmd
         run: |
-          msbuild ZigVS.sln /restore /t:Rebuild /m ^
+          msbuild ZigVS\ZigVS.csproj /restore /t:Rebuild /m ^
             /p:Configuration=Release ^
             /p:Platform="Any CPU"
 
