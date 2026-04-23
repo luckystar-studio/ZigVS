@@ -1,57 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup Label="ProjectConfigurations">
-		<ProjectConfiguration Include="Debug|x86">
-			<Configuration>Debug</Configuration>
-			<Platform>x86</Platform>
-			<DebugSymbols>true</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|x86">
-			<Configuration>Release</Configuration>
-			<Platform>x86</Platform>
-			<DebugSymbols>false</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Debug|X64">
-			<Configuration>Debug</Configuration>
-			<Platform>X64</Platform>
-			<DebugSymbols>true</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|X64">
-			<Configuration>Release</Configuration>
-			<Platform>X64</Platform>
-			<DebugSymbols>false</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Debug|ARM">
-			<Configuration>Debug</Configuration>
-			<Platform>ARM</Platform>
-			<DebugSymbols>true</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|ARM">
-			<Configuration>Release</Configuration>
-			<Platform>ARM</Platform>
-			<DebugSymbols>false</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Debug|ARM64">
-			<Configuration>Debug</Configuration>
-			<Platform>ARM64</Platform>
-			<DebugSymbols>true</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|ARM64">
-			<Configuration>Release</Configuration>
-			<Platform>ARM64</Platform>
-			<DebugSymbols>false</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Debug|WASM32">
-			<Configuration>Debug</Configuration>
-			<Platform>WASM32</Platform>
-			<DebugSymbols>true</DebugSymbols>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|WASM32">
-			<Configuration>Release</Configuration>
-			<Platform>WASM32</Platform>
-			<DebugSymbols>false</DebugSymbols>
-		</ProjectConfiguration>
-	</ItemGroup>
+    <ItemGroup Label="ProjectConfigurations">
+        <ProjectConfiguration Include="Debug|x86">
+            <Configuration>Debug</Configuration>
+            <Platform>x86</Platform>
+            <DebugSymbols>true</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Release|x86">
+            <Configuration>Release</Configuration>
+            <Platform>x86</Platform>
+            <DebugSymbols>false</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Debug|X64">
+            <Configuration>Debug</Configuration>
+            <Platform>X64</Platform>
+            <DebugSymbols>true</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Release|X64">
+            <Configuration>Release</Configuration>
+            <Platform>X64</Platform>
+            <DebugSymbols>false</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Debug|ARM">
+            <Configuration>Debug</Configuration>
+            <Platform>ARM</Platform>
+            <DebugSymbols>true</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Release|ARM">
+            <Configuration>Release</Configuration>
+            <Platform>ARM</Platform>
+            <DebugSymbols>false</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Debug|ARM64">
+            <Configuration>Debug</Configuration>
+            <Platform>ARM64</Platform>
+            <DebugSymbols>true</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Release|ARM64">
+            <Configuration>Release</Configuration>
+            <Platform>ARM64</Platform>
+            <DebugSymbols>false</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Debug|WASM32">
+            <Configuration>Debug</Configuration>
+            <Platform>WASM32</Platform>
+            <DebugSymbols>true</DebugSymbols>
+        </ProjectConfiguration>
+        <ProjectConfiguration Include="Release|WASM32">
+            <Configuration>Release</Configuration>
+            <Platform>WASM32</Platform>
+            <DebugSymbols>false</DebugSymbols>
+        </ProjectConfiguration>
+    </ItemGroup>
 
     <PropertyGroup>	<!-- a Name Property will be added when project is created by DevEnv.-->
     </PropertyGroup>
@@ -92,18 +92,18 @@
         <ApplicationType>iOS</ApplicationType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(OSType)' == 'macOS'">
-        <ApplicationType>windows</ApplicationType>	<!-- Microsoft.Cpp.props does not support macos-->
+        <ApplicationType>windows</ApplicationType>      <!-- Microsoft.Cpp.props does not support macos-->
     </PropertyGroup>
     <PropertyGroup Condition="'$(OSType)' == 'WASI'">
         <ApplicationType>WASI</ApplicationType>
     </PropertyGroup>
-    
+
     <!-- Read https://learn.microsoft.com/en-us/visualstudio/extensibility/visual-cpp-project-extensibility?view=vs-2022 -->
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
     <!-- Read https://learn.microsoft.com/en-us/visualstudio/extensibility/visual-cpp-project-extensibility?view=vs-2022 -->
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-    
-    <PropertyGroup>	<!-- if the configuration is unknown , set default -->
+
+    <PropertyGroup>     <!-- if the configuration is unknown , set default -->
         <Platform Condition="'$(Platform)' == '' or '$(Platform)' == 'Win32' ">x64</Platform>
         <Configuration Condition="'$(Configuration)' == '' ">Debug</Configuration>
     </PropertyGroup>
@@ -150,7 +150,7 @@
         <ZigOS Condition=" '$(ApplicationType)' == 'linux' ">linux</ZigOS>
         <ZigOS Condition=" '$(ApplicationType)' == 'Android' ">linux</ZigOS>
         <ZigOS Condition=" '$(ApplicationType)' == 'iOS' ">ios</ZigOS>
-        <ZigOS Condition=" '$(OSType)' == 'macos' ">macos</ZigOS>	<!-- Microsoft.Cpp.props does not support macos-->
+        <ZigOS Condition=" '$(OSType)' == 'macos' ">macos</ZigOS>       <!-- Microsoft.Cpp.props does not support macos-->
         <ZigOS Condition=" '$(ApplicationType)' == 'WASI' ">wasi</ZigOS>
         <ZigArchitecture Condition=" '$(Platform)' == 'x86' ">x86</ZigArchitecture>
         <ZigArchitecture Condition=" '$(Platform)' == 'X64' ">x86_64</ZigArchitecture>
@@ -165,7 +165,7 @@
         <ZigLibType Condition=" '$(ConfigurationType)' == 'Application' "></ZigLibType>
         <ZigLibType Condition=" '$(ConfigurationType)' == 'StaticLibrary' ">-static</ZigLibType>
         <ZigLibType Condition=" '$(ConfigurationType)' == 'DynamicLibrary' ">-dynamic</ZigLibType>
-        
+
         <OutputName Condition=" '$(ConfigurationType)' == 'Application' ">$(AssemblyName).exe</OutputName>
         <OutputName Condition=" '$(ConfigurationType)' == 'StaticLibrary' ">$(AssemblyName).lib</OutputName>
         <OutputName Condition=" '$(ConfigurationType)' == 'DynamicLibrary' ">$(AssemblyName).dll</OutputName>
@@ -186,7 +186,7 @@
     <!-- Read https://learn.microsoft.com/en-us/visualstudio/extensibility/visual-cpp-project-extensibility?view=vs-2022 -->
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
     <Import Project="$(MSBuildBinPath)\Microsoft.Common.tasks" />
-    
+
     <Target Condition="'$(GenerateBuildDotZig)' == 'true'" Name ="GenerateBuildDotZig">
         <ItemGroup>
             <AllCFiles Include="@(ClCompile)" Condition="%(ClCompile.Subtype) == 'Code'" />
@@ -278,59 +278,32 @@ pub fn build(b: *std.Build) void {
         <Error Condition="!Exists('$(ProjectDir)%(ZigDependency.CheckoutDir)/%(ZigDependency.RootSource)')" Text="ZigDependency %(ZigDependency.Identity) root source was not found at %(ZigDependency.CheckoutDir)/%(ZigDependency.RootSource). Update RootSource in the dependency Properties window." />
     </Target>
 
-<<<<<<< fix-sapces-bug
-	<Target Name="BuildWithOutBuildDotZig" Condition="'$(UseBuildDotZig)' == 'false'" Inputs="@(Compile);@(ClCompile);@(ResourceCompile);@(Content)" Outputs="$(OutDir)$(OutputName)">
-		<ItemGroup>
-			<AllCFiles Include="@(ClCompile)" Condition="%(ClCompile.Subtype) == 'Code'" />
-		</ItemGroup>
-		<PropertyGroup>
-			<IncludeDirsOption></IncludeDirsOption>
-			<IncludeDirsOption Condition=" '$(IncludeDirs)' != '' "> -I &quot;$(IncludeDirs.Replace(';', '&quot; -I &quot;'))&quot; </IncludeDirsOption>
-			<LibraryDirsOption></LibraryDirsOption>
-			<LibraryDirsOption Condition=" '$(LibraryDirs)' != '' "> -L &quot;$(LibraryDirs.Replace(';', '&quot; -L &quot;'))&quot; </LibraryDirsOption>
-			<LibrariesOption></LibrariesOption>
-			<LibrariesOption Condition=" '$(Libraries)' != '' ">-l &quot;$(Libraries.Replace(';', '&quot; -l &quot;'))&quot; </LibrariesOption>
-			<DependenciesOption></DependenciesOption>
-			<DependenciesOption Condition=" '$(Dependencies)' != '' ">--deps &quot;$(Dependencies.Replace(';', '&quot; --deps &quot;'))&quot; </DependenciesOption>
-			<ModulesOption></ModulesOption>
-			<ModulesOption Condition=" '$(Modules)' != '' ">--mod &quot;$(Modules.Replace(';', '&quot; --mod &quot;'))&quot; </ModulesOption>
-
-			<NativeProjectReferencePaths>@(_ResolvedNativeProjectReferencePaths->'"%(Identity)"', ' ')</NativeProjectReferencePaths>
-			<AllCFilesFlat>@(AllCFiles->'"%(Identity)"', ' ')</AllCFilesFlat>
-			<AllRCFilesFlat>@(ResourceCompile->'"%(Identity)"', ' ')</AllRCFilesFlat>
-			<BuildCommand>"$(ToolPath)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin="$(OutDir)$(OutputName)" --cache-dir "$(IntDir.TrimEnd('\'))" $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(DependenciesOption) $(ModulesOption) $(BuildOption) "$(RootSourceName)" $(AllCFilesFlat) $(NativeProjectReferencePaths) $(AllRCFilesFlat)</BuildCommand>
-		</PropertyGroup>
-	  	<MakeDir Directories="$(OutDir)"/>
-		<Message Text="Building: $(BuildCommand)" Importance="high"/>
-		<Exec WorkingDirectory="$(ProjectDir)" Command="$(BuildCommand)" />
-	</Target>
-=======
     <Target Name="BuildWithOutBuildDotZig" Condition="'$(UseBuildDotZig)' == 'false'" Inputs="@(Compile);@(ClCompile);@(ResourceCompile);@(Content)" Outputs="$(OutDir)$(OutputName)">
         <ItemGroup>
             <AllCFiles Include="@(ClCompile)" Condition="%(ClCompile.Subtype) == 'Code'" />
         </ItemGroup>
         <PropertyGroup>
             <IncludeDirsOption></IncludeDirsOption>
-            <IncludeDirsOption Condition=" '$(IncludeDirs)' != '' "> -I $(IncludeDirs.Replace(';', ' -I ')) </IncludeDirsOption>
+            <IncludeDirsOption Condition=" '$(IncludeDirs)' != '' "> -I &quot;$(IncludeDirs.Replace(';', '&quot; -I &quot;'))&quot; </IncludeDirsOption>
             <LibraryDirsOption></LibraryDirsOption>
-            <LibraryDirsOption Condition=" '$(LibraryDirs)' != '' "> -L $(LibraryDirs.Replace(';', ' -L ')) </LibraryDirsOption>
+            <LibraryDirsOption Condition=" '$(LibraryDirs)' != '' "> -L &quot;$(LibraryDirs.Replace(';', '&quot; -L &quot;'))&quot; </LibraryDirsOption>
             <LibrariesOption></LibrariesOption>
-            <LibrariesOption Condition=" '$(Libraries)' != '' ">-l $(Libraries.Replace(';', ' -l ')) </LibrariesOption>
+            <LibrariesOption Condition=" '$(Libraries)' != '' "> -l $(Libraries.Replace(';', ' -l ')) </LibrariesOption>
             <DependenciesOption></DependenciesOption>
-            <DependenciesOption Condition=" '$(Dependencies)' != '' ">--deps $(Dependencies.Replace(';', ' --deps ')) </DependenciesOption>
+            <DependenciesOption Condition=" '$(Dependencies)' != '' ">--deps &quot;$(Dependencies.Replace(';', '&quot; --deps &quot;'))&quot; </DependenciesOption>
             <ManagedDependenciesOption></ManagedDependenciesOption>
             <ManagedDependenciesOption Condition=" '@(ZigDependency)' != '' ">--deps @(ZigDependency->'%(ModuleName)', ' --deps ') </ManagedDependenciesOption>
             <ModulesOption></ModulesOption>
-            <ModulesOption Condition=" '$(Modules)' != '' ">--mod $(Modules.Replace(';', ' --mod ')) </ModulesOption>
+            <ModulesOption Condition=" '$(Modules)' != '' ">--mod &quot;$(Modules.Replace(';', '&quot; --mod &quot;'))&quot; </ModulesOption>
             <ManagedModulesOption></ManagedModulesOption>
             <ManagedModulesOption Condition=" '@(ZigDependency)' != '' ">--mod @(ZigDependency->'%(ModuleName)::%(CheckoutDir)/%(RootSource)', ' --mod ') </ManagedModulesOption>
             <AllDependenciesOption>$(DependenciesOption) $(ManagedDependenciesOption)</AllDependenciesOption>
             <AllModulesOption>$(ModulesOption) $(ManagedModulesOption)</AllModulesOption>
 
-            <NativeProjectReferencePaths>@(_ResolvedNativeProjectReferencePaths)</NativeProjectReferencePaths>
-            <AllCFilesFlat>@(AllCFiles)</AllCFilesFlat>
-            <AllRCFilesFlat>@(ResourceCompile)</AllRCFilesFlat>
-            <BuildCommand>"$(ToolPath)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin=$(OutDir)$(OutputName) --cache-dir $(IntDir) $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(AllDependenciesOption) $(AllModulesOption) $(BuildOption) $(RootSourceName) $(AllCFilesFlat.Replace(';', ' ')) $(NativeProjectReferencePaths.Replace(';', ' ')) $(AllRCFilesFlat.Replace(';', ' '))</BuildCommand>
+            <NativeProjectReferencePaths>@(_ResolvedNativeProjectReferencePaths->'"%(Identity)"', ' ')</NativeProjectReferencePaths>
+            <AllCFilesFlat>@(AllCFiles->'"%(Identity)"', ' ')</AllCFilesFlat>
+            <AllRCFilesFlat>@(ResourceCompile->'"%(Identity)"', ' ')</AllRCFilesFlat>
+            <BuildCommand>"$(ToolPath)" $(ZigBuildCommand) --name $(AssemblyName) -target $(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) -femit-bin="$(OutDir)$(OutputName)" --cache-dir "$(IntDir.TrimEnd('\'))" $(ZigLibType) $(IncludeDirsOption) $(LibraryDirsOption) $(LibrariesOption) $(AllDependenciesOption) $(AllModulesOption) $(BuildOption) "$(RootSourceName)" $(AllCFilesFlat) $(NativeProjectReferencePaths) $(AllRCFilesFlat)</BuildCommand>
         </PropertyGroup>
         <MakeDir Directories="$(OutDir)"/>
         <Message Text="Building: $(BuildCommand)" Importance="high"/>
@@ -338,51 +311,28 @@ pub fn build(b: *std.Build) void {
         <Error Condition="!Exists('$(OutDir)$(OutputName)')" Text="Zig build did not produce the expected output file: $(OutDir)$(OutputName)" />
         <Message Condition="Exists('$(OutDir)$(OutputName)')" Text="Built output: $(OutDir)$(OutputName)" Importance="high"/>
     </Target>
->>>>>>> main
 
     <Target Name="BuildWithBuildDotZig" Condition="'$(UseBuildDotZig)' == 'true'">
         <PropertyGroup>
             <OutputTypeName Condition=" '$(ConfigurationType)' == 'Application' ">exe</OutputTypeName>
             <OutputTypeName Condition=" '$(ConfigurationType)' != 'Application' ">lib</OutputTypeName>
 
-<<<<<<< fix-sapces-bug
-			<BuildCommand>"$(ToolPath)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir "$(IntDir.TrimEnd('\'))" --prefix-$(OutputTypeName)-dir "$(OutDir.TrimEnd('\'))"</BuildCommand>
-		</PropertyGroup>
-		<Message Text="Building: $(BuildCommand)" Importance="high"/>
-		<Exec WorkingDirectory="$(ProjectDir)" Command="$(BuildCommand)" />
-	</Target>
-	
-	<Target Name="Clean">
-		<Message Text="Cleaning:$(CleaningDirectories)" Importance="high"/>
-		<RemoveDir Directories="$(CleaningDirectories)" />
-	</Target>
-	
-	<Target Name="Build" DependsOnTargets="GetResourceCompile;ResolveProjectReferences;GenerateBuildDotZigDotZon;GenerateBuildDotZig;BuildWithOutBuildDotZig;BuildWithBuildDotZig">
-	</Target>
-	
-	<Target Name="ReBuild" DependsOnTargets="Clean;Build">
-	</Target>
-	
-	<Target Name="AllProjectOutputGroups"  /> <!-- clear target defined in Microsoft.CppBuild.targets to avoid OutputGroup.cs DebugAssert()-->
-</Project>
-=======
-            <BuildCommand>"$(ToolPath)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir $(IntDir) --prefix-$(OutputTypeName)-dir $(OutDir)</BuildCommand>
+            <BuildCommand>"$(ToolPath)" build -Dtarget=$(ZigArchitecture)-$(ZigOS) -Doptimize=$(ZigOptimize) --cache-dir "$(IntDir.TrimEnd('\\'))" --prefix-$(OutputTypeName)-dir "$(OutDir.TrimEnd('\\'))"</BuildCommand>
         </PropertyGroup>
         <Message Text="Building: $(BuildCommand)" Importance="high"/>
         <Exec WorkingDirectory="$(ProjectDir)" Command="$(BuildCommand)" />
     </Target>
-    
+
     <Target Name="Clean">
         <Message Text="Cleaning:$(CleaningDirectories)" Importance="high"/>
         <RemoveDir Directories="$(CleaningDirectories)" />
     </Target>
-    
+
     <Target Name="Build" DependsOnTargets="GetResourceCompile;ResolveProjectReferences;GenerateBuildDotZigDotZon;GenerateBuildDotZig;WarnManagedZigDependenciesWithBuildZig;RestoreManagedZigDependencies;BuildWithOutBuildDotZig;BuildWithBuildDotZig">
     </Target>
-    
+
     <Target Name="ReBuild" DependsOnTargets="Clean;Build">
     </Target>
-    
+
     <Target Name="AllProjectOutputGroups"  /> <!-- clear target defined in Microsoft.CppBuild.targets to avoid OutputGroup.cs DebugAssert()-->
 </Project>
->>>>>>> main

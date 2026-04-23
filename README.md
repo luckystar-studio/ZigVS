@@ -21,6 +21,7 @@ ___
     * Comment and uncomment zig style comments  
         line comments (//), doc comments (///), top-level doc comments (//!)
     * Multiline string marking (\\\\)
+    * Generate a unit test skeleton for the function at the cursor position
 * Folder mode
     * Create a new Zig package from the Visual Studio GUI
     * Build from Visual Studio using build.zig
@@ -569,6 +570,18 @@ LuckyStar Studio LLC
 ___
 # Version History
 ```
+    Version 0.16.0.0 (2026/04/24):
+        Improvements
+            Added support for Zig 0.16.0 and ZLS 0.16.0
+            Added unit test skeleton generation.
+                It creates a unit test template for the function at the cursor position.
+            Included the fixes from GitHub pull request #1.
+
+        Compatibility:
+            Visual Studio 2026 18.5.1
+            Zig Tool chain: zig-windows-x86_64-0.16.0.zip
+            ZLS Language Server: zls-windows-x86_64-0.16.0.zip
+
     Version 0.15.2.3 (2026/04/01):
         Improvements
             Added managed git dependencies for `.zigproj` Project mode.

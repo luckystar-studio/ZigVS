@@ -1,4 +1,4 @@
-﻿/********************************************************************************************
+/********************************************************************************************
 Copyright(c) 2023 LuckyStar Studio LLC
 All rights reserved.
 
@@ -157,61 +157,54 @@ namespace ZigVS
 pub fn main() !void
 {
     const __std = @import(""std"");
-    const __process = std.process;
+    const __process = __std.process;
 
-    var single_threaded_arena = std.heap.ArenaAllocator.init(__std.heap.page_allocator);
-    defer single_threaded_arena.deinit();
+    var arena_state = __std.heap.ArenaAllocator.init(__std.heap.page_allocator);
+    defer arena_state.deinit();
+    const arena = arena_state.allocator();
 
-    var thread_safe_arena: __std.heap.ThreadSafeAllocator = .{
-        .child_allocator = single_threaded_arena.allocator(),
-    };
-    const arena = thread_safe_arena.allocator();
+    var threaded: __std.Io.Threaded = .init(arena, .{});
+    defer threaded.deinit();
+    const io = threaded.io();
 
-    const build_root_directory: __std.Build.Cache.Directory = .{
-        .path = ""\\"",
-        .handle = try __std.fs.cwd().openDir(""\\"", .{}),
-    };
+    const cwd_path = try __process.currentPathAlloc(io, arena);
+    const cwd = __std.Io.Dir.cwd();
 
-    const local_cache_directory: __std.Build.Cache.Directory = .{
-        .path = ""\\"",
-        .handle = try __std.fs.cwd().makeOpenPath(""\\"", .{}),
-    };
+    const build_root_directory = __std.Build.Cache.Directory.cwd();
+    const local_cache_directory = __std.Build.Cache.Directory.cwd();
+    const global_cache_directory = __std.Build.Cache.Directory.cwd();
+    const zig_lib_directory = __std.Build.Cache.Directory.cwd();
 
-    const global_cache_directory: __std.Build.Cache.Directory = .{
-        .path = ""\\"",
-        .handle = try __std.fs.cwd().makeOpenPath(""\\"", .{}),
-    };
+    const environ_map = try __process.Environ.createMap(.{ .block = .global }, arena);
 
-    const zig_lib_directory: __std.Build.Cache.Directory = .{
-        .path = ""\\"",
-        .handle = try __std.fs.cwd().makeOpenPath(""\\"", .{}),
-    };
-
-    var graph: std.Build.Graph = .{
+    var graph: __std.Build.Graph = .{
+        .io = io,
         .arena = arena,
         .cache = .{
+            .io = io,
             .gpa = arena,
-            .manifest_dir = try local_cache_directory.handle.makeOpenPath(""h"", .{}),
+            .manifest_dir = try local_cache_directory.handle.createDirPathOpen(io, ""h"", .{}),
+            .cwd = cwd_path,
         },
         .zig_exe = """", // ToDo
-        .env_map = try __process.getEnvMap(arena),
+        .environ_map = environ_map,
         .global_cache_root = global_cache_directory,
         .zig_lib_directory = zig_lib_directory,
         .host = .{
             .query = .{},
-            .result = try std.zig.system.resolveTargetQuery(.{}),
+            .result = try __std.zig.system.resolveTargetQuery(io, .{}),
         },
 	    .time_report = false
     };
 
-    graph.cache.addPrefix(.{ .path = null, .handle = __std.fs.cwd() });
+    graph.cache.addPrefix(.{ .path = null, .handle = cwd });
     graph.cache.addPrefix(build_root_directory);
     graph.cache.addPrefix(local_cache_directory);
     graph.cache.addPrefix(global_cache_directory);
 
     const available_deps: []const struct { []const u8, []const u8 } = &.{};
 
-    const builder = try std.Build.create(
+    const builder = try __std.Build.create(
         &graph,
         build_root_directory,
         local_cache_directory,
@@ -235,7 +228,7 @@ pub fn main() !void
     }
 
     if (selected_basename) |name| {
-        try __std.fs.File.stdout().writeAll(name);
+        try __std.Io.File.writeStreamingAll(__std.Io.File.stdout(), io, name);
         return;
     }
 

@@ -98,6 +98,7 @@
     <Compile Include="Command\PackageInstaller\PackageInstallerWindow.cs" />
     <Compile Include="Command\PackageInstaller\PackageInstaller.cs" />
     <Compile Include="Command\PasteJSONAsStructCommand.cs" />
+    <Compile Include="Command\GenerateTestSkeletonCommand.cs" />
     <Compile Include="Command\QAndACommand.cs" />
     <Compile Include="Command\RatingAndReviewCommand.cs" />
     <Compile Include="Command\ValidateEnvironmentCommand.Refactored.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="CoreCompatibility\Contracts.cs" />
     <Compile Include="CoreCompatibility\CoreServices.cs" />
     <Compile Include="CoreCompatibility\Build\FolderModeBuildArtifactResolver.cs" />
+    <Compile Include="CoreCompatibility\Testing\ZigTestSkeletonGenerator.cs" />
     <Compile Include="CoreCompatibility\Testing\ZigTestResultParser.cs" />
     <Compile Include="CoreCompatibility\Toolchain\ProjectToolOverrideReader.cs" />
     <Compile Include="CoreCompatibility\Toolchain\ZigToolchainProbe.cs" />

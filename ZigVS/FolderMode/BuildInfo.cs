@@ -1,4 +1,4 @@
-﻿/********************************************************************************************
+/********************************************************************************************
 Copyright(c) 2023 LuckyStar Studio LLC
 All rights reserved.
 
@@ -106,15 +106,16 @@ namespace ZigVS
                         File.Exists(i_resolvedZigExePath) &&
                         (l_FolderModeOptions != null))
                     {
-                        string l_BuildFile = File.ReadAllText(i_buildFilePath) + l_FolderModeOptions.BuildInfoCapturer;
-
                         string l_BuildInfoPathString = System.IO.Path.Combine(i_intDirectory, c_BuildInfo + Parameter.c_fileExtension);
-
-                        if (File.Exists(l_BuildInfoPathString))
                         {
-                            File.Delete(l_BuildInfoPathString);
+                            string l_BuildFile = File.ReadAllText(i_buildFilePath) + l_FolderModeOptions.BuildInfoCapturer;
+
+                            if (File.Exists(l_BuildInfoPathString))
+                            {
+                                File.Delete(l_BuildInfoPathString);
+                            }
+                            File.WriteAllText(l_BuildInfoPathString, l_BuildFile);
                         }
-                        File.WriteAllText(l_BuildInfoPathString, l_BuildFile);
                         {
                             var l_BuildProcess = new Process
                             {

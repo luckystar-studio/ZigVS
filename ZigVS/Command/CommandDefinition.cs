@@ -1,4 +1,4 @@
-﻿/********************************************************************************************
+/********************************************************************************************
 Copyright(c) 2023 LuckyStar Studio LLC
 All rights reserved.
 
@@ -77,6 +77,7 @@ namespace ZigVS.Command
             RemoveMultiLineStringCommentId = 0xD800,
 
             PasteJSONAsStruct = 0xE000,
+            GenerateTestSkeleton = 0xE100,
         }
     }
 }

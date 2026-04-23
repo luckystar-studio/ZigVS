@@ -232,6 +232,13 @@
                     <ButtonText>Remove Multiline String (\\)</ButtonText>
                 </Strings>
             </Button>
+
+            <Button guid="guidZigVSPackageCmdSet" id="GenerateTestSkeletonId" priority="0x1090" type="Button">
+                <Parent guid="guidZigVSPackageCmdSet" id="EditSubMenuGroupId" />
+                <Strings>
+                    <ButtonText>Generate Test Skeleton</ButtonText>
+                </Strings>
+            </Button>
         </Buttons>
         <!--Combos>
             <Combo guid="guidZigVSPackageCmdSet" id="DebuggerDropDownComboId" priority="0x0300" type="DropDownCombo" defaultWidth="150" idCommandList="DebuggerDropDownComboListCommandId">
@@ -279,6 +286,7 @@
             <IDSymbol name="RemoveMultiLineStringCommentId" value="0xD800" />
 
             <IDSymbol name="PasteJSONAsStructId" value="0xE000" />
+            <IDSymbol name="GenerateTestSkeletonId" value="0xE100" />
 
             
             <IDSymbol name="ToolbarId" value="0x0350" />
