@@ -1,8 +1,15 @@
 name: build-and-release
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (for example: v0.16.0.0 or version0.16.0.0)'
+        required: true
+        type: string
   push:
     tags:
+      - 'v*'
       - 'version*'
 
 permissions:
@@ -13,6 +20,30 @@ jobs:
     runs-on: windows-2022
 
     steps:
+      - name: Resolve release tag
+        id: release_meta
+        shell: pwsh
+        run: |
+          $tag = if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            "${{ inputs.tag }}"
+          } else {
+            "${{ github.ref_name }}"
+          }
+
+          $tag = $tag.Trim()
+          if ([string]::IsNullOrWhiteSpace($tag)) {
+            throw "A release tag is required."
+          }
+
+          if ($tag -notmatch '^(version|v)\d') {
+            throw "Release tag [$tag] must start with 'v' or 'version' followed by the version number."
+          }
+
+          $tagVersion = $tag -replace '^(version|v)', ''
+
+          "tag=$tag" >> $env:GITHUB_OUTPUT
+          "version=$tagVersion" >> $env:GITHUB_OUTPUT
+
       - uses: actions/checkout@v4
 
       - name: Add MSBuild to PATH
@@ -25,7 +56,7 @@ jobs:
           $ns = New-Object System.Xml.XmlNamespaceManager($xml.NameTable)
           $ns.AddNamespace('vsix', 'http://schemas.microsoft.com/developer/vsx-schema/2011')
           $manifestVersion = $xml.SelectSingleNode('//vsix:Metadata/vsix:Identity', $ns).Version
-          $tagVersion = "${{ github.ref_name }}".TrimStart('v')
+          $tagVersion = "${{ steps.release_meta.outputs.version }}"
 
           if ($manifestVersion -ne $tagVersion) {
             throw "Tag version [$tagVersion] != manifest version [$manifestVersion]"
@@ -65,12 +96,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $tag = "${{ github.ref_name }}"
+          $tag = "${{ steps.release_meta.outputs.tag }}"
           $asset = "${{ steps.find_vsix.outputs.path }}"
+          $target = "${{ github.sha }}"
 
           gh release view $tag *> $null
           if ($LASTEXITCODE -eq 0) {
             gh release upload $tag $asset --clobber
           } else {
-            gh release create $tag $asset --title "ZigVS $tag" --generate-notes
+            gh release create $tag $asset --title "ZigVS $tag" --generate-notes --target $target
           }
